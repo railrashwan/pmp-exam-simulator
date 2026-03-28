@@ -188,7 +188,7 @@ export default function ResultsPage() {
                     >
                       {r.isCorrect ? "✓" : r.selectedAnswer ? "✗" : "—"}
                     </span>
-                    <span className="text-sm-type text-content flex-1" dir={isRtl ? "rtl" : "ltr"}>
+                    <span className={`text-sm-type text-content flex-1 ${isRtl ? "text-right" : "text-left"}`} dir={isRtl ? "rtl" : "ltr"}>
                       {idx + 1}. {isRtl ? r.questionTextAr : r.questionTextEn}
                     </span>
                     <span className="text-muted text-xs-type shrink-0 mt-1">{expanded === idx ? "▲" : "▼"}</span>
