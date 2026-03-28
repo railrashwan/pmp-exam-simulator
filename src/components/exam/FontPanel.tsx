@@ -18,6 +18,14 @@ const ENGLISH_FONTS = [
   "Oswald", "Work Sans", "DM Sans", "Outfit", "Josefin Sans",
 ];
 
+const FONT_SIZES: { label: string; value: number }[] = [
+  { label: "Small",  value: 1.125 },  // 18px
+  { label: "Medium", value: 1.25  },  // 20px
+  { label: "Large",  value: 1.5   },  // 24px — default
+  { label: "X-Large",value: 1.75  },  // 28px
+  { label: "XX-Large",value: 2.0  },  // 32px
+];
+
 const ARABIC_SAMPLE = "ما هي الخطوة الأولى التي يجب عليك اتخاذها؟";
 const ENGLISH_SAMPLE = "What is the first step you should take?";
 
@@ -28,7 +36,7 @@ const ENGLISH_FONTS_URL =
 
 export function FontPanel() {
   const { language } = useExamStore();
-  const { questionFont, setQuestionFont } = usePreferencesStore();
+  const { questionFont, setQuestionFont, fontSize, setFontSize } = usePreferencesStore();
   const [open, setOpen] = useState(false);
 
   const isAr = language === "ar";
@@ -70,7 +78,7 @@ export function FontPanel() {
       <button
         onClick={() => setOpen((o) => !o)}
         className="fixed bottom-4 left-4 z-40 bg-canvas border border-edge text-muted font-medium shadow-sm hover:bg-surface hover:text-content transition-colors rounded px-4 py-1.5 text-xs-type"
-        aria-label="Open font selector"
+        aria-label="Open font settings"
       >
         Aa
       </button>
@@ -89,9 +97,7 @@ export function FontPanel() {
         <div className="bg-surface border-b border-edge px-5 py-4 flex items-center justify-between shrink-0">
           <div>
             <div className="text-sm-type font-bold text-content">Font Settings</div>
-            <div className="text-xs-type text-muted mt-0.5">
-              {isAr ? "Choose your Arabic font" : "Choose your English font"}
-            </div>
+            <div className="text-xs-type text-muted mt-0.5">Size and typeface — saved automatically</div>
           </div>
           <button
             onClick={() => setOpen(false)}
@@ -100,6 +106,46 @@ export function FontPanel() {
           >
             ×
           </button>
+        </div>
+
+        {/* ── Font Size ── */}
+        <div className="border-b border-edge px-5 py-4 shrink-0 bg-surface">
+          <div className="text-label-caps text-muted mb-3">Font Size</div>
+          <div className="grid grid-cols-5 gap-1.5">
+            {FONT_SIZES.map(({ label, value }) => {
+              const isActive = fontSize === value;
+              return (
+                <button
+                  key={value}
+                  onClick={() => setFontSize(value)}
+                  className={`py-2.5 rounded border text-xs-type font-semibold transition-colors ${
+                    isActive
+                      ? "bg-primary text-inverse border-primary"
+                      : "bg-canvas text-content border-edge hover:border-edge-2"
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+          {/* Live preview */}
+          <div
+            className="mt-3 p-3 rounded border border-edge bg-canvas text-content"
+            style={{
+              fontSize: `${fontSize}rem`,
+              lineHeight: isAr ? "1.85" : "1.6",
+              direction: isAr ? "rtl" : "ltr",
+              fontFamily: questionFont ? `'${questionFont}', sans-serif` : undefined,
+            }}
+          >
+            {sample}
+          </div>
+        </div>
+
+        {/* ── Font Family ── */}
+        <div className="px-5 pt-4 pb-2 shrink-0">
+          <div className="text-label-caps text-muted mb-1">{isAr ? "Arabic Font" : "English Font"}</div>
         </div>
 
         {/* Active font bar */}
@@ -148,7 +194,7 @@ export function FontPanel() {
 
         {/* Footer */}
         <div className="border-t border-edge px-5 py-3 bg-surface text-muted text-xs-type shrink-0">
-          Your font choice is saved automatically.
+          Your choices are saved automatically.
         </div>
       </div>
     </>

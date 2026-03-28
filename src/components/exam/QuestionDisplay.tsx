@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useExamStore } from "@/store/examStore";
+import { usePreferencesStore } from "@/store/preferencesStore";
 import { LanguageToggle } from "./LanguageToggle";
 import type { ExamQuestion } from "@/lib/types";
 
@@ -20,6 +21,7 @@ function getOptionText(q: ExamQuestion, key: string, lang: "en" | "ar"): string 
 
 export function QuestionDisplay() {
   const { questions, currentIndex, answers, language, selectAnswer } = useExamStore();
+  const fontSize = usePreferencesStore((s) => s.fontSize);
 
   // Scroll back to top on every question change
   useEffect(() => {
@@ -47,7 +49,7 @@ export function QuestionDisplay() {
       >
         <p
           className={`font-bold text-content ${isRtl ? "text-right" : ""}`}
-          style={{ fontSize: "1.5rem", lineHeight: isRtl ? "1.85" : "1.6" }}
+          style={{ fontSize: `${fontSize}rem`, lineHeight: isRtl ? "1.85" : "1.6" }}
         >
           {qText}
         </p>
@@ -78,7 +80,7 @@ export function QuestionDisplay() {
               />
               <span
                 className={`text-content ${isRtl ? "text-right" : ""}`}
-                style={{ fontSize: "1.5rem", lineHeight: isRtl ? "1.85" : "1.6" }}
+                style={{ fontSize: `${fontSize}rem`, lineHeight: isRtl ? "1.85" : "1.6" }}
               >
                 <span className="font-semibold">{label}. </span>
                 {optionText}
