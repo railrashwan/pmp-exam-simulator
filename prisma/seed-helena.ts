@@ -31,8 +31,8 @@ interface ParsedQuestion {
 }
 
 function parseQuestions(markdown: string): ParsedQuestion[] {
-  // Try to split by Q<number> at the start of a line
-  const blocks = markdown.split(/(?=^Q\d+)/m).map((b) => b.trim()).filter(Boolean);
+  // Try to split by Q<number> or just <number> on its own line
+  const blocks = markdown.split(/(?=^Q?\d+\s*$)/m).map((b) => b.trim()).filter(Boolean);
   const questions: ParsedQuestion[] = [];
 
   for (const block of blocks) {

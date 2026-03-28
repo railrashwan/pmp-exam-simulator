@@ -10,7 +10,7 @@ const PMP_COUNTS = [10, 20, 40, 60, 100, 120, 150, 180];
 const UNDRAW_COUNT = 49;
 const ANDREW_COUNT = 200;
 const YASSINE_COUNT = 180;
-const HELENA_COUNT = 177;
+const HELENA_COUNT = 180;
 
 export default function HomePage() {
   const [pmpCount, setPmpCount] = useState(40);
@@ -278,7 +278,7 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="text-xs-type text-muted leading-relaxed">
-                177 scenario questions targeting process and people domains to refine your PMP readiness.
+                180 scenario questions targeting process and people domains to refine your PMP readiness.
               </p>
               <button
                 onClick={() => handleStart("helena")}
