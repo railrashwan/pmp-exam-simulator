@@ -62,7 +62,7 @@ export function QuestionDisplay() {
           return (
             <label
               key={key}
-              className={`flex items-start gap-3 px-3 py-2.5 border rounded-lg cursor-pointer transition-all ${
+              className={`flex items-center gap-3 px-3 py-2.5 border rounded-lg cursor-pointer transition-all ${
                 isSelected
                   ? "border-selected bg-selected shadow-sm"
                   : "border-edge bg-canvas hover:bg-surface hover:border-edge-2"
@@ -74,7 +74,7 @@ export function QuestionDisplay() {
                 value={key}
                 checked={isSelected}
                 onChange={() => selectAnswer(question.id, key)}
-                className="mt-1 shrink-0 w-4 h-4 accent-[var(--color-interact)]"
+                className="shrink-0 w-4 h-4 accent-[var(--color-interact)]"
               />
               <span
                 className={`text-content ${isRtl ? "text-right" : ""}`}
