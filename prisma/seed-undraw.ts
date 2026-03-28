@@ -3,8 +3,9 @@ import path from "node:path";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
 import { PrismaClient } from "../src/generated/prisma/client";
 
-const dbPath = path.resolve(process.cwd(), "dev.db");
-const adapter = new PrismaLibSql({ url: `file:${dbPath}` });
+const url = process.env.DATABASE_URL ?? `file:${path.resolve(process.cwd(), "dev.db")}`;
+const authToken = process.env.DATABASE_AUTH_TOKEN;
+const adapter = new PrismaLibSql({ url, authToken });
 const prisma = new PrismaClient({ adapter } as never);
 
 const questions = [
