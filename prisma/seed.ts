@@ -1,0 +1,837 @@
+import "dotenv/config";
+import path from "node:path";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { PrismaClient } from "../src/generated/prisma/client";
+
+const dbPath = path.resolve(process.cwd(), "dev.db");
+const adapter = new PrismaLibSql({ url: `file:${dbPath}` });
+const prisma = new PrismaClient({ adapter } as never);
+
+const questions = [
+  // ── PROCESS DOMAIN (20 questions) ───────────────────────────────────────────
+  {
+    domain: "Process",
+    questionTextEn:
+      "During project execution, a key stakeholder requests a major scope change that will significantly impact the schedule and budget. What should be the project manager's FIRST step?",
+    questionTextAr:
+      "أثناء تنفيذ المشروع، يطلب صاحب مصلحة رئيسي تغييراً جوهرياً في النطاق يؤثر بشكل كبير على الجدول الزمني والميزانية. ما الخطوة الأولى التي يجب على مدير المشروع اتخاذها؟",
+    optionAEn: "Assess the impact of the change on all project constraints",
+    optionAAr: "تقييم تأثير التغيير على جميع قيود المشروع",
+    optionBEn: "Submit the change request to the Change Control Board (CCB)",
+    optionBAr: "إرسال طلب التغيير إلى مجلس مراقبة التغيير",
+    optionCEn: "Implement the change immediately to satisfy the stakeholder",
+    optionCAr: "تنفيذ التغيير فوراً لإرضاء صاحب المصلحة",
+    optionDEn: "Update the project management plan to reflect the change",
+    optionDAr: "تحديث خطة إدارة المشروع لتعكس التغيير",
+    correctAnswer: "A",
+    explanationEn:
+      "Before submitting to the CCB or updating any plans, the project manager must first evaluate how the change affects scope, schedule, cost, quality, risk, and resources. This analysis informs the CCB submission.",
+    explanationAr:
+      "قبل الرفع إلى مجلس مراقبة التغيير أو تحديث أي خطط، يجب على مدير المشروع أولاً تقييم تأثير التغيير على النطاق والجدول الزمني والتكلفة والجودة والمخاطر والموارد.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project manager notices that a deliverable does not meet the quality standards defined in the quality management plan. What is the BEST course of action?",
+    questionTextAr:
+      "لاحظ مدير مشروع أن أحد المخرجات لا يستوفي معايير الجودة المحددة في خطة إدارة الجودة. ما هو أفضل إجراء يجب اتخاذه؟",
+    optionAEn: "Accept the deliverable to avoid project delays",
+    optionAAr: "قبول المخرج لتجنب تأخير المشروع",
+    optionBEn: "Initiate defect repair and conduct a root cause analysis",
+    optionBAr: "بدء إصلاح العيوب وإجراء تحليل للسبب الجذري",
+    optionCEn: "Update the quality standards to match the deliverable",
+    optionCAr: "تحديث معايير الجودة لتتوافق مع المخرج",
+    optionDEn: "Notify the sponsor and request additional budget",
+    optionDAr: "إخطار الراعي وطلب ميزانية إضافية",
+    correctAnswer: "B",
+    explanationEn:
+      "When a deliverable fails quality standards, the correct approach is to initiate defect repair and investigate the root cause to prevent recurrence, following the quality control process.",
+    explanationAr:
+      "عندما لا يستوفي مخرج معايير الجودة، يجب إصلاح العيب وإجراء تحليل للسبب الجذري لمنع تكرار المشكلة وفق عملية ضبط الجودة.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project is behind schedule. The project manager decides to add more resources to critical path activities. This technique is called:",
+    questionTextAr:
+      "المشروع متأخر عن الجدول الزمني. قرر مدير المشروع إضافة موارد إضافية لأنشطة المسار الحرج. تُسمى هذه التقنية:",
+    optionAEn: "Fast tracking",
+    optionAAr: "التتبع السريع",
+    optionBEn: "Crashing",
+    optionBAr: "الضغط",
+    optionCEn: "Resource leveling",
+    optionCAr: "تسوية الموارد",
+    optionDEn: "Schedule compression",
+    optionDAr: "ضغط الجدول الزمني",
+    correctAnswer: "B",
+    explanationEn:
+      "Crashing involves adding resources (people, equipment, overtime) to critical path activities to shorten the project duration, typically increasing cost. Fast tracking involves running activities in parallel.",
+    explanationAr:
+      "يتضمن الضغط إضافة موارد (أشخاص، معدات، ساعات عمل إضافية) لأنشطة المسار الحرج لتقليل مدة المشروع مع زيادة التكلفة عادةً. أما التتبع السريع فيعني تشغيل الأنشطة بالتوازي.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "During project planning, the team identifies that the project scope is unclear. Which document should the project manager develop FIRST to clarify the scope?",
+    questionTextAr:
+      "خلال تخطيط المشروع، يحدد الفريق أن نطاق المشروع غير واضح. أي وثيقة يجب على مدير المشروع تطويرها أولاً لتوضيح النطاق؟",
+    optionAEn: "Work Breakdown Structure (WBS)",
+    optionAAr: "هيكل تقسيم العمل",
+    optionBEn: "Project Scope Statement",
+    optionBAr: "بيان نطاق المشروع",
+    optionCEn: "Requirements Traceability Matrix",
+    optionCAr: "مصفوفة تتبع المتطلبات",
+    optionDEn: "Scope Management Plan",
+    optionDAr: "خطة إدارة النطاق",
+    correctAnswer: "B",
+    explanationEn:
+      "The Project Scope Statement defines what is and is not included in the project. It must be created before developing the WBS or other scope documents, as it serves as the foundation for scope planning.",
+    explanationAr:
+      "يحدد بيان نطاق المشروع ما يشمله المشروع وما لا يشمله. يجب إنشاؤه قبل تطوير هيكل تقسيم العمل أو غيره من وثائق النطاق لأنه يشكل الأساس لتخطيط النطاق.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "Which risk response strategy involves shifting the negative impact of a risk to a third party?",
+    questionTextAr:
+      "أي استراتيجية للاستجابة للمخاطر تتضمن نقل التأثير السلبي للمخاطرة إلى طرف ثالث؟",
+    optionAEn: "Avoid",
+    optionAAr: "التجنب",
+    optionBEn: "Mitigate",
+    optionBAr: "التخفيف",
+    optionCEn: "Transfer",
+    optionCAr: "النقل",
+    optionDEn: "Accept",
+    optionDAr: "القبول",
+    correctAnswer: "C",
+    explanationEn:
+      "Transfer shifts risk impact to a third party (e.g., insurance, contracts). It does not eliminate the risk but moves financial responsibility. Common examples include insurance policies and fixed-price contracts.",
+    explanationAr:
+      "ينقل أسلوب النقل تأثير المخاطرة إلى طرف ثالث (مثل التأمين والعقود). لا يُزيل هذا الأسلوب المخاطرة بل ينقل المسؤولية المالية. ومن الأمثلة الشائعة وثائق التأمين وعقود السعر الثابت.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project manager is conducting a project status meeting and discovers that the schedule performance index (SPI) is 0.85. What does this indicate?",
+    questionTextAr:
+      "يجري مدير المشروع اجتماع حالة المشروع ويكتشف أن مؤشر أداء الجدول الزمني (SPI) هو 0.85. ماذا يعني ذلك؟",
+    optionAEn: "The project is ahead of schedule",
+    optionAAr: "المشروع متقدم عن الجدول الزمني",
+    optionBEn: "The project is behind schedule",
+    optionBAr: "المشروع متأخر عن الجدول الزمني",
+    optionCEn: "The project is over budget",
+    optionCAr: "المشروع تجاوز الميزانية",
+    optionDEn: "The project is within budget",
+    optionDAr: "المشروع ضمن الميزانية",
+    correctAnswer: "B",
+    explanationEn:
+      "SPI = EV/PV. An SPI less than 1.0 means the project is behind schedule (earning less value than planned). SPI > 1 means ahead of schedule; CPI relates to budget, not SPI.",
+    explanationAr:
+      "مؤشر أداء الجدول = القيمة المكتسبة / القيمة المخططة. إذا كان المؤشر أقل من 1.0، فهذا يعني أن المشروع متأخر عن الجدول (ينجز قيمة أقل مما خُطط له).",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project manager wants to identify all the work required to complete the project. Which tool is MOST useful?",
+    questionTextAr:
+      "يريد مدير المشروع تحديد جميع الأعمال المطلوبة لإكمال المشروع. أي أداة هي الأكثر فائدة؟",
+    optionAEn: "Gantt chart",
+    optionAAr: "مخطط جانت",
+    optionBEn: "Work Breakdown Structure (WBS)",
+    optionBAr: "هيكل تقسيم العمل",
+    optionCEn: "RACI matrix",
+    optionCAr: "مصفوفة راسي",
+    optionDEn: "Risk register",
+    optionDAr: "سجل المخاطر",
+    correctAnswer: "B",
+    explanationEn:
+      "The WBS decomposes the total project scope into manageable work packages, ensuring all required work is identified and organized. It is the foundation for schedule, cost, and resource planning.",
+    explanationAr:
+      "يقسّم هيكل تقسيم العمل النطاق الكلي للمشروع إلى حزم عمل قابلة للإدارة، مما يضمن تحديد جميع الأعمال المطلوبة وتنظيمها. وهو الأساس لتخطيط الجدول الزمني والتكلفة والموارد.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "The cost performance index (CPI) for a project is 1.15. What does this mean?",
+    questionTextAr:
+      "مؤشر أداء التكلفة (CPI) لمشروع ما هو 1.15. ماذا يعني ذلك؟",
+    optionAEn: "The project is over budget",
+    optionAAr: "المشروع تجاوز الميزانية",
+    optionBEn: "The project is under budget",
+    optionBAr: "المشروع دون الميزانية",
+    optionCEn: "The project is behind schedule",
+    optionCAr: "المشروع متأخر عن الجدول الزمني",
+    optionDEn: "The project has a cost variance of zero",
+    optionDAr: "المشروع لديه تباين تكلفة يساوي صفراً",
+    correctAnswer: "B",
+    explanationEn:
+      "CPI = EV/AC. A CPI of 1.15 means the project is getting $1.15 of value for every $1 spent — it is under budget (performing better than planned from a cost perspective).",
+    explanationAr:
+      "مؤشر أداء التكلفة = القيمة المكتسبة / التكلفة الفعلية. مؤشر 1.15 يعني أن المشروع يحصل على قيمة 1.15 دولار مقابل كل دولار يُنفق — أي أنه دون الميزانية.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project manager is preparing for a procurement. The project requires a vendor to build a custom solution with unclear requirements. Which contract type is MOST appropriate?",
+    questionTextAr:
+      "يستعد مدير المشروع لعملية شراء. يتطلب المشروع من مورد بناء حل مخصص بمتطلبات غير واضحة. أي نوع من العقود هو الأنسب؟",
+    optionAEn: "Fixed-price contract",
+    optionAAr: "عقد السعر الثابت",
+    optionBEn: "Time and material contract",
+    optionBAr: "عقد الوقت والمواد",
+    optionCEn: "Cost-plus-fixed-fee contract",
+    optionCAr: "عقد التكلفة مضافاً إليها أتعاب ثابتة",
+    optionDEn: "Firm-fixed-price contract",
+    optionDAr: "عقد السعر الثابت القاطع",
+    correctAnswer: "C",
+    explanationEn:
+      "When requirements are unclear, a cost-reimbursable contract (like cost-plus-fixed-fee) is most appropriate because the buyer reimburses costs and pays a fixed fee, providing flexibility for undefined scope.",
+    explanationAr:
+      "عندما تكون المتطلبات غير واضحة، يكون عقد استرداد التكلفة (مثل التكلفة مضافاً إليها أتعاب ثابتة) هو الأنسب لأن المشتري يسدد التكاليف ويدفع أتعاباً ثابتة، مما يوفر مرونة للنطاق غير المحدد.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "During project execution, a team member identifies a risk that was not in the risk register. What should the project manager do FIRST?",
+    questionTextAr:
+      "خلال تنفيذ المشروع، يحدد أحد أعضاء الفريق خطراً لم يكن في سجل المخاطر. ما الذي يجب على مدير المشروع القيام به أولاً؟",
+    optionAEn: "Escalate the risk to the project sponsor",
+    optionAAr: "تصعيد المخاطرة إلى راعي المشروع",
+    optionBEn: "Add the risk to the risk register and analyze it",
+    optionBAr: "إضافة المخاطرة إلى سجل المخاطر وتحليلها",
+    optionCEn: "Ignore the risk if it has a low probability",
+    optionCAr: "تجاهل المخاطرة إذا كان احتمالها منخفضاً",
+    optionDEn: "Implement a workaround immediately",
+    optionDAr: "تنفيذ حل بديل فوراً",
+    correctAnswer: "B",
+    explanationEn:
+      "New risks must be documented in the risk register and analyzed (probability, impact) before deciding on a response strategy. This follows the risk management process.",
+    explanationAr:
+      "يجب توثيق المخاطر الجديدة في سجل المخاطر وتحليلها (الاحتمالية والتأثير) قبل تحديد استراتيجية الاستجابة.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project is approaching completion. The project manager wants to formally verify that deliverables meet the acceptance criteria. Which process should be performed?",
+    questionTextAr:
+      "يقترب المشروع من الاكتمال. يريد مدير المشروع التحقق رسمياً من أن المخرجات تستوفي معايير القبول. أي عملية يجب تنفيذها؟",
+    optionAEn: "Perform quality assurance",
+    optionAAr: "إجراء ضمان الجودة",
+    optionBEn: "Control quality",
+    optionBAr: "ضبط الجودة",
+    optionCEn: "Validate scope",
+    optionCAr: "التحقق من النطاق",
+    optionDEn: "Close project",
+    optionDAr: "إغلاق المشروع",
+    correctAnswer: "C",
+    explanationEn:
+      "Validate Scope is the process of formally accepting completed project deliverables. It results in accepted deliverables signed off by the customer or sponsor.",
+    explanationAr:
+      "التحقق من النطاق هو عملية القبول الرسمي للمخرجات المكتملة، وتنتهي باعتماد المخرجات من قِبل العميل أو الراعي.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project manager is using the critical path method. An activity has a total float of zero. What does this mean?",
+    questionTextAr:
+      "يستخدم مدير المشروع طريقة المسار الحرج. نشاط معين لديه إجمالي طفو يساوي صفراً. ماذا يعني ذلك؟",
+    optionAEn: "The activity can be delayed without affecting the project end date",
+    optionAAr: "يمكن تأخير النشاط دون التأثير على تاريخ انتهاء المشروع",
+    optionBEn: "The activity is on the critical path",
+    optionBAr: "النشاط موجود على المسار الحرج",
+    optionCEn: "The activity is not needed for project completion",
+    optionCAr: "النشاط غير ضروري لإكمال المشروع",
+    optionDEn: "The activity has unlimited slack",
+    optionDAr: "النشاط لديه وقت احتياطي غير محدود",
+    correctAnswer: "B",
+    explanationEn:
+      "An activity with zero total float is on the critical path. Any delay in a critical path activity will directly delay the project end date.",
+    explanationAr:
+      "النشاط الذي يمتلك إجمالي طفو يساوي صفراً يقع على المسار الحرج. أي تأخير في نشاط المسار الحرج يؤخر تاريخ انتهاء المشروع مباشرةً.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project manager needs to communicate project status to 15 stakeholders. How many communication channels exist?",
+    questionTextAr:
+      "يحتاج مدير المشروع إلى إيصال حالة المشروع إلى 15 صاحب مصلحة. كم عدد قنوات التواصل الموجودة؟",
+    optionAEn: "105",
+    optionAAr: "105",
+    optionBEn: "120",
+    optionBAr: "120",
+    optionCEn: "15",
+    optionCAr: "15",
+    optionDEn: "225",
+    optionDAr: "225",
+    correctAnswer: "A",
+    explanationEn:
+      "Communication channels = n(n-1)/2. With 15 stakeholders (including the PM): 15×14/2 = 105 channels. If the PM is one of the 15, the formula still applies: 15×14/2 = 105.",
+    explanationAr:
+      "قنوات التواصل = ن × (ن-1) / 2. مع 15 صاحب مصلحة: 15 × 14 / 2 = 105 قناة.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project manager identifies a potential risk with high probability and high impact. Which risk response strategy is MOST appropriate?",
+    questionTextAr:
+      "يحدد مدير المشروع خطراً محتملاً ذا احتمالية عالية وتأثير عالٍ. أي استراتيجية للاستجابة للمخاطر هي الأنسب؟",
+    optionAEn: "Accept",
+    optionAAr: "القبول",
+    optionBEn: "Transfer",
+    optionBAr: "النقل",
+    optionCEn: "Avoid",
+    optionCAr: "التجنب",
+    optionDEn: "Mitigate",
+    optionDAr: "التخفيف",
+    correctAnswer: "C",
+    explanationEn:
+      "For high probability and high impact risks, avoidance is preferred — changing the project plan to eliminate the threat. Acceptance is for low-impact risks; transfer and mitigate address risks that cannot be avoided.",
+    explanationAr:
+      "بالنسبة للمخاطر ذات الاحتمالية العالية والتأثير العالي، يُفضَّل التجنب — تغيير خطة المشروع للقضاء على التهديد. القبول مناسب للمخاطر منخفضة التأثير.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "Which document formally authorizes a project and identifies the project manager?",
+    questionTextAr:
+      "أي وثيقة تأذن رسمياً بالمشروع وتحدد مدير المشروع؟",
+    optionAEn: "Project management plan",
+    optionAAr: "خطة إدارة المشروع",
+    optionBEn: "Project charter",
+    optionBAr: "ميثاق المشروع",
+    optionCEn: "Statement of work",
+    optionCAr: "بيان العمل",
+    optionDEn: "Business case",
+    optionDAr: "دراسة الجدوى التجارية",
+    correctAnswer: "B",
+    explanationEn:
+      "The Project Charter formally authorizes the project, documents high-level requirements, assigns the project manager, and provides the PM with authority to apply organizational resources.",
+    explanationAr:
+      "يُجيز ميثاق المشروع رسمياً تنفيذ المشروع، ويوثق المتطلبات رفيعة المستوى، ويُعيِّن مدير المشروع، ويمنح مدير المشروع صلاحية استخدام موارد المنظمة.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "The actual cost (AC) of a project is $500,000, the earned value (EV) is $450,000, and the planned value (PV) is $480,000. What is the cost variance (CV)?",
+    questionTextAr:
+      "التكلفة الفعلية للمشروع هي 500,000 دولار، والقيمة المكتسبة هي 450,000 دولار، والقيمة المخططة هي 480,000 دولار. ما تباين التكلفة؟",
+    optionAEn: "$-50,000 (over budget)",
+    optionAAr: "50,000- دولار (تجاوز الميزانية)",
+    optionBEn: "$-30,000 (over budget)",
+    optionBAr: "30,000- دولار (تجاوز الميزانية)",
+    optionCEn: "$50,000 (under budget)",
+    optionCAr: "50,000 دولار (دون الميزانية)",
+    optionDEn: "$30,000 (under budget)",
+    optionDAr: "30,000 دولار (دون الميزانية)",
+    correctAnswer: "A",
+    explanationEn:
+      "CV = EV - AC = $450,000 - $500,000 = -$50,000. A negative CV means the project is over budget (spending more than the value earned).",
+    explanationAr:
+      "تباين التكلفة = القيمة المكتسبة - التكلفة الفعلية = 450,000 - 500,000 = -50,000 دولار. التباين السالب يعني أن المشروع تجاوز الميزانية.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project manager is closing a project. Which activity is MOST important to perform before officially closing?",
+    questionTextAr:
+      "يقوم مدير المشروع بإغلاق مشروع. أي نشاط هو الأهم تنفيذه قبل الإغلاق الرسمي؟",
+    optionAEn: "Archive all project documents",
+    optionAAr: "أرشفة جميع وثائق المشروع",
+    optionBEn: "Obtain formal acceptance of deliverables",
+    optionBAr: "الحصول على قبول رسمي للمخرجات",
+    optionCEn: "Release the project team",
+    optionCAr: "تحرير فريق المشروع",
+    optionDEn: "Update the lessons learned register",
+    optionDAr: "تحديث سجل الدروس المستفادة",
+    correctAnswer: "B",
+    explanationEn:
+      "Obtaining formal acceptance of deliverables from the customer or sponsor is the most critical activity before project closure. Without formal acceptance, the project cannot be officially closed.",
+    explanationAr:
+      "الحصول على القبول الرسمي للمخرجات من العميل أو الراعي هو النشاط الأكثر أهمية قبل إغلاق المشروع. بدون قبول رسمي، لا يمكن إغلاق المشروع رسمياً.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "Which estimating technique uses historical data from similar past projects to estimate cost or duration?",
+    questionTextAr:
+      "أي تقنية تقدير تستخدم البيانات التاريخية من مشاريع مماثلة سابقة لتقدير التكلفة أو المدة؟",
+    optionAEn: "Bottom-up estimating",
+    optionAAr: "التقدير من القاعدة إلى الأعلى",
+    optionBEn: "Parametric estimating",
+    optionBAr: "التقدير البارامتري",
+    optionCEn: "Analogous estimating",
+    optionCAr: "التقدير القياسي",
+    optionDEn: "Three-point estimating",
+    optionDAr: "التقدير بثلاث نقاط",
+    correctAnswer: "C",
+    explanationEn:
+      "Analogous estimating uses historical data from similar past projects. It is quick but less accurate. Parametric uses statistical relationships; bottom-up aggregates detailed estimates.",
+    explanationAr:
+      "التقدير القياسي يستخدم البيانات التاريخية من مشاريع مماثلة سابقة. إنه سريع لكنه أقل دقة. التقدير البارامتري يستخدم العلاقات الإحصائية.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project manager is creating a schedule and wants to identify the longest path through the project network. Which technique is used?",
+    questionTextAr:
+      "يقوم مدير المشروع بإنشاء جدول زمني ويريد تحديد أطول مسار عبر شبكة المشروع. أي تقنية تُستخدم؟",
+    optionAEn: "Resource leveling",
+    optionAAr: "تسوية الموارد",
+    optionBEn: "Critical Path Method (CPM)",
+    optionBAr: "طريقة المسار الحرج",
+    optionCEn: "Monte Carlo simulation",
+    optionCAr: "محاكاة مونت كارلو",
+    optionDEn: "PERT analysis",
+    optionDAr: "تحليل بيرت",
+    correctAnswer: "B",
+    explanationEn:
+      "The Critical Path Method (CPM) identifies the longest sequence of dependent activities that determines the minimum project duration.",
+    explanationAr:
+      "تُحدد طريقة المسار الحرج أطول تسلسل من الأنشطة التابعة الذي يحدد الحد الأدنى لمدة المشروع.",
+  },
+  {
+    domain: "Process",
+    questionTextEn:
+      "A project manager wants to decompose project deliverables into smaller, more manageable components. Which tool supports this?",
+    questionTextAr:
+      "يريد مدير المشروع تفكيك مخرجات المشروع إلى مكونات أصغر وأكثر قابلية للإدارة. أي أداة تدعم ذلك؟",
+    optionAEn: "Risk register",
+    optionAAr: "سجل المخاطر",
+    optionBEn: "Responsibility Assignment Matrix",
+    optionBAr: "مصفوفة تعيين المسؤوليات",
+    optionCEn: "Work Breakdown Structure (WBS)",
+    optionCAr: "هيكل تقسيم العمل",
+    optionDEn: "Stakeholder register",
+    optionDAr: "سجل أصحاب المصلحة",
+    correctAnswer: "C",
+    explanationEn:
+      "The WBS is the tool for decomposing deliverables into work packages. It organizes total project scope and is the foundation for scope definition and control.",
+    explanationAr:
+      "هيكل تقسيم العمل هو الأداة المستخدمة لتفكيك المخرجات إلى حزم عمل. يُنظم النطاق الكلي للمشروع ويُشكل الأساس لتعريف النطاق والتحكم فيه.",
+  },
+
+  // ── PEOPLE DOMAIN (15 questions) ────────────────────────────────────────────
+  {
+    domain: "People",
+    questionTextEn:
+      "A new project team is formed and team members are getting to know each other, setting ground rules, and establishing team norms. According to Tuckman's model, which stage is the team in?",
+    questionTextAr:
+      "تم تشكيل فريق مشروع جديد وأعضاؤه يتعارفون ويضعون القواعد الأساسية ومعايير الفريق. وفق نموذج تاكمان، في أي مرحلة يوجد الفريق؟",
+    optionAEn: "Storming",
+    optionAAr: "العصف",
+    optionBEn: "Norming",
+    optionBAr: "التوافق",
+    optionCEn: "Forming",
+    optionCAr: "التشكيل",
+    optionDEn: "Performing",
+    optionDAr: "الأداء",
+    correctAnswer: "C",
+    explanationEn:
+      "Forming is the first stage of Tuckman's model where team members meet, learn about the project, and begin establishing relationships. Ground rules and norms are just starting to form.",
+    explanationAr:
+      "التشكيل هو المرحلة الأولى من نموذج تاكمان، يتعارف فيها أعضاء الفريق ويتعلمون عن المشروع ويبدؤون بإقامة العلاقات.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project team member consistently underperforms despite having the necessary skills. The project manager discovers the team member feels unrecognized for their contributions. Which motivational theory is MOST relevant?",
+    questionTextAr:
+      "عضو في فريق المشروع يُظهر أداءً منخفضاً باستمرار رغم امتلاكه للمهارات اللازمة. اكتشف مدير المشروع أن العضو يشعر بعدم الاعتراف بمساهماته. أي نظرية تحفيزية هي الأكثر صلة؟",
+    optionAEn: "Theory X",
+    optionAAr: "النظرية X",
+    optionBEn: "Herzberg's Motivation-Hygiene Theory",
+    optionBAr: "نظرية هيرتزبرغ للتحفيز والنظافة",
+    optionCEn: "McClelland's Theory of Needs",
+    optionCAr: "نظرية ماكليلاند للاحتياجات",
+    optionDEn: "Expectancy Theory",
+    optionDAr: "نظرية التوقع",
+    correctAnswer: "B",
+    explanationEn:
+      "Herzberg's theory distinguishes motivators (recognition, achievement) from hygiene factors. Lack of recognition is a motivational deficiency. Recognition is a key motivator in this theory.",
+    explanationAr:
+      "تميز نظرية هيرتزبرغ بين المحفزات (الاعتراف، الإنجاز) وعوامل النظافة. غياب الاعتراف هو قصور تحفيزي. الاعتراف هو أحد المحفزات الرئيسية في هذه النظرية.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "Two team members have an ongoing conflict that is affecting team morale and project performance. The project manager has tried to smooth over the conflict, but it persists. What is the BEST approach?",
+    questionTextAr:
+      "عضوان في الفريق لديهما نزاع مستمر يؤثر على معنويات الفريق وأداء المشروع. حاول مدير المشروع تهدئة النزاع لكنه مستمر. ما أفضل نهج؟",
+    optionAEn: "Force one team member to comply",
+    optionAAr: "إجبار أحد أعضاء الفريق على الامتثال",
+    optionBEn: "Avoid the conflict and hope it resolves itself",
+    optionBAr: "تجنب النزاع وأمل أن يحل من تلقاء نفسه",
+    optionCEn: "Confront the conflict and work toward a collaborative solution",
+    optionCAr: "مواجهة النزاع والعمل نحو حل تعاوني",
+    optionDEn: "Remove one team member from the project",
+    optionDAr: "إزالة أحد أعضاء الفريق من المشروع",
+    correctAnswer: "C",
+    explanationEn:
+      "Confronting (problem-solving) is the best conflict resolution technique — it addresses root causes and seeks a win-win solution. Smoothing is temporary; forcing and withdrawal are less effective.",
+    explanationAr:
+      "المواجهة (حل المشكلة) هي أفضل تقنية لحل النزاعات — تعالج الأسباب الجذرية وتسعى إلى حل مربح للجانبين. التهدئة مؤقتة؛ الإكراه والانسحاب أقل فعالية.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project manager wants to improve team performance by clearly defining roles and responsibilities. Which tool is MOST effective?",
+    questionTextAr:
+      "يريد مدير المشروع تحسين أداء الفريق من خلال تحديد الأدوار والمسؤوليات بوضوح. أي أداة هي الأكثر فعالية؟",
+    optionAEn: "Gantt chart",
+    optionAAr: "مخطط جانت",
+    optionBEn: "RACI matrix",
+    optionBAr: "مصفوفة راسي",
+    optionCEn: "Network diagram",
+    optionCAr: "مخطط الشبكة",
+    optionDEn: "Risk register",
+    optionDAr: "سجل المخاطر",
+    correctAnswer: "B",
+    explanationEn:
+      "The RACI matrix (Responsible, Accountable, Consulted, Informed) clearly defines roles and responsibilities for each task, eliminating ambiguity and improving team accountability.",
+    explanationAr:
+      "تُحدد مصفوفة راسي (المسؤول، المحاسب، المستشار، المُطلع) الأدوار والمسؤوليات لكل مهمة بوضوح، مما يُزيل الغموض ويحسن مساءلة الفريق.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project manager is working with a virtual team spread across multiple time zones. What is the GREATEST challenge?",
+    questionTextAr:
+      "يعمل مدير المشروع مع فريق افتراضي موزع عبر مناطق زمنية متعددة. ما أكبر تحدٍّ؟",
+    optionAEn: "Sharing project documentation",
+    optionAAr: "مشاركة وثائق المشروع",
+    optionBEn: "Communication and team cohesion",
+    optionBAr: "التواصل وتماسك الفريق",
+    optionCEn: "Tracking project costs",
+    optionCAr: "تتبع تكاليف المشروع",
+    optionDEn: "Obtaining stakeholder approvals",
+    optionDAr: "الحصول على موافقات أصحاب المصلحة",
+    correctAnswer: "B",
+    explanationEn:
+      "Virtual teams face unique challenges with communication, building trust, and maintaining team cohesion across different time zones, cultures, and locations.",
+    explanationAr:
+      "تواجه الفرق الافتراضية تحديات فريدة في التواصل وبناء الثقة والحفاظ على تماسك الفريق عبر مناطق زمنية وثقافات ومواقع مختلفة.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "According to Maslow's hierarchy of needs, which level must be satisfied BEFORE an employee can be motivated by esteem needs?",
+    questionTextAr:
+      "وفق تسلسل ماسلو الهرمي للاحتياجات، أي مستوى يجب إشباعه قبل أن يتحفز الموظف باحتياجات التقدير؟",
+    optionAEn: "Self-actualization",
+    optionAAr: "تحقيق الذات",
+    optionBEn: "Social/belonging needs",
+    optionBAr: "الاحتياجات الاجتماعية/الانتماء",
+    optionCEn: "Safety needs",
+    optionCAr: "احتياجات الأمان",
+    optionDEn: "Physiological needs",
+    optionDAr: "الاحتياجات الفيزيولوجية",
+    correctAnswer: "B",
+    explanationEn:
+      "Maslow's hierarchy: Physiological → Safety → Social/Belonging → Esteem → Self-actualization. Social/belonging needs must be met before esteem needs can motivate an employee.",
+    explanationAr:
+      "تسلسل ماسلو: الفيزيولوجية ← الأمان ← الاجتماعية/الانتماء ← التقدير ← تحقيق الذات. يجب إشباع الاحتياجات الاجتماعية قبل أن تُحفّز احتياجات التقدير الموظف.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project manager notices that a team member has taken on too much work and is showing signs of burnout. What should the project manager do?",
+    questionTextAr:
+      "لاحظ مدير المشروع أن أحد أعضاء الفريق تحمّل عملاً كثيراً جداً ويظهر عليه علامات الاحتراق الوظيفي. ماذا يجب أن يفعل مدير المشروع؟",
+    optionAEn: "Assign additional resources to help with the workload",
+    optionAAr: "تعيين موارد إضافية للمساعدة في عبء العمل",
+    optionBEn: "Ignore the issue as it will resolve naturally",
+    optionBAr: "تجاهل المشكلة لأنها ستُحل تلقائياً",
+    optionCEn: "Reassign the team member to another project",
+    optionCAr: "إعادة تعيين العضو إلى مشروع آخر",
+    optionDEn: "Document the issue and notify HR immediately",
+    optionDAr: "توثيق المشكلة وإبلاغ الموارد البشرية فوراً",
+    correctAnswer: "A",
+    explanationEn:
+      "The project manager should take proactive steps to address workload issues, including assigning additional resources, to protect team well-being and maintain productivity.",
+    explanationAr:
+      "يجب على مدير المشروع اتخاذ خطوات استباقية لمعالجة مشكلات عبء العمل، بما في ذلك تعيين موارد إضافية، للحفاظ على صحة الفريق والإنتاجية.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project manager uses a servant leadership style. Which behavior BEST describes this approach?",
+    questionTextAr:
+      "يستخدم مدير المشروع أسلوب القيادة الخادمة. أي سلوك يصف هذا النهج بأفضل صورة؟",
+    optionAEn: "Making all decisions without consulting the team",
+    optionAAr: "اتخاذ جميع القرارات دون استشارة الفريق",
+    optionBEn: "Focusing on removing obstacles and empowering the team",
+    optionBAr: "التركيز على إزالة العوائق وتمكين الفريق",
+    optionCEn: "Enforcing strict rules and procedures",
+    optionCAr: "تطبيق قواعد وإجراءات صارمة",
+    optionDEn: "Prioritizing project goals over team needs",
+    optionDAr: "إعطاء الأولوية لأهداف المشروع على حساب احتياجات الفريق",
+    correctAnswer: "B",
+    explanationEn:
+      "Servant leadership focuses on serving the team — removing impediments, empowering team members, and enabling them to perform at their best. It is increasingly valued in agile environments.",
+    explanationAr:
+      "تركز القيادة الخادمة على خدمة الفريق — إزالة العوائق وتمكين أعضاء الفريق وتمكينهم من تحقيق أفضل أداء. وهي ذات قيمة متزايدة في البيئات الرشيقة.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project manager is negotiating with a functional manager for resources. The functional manager is reluctant to release a key team member. What negotiation approach is MOST effective?",
+    questionTextAr:
+      "يتفاوض مدير المشروع مع مدير وظيفي للحصول على موارد. يتردد المدير الوظيفي في تحرير عضو رئيسي في الفريق. أي نهج تفاوضي هو الأكثر فعالية؟",
+    optionAEn: "Escalate to upper management immediately",
+    optionAAr: "التصعيد الفوري إلى الإدارة العليا",
+    optionBEn: "Agree to a compromise that meets both parties' needs",
+    optionBAr: "الاتفاق على حل وسط يلبي احتياجات الطرفين",
+    optionCEn: "Demand the resource regardless of the impact",
+    optionCAr: "المطالبة بالموارد بصرف النظر عن التأثير",
+    optionDEn: "Replace the resource with an external contractor",
+    optionDAr: "استبدال المورد بمقاول خارجي",
+    correctAnswer: "B",
+    explanationEn:
+      "Collaborative negotiation that finds a win-win compromise is most effective. Understanding the functional manager's constraints and finding mutually beneficial solutions leads to better long-term relationships.",
+    explanationAr:
+      "التفاوض التعاوني الذي يجد حلاً وسطاً مربحاً للطرفين هو الأكثر فعالية. فهم قيود المدير الوظيفي وإيجاد حلول مفيدة للطرفين يؤدي إلى علاقات أفضل على المدى البعيد.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project manager is assigned to a project that is already in progress. They notice the team seems demotivated. What is the FIRST thing they should do?",
+    questionTextAr:
+      "تم تعيين مدير مشروع لمشروع قائم بالفعل. يلاحظ أن الفريق يبدو منخفض التحفيز. ما أول شيء يجب عليه فعله؟",
+    optionAEn: "Implement new reward systems immediately",
+    optionAAr: "تطبيق أنظمة مكافآت جديدة فوراً",
+    optionBEn: "Meet with team members to understand the situation",
+    optionBAr: "الاجتماع بأعضاء الفريق لفهم الوضع",
+    optionCEn: "Replace underperforming team members",
+    optionCAr: "استبدال أعضاء الفريق ضعيفي الأداء",
+    optionDEn: "Request additional budget for team incentives",
+    optionDAr: "طلب ميزانية إضافية لحوافز الفريق",
+    correctAnswer: "B",
+    explanationEn:
+      "Before taking any action, the project manager must understand the root cause of demotivation by speaking with team members. Actions without understanding the cause may be ineffective or counterproductive.",
+    explanationAr:
+      "قبل اتخاذ أي إجراء، يجب على مدير المشروع فهم السبب الجذري للتراجع في التحفيز من خلال التحدث مع أعضاء الفريق. الإجراءات دون فهم السبب قد تكون غير فعالة أو عكسية.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project manager learns that a team member is struggling with a task outside their skill set. What is the BEST response?",
+    questionTextAr:
+      "علم مدير المشروع أن أحد أعضاء الفريق يعاني في مهمة خارج نطاق مهاراته. ما الاستجابة المثلى؟",
+    optionAEn: "Reassign the task to another team member",
+    optionAAr: "إعادة تعيين المهمة لعضو آخر في الفريق",
+    optionBEn: "Provide coaching, training, or pair them with a mentor",
+    optionBAr: "تقديم التوجيه والتدريب أو إقرانهم بمرشد",
+    optionCEn: "Document the performance issue in HR records",
+    optionCAr: "توثيق مشكلة الأداء في سجلات الموارد البشرية",
+    optionDEn: "Extend the schedule to give the member more time",
+    optionDAr: "تمديد الجدول الزمني لمنح العضو مزيداً من الوقت",
+    correctAnswer: "B",
+    explanationEn:
+      "Coaching and training develops team capability. This is the preferred approach because it addresses the root cause (skill gap) while keeping the team member engaged and growing.",
+    explanationAr:
+      "يطوّر التوجيه والتدريب قدرات الفريق. هذا هو النهج المفضل لأنه يعالج السبب الجذري (الفجوة في المهارات) مع إبقاء العضو منخرطاً ومتطوراً.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project manager wants to increase team motivation without additional financial rewards. Which approach is MOST effective according to Herzberg?",
+    questionTextAr:
+      "يريد مدير المشروع زيادة دافعية الفريق دون مكافآت مالية إضافية. أي نهج هو الأكثر فعالية وفق هيرتزبرغ؟",
+    optionAEn: "Improve workspace conditions and salaries",
+    optionAAr: "تحسين ظروف بيئة العمل والرواتب",
+    optionBEn: "Give team members greater responsibility and recognition",
+    optionBAr: "منح أعضاء الفريق مسؤولية أكبر واعترافاً بجهودهم",
+    optionCEn: "Increase job security and benefits",
+    optionCAr: "زيادة الأمن الوظيفي والمزايا",
+    optionDEn: "Reduce working hours",
+    optionDAr: "تقليل ساعات العمل",
+    correctAnswer: "B",
+    explanationEn:
+      "According to Herzberg, true motivators include recognition, achievement, responsibility, and advancement. Salary, conditions, and security are hygiene factors — they prevent dissatisfaction but do not motivate.",
+    explanationAr:
+      "وفق هيرتزبرغ، المحفزات الحقيقية هي الاعتراف والإنجاز والمسؤولية والتقدم الوظيفي. الراتب والظروف والأمان هي عوامل نظافة — تمنع عدم الرضا لكنها لا تُحفّز.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project manager uses an agile approach and holds daily standups. A team member consistently arrives late to these meetings. What should the project manager do?",
+    questionTextAr:
+      "يستخدم مدير المشروع نهجاً رشيقاً ويُجري اجتماعات يومية قصيرة. أحد أعضاء الفريق يتأخر باستمرار عن هذه الاجتماعات. ما الذي يجب أن يفعله مدير المشروع؟",
+    optionAEn: "Remove the team member from the daily standup",
+    optionAAr: "إزالة العضو من الاجتماعات اليومية القصيرة",
+    optionBEn: "Have a private conversation to understand the reason",
+    optionBAr: "إجراء محادثة خاصة لفهم السبب",
+    optionCEn: "Document the tardiness in a performance review",
+    optionCAr: "توثيق التأخير في مراجعة الأداء",
+    optionDEn: "Change the meeting time to suit the team member",
+    optionDAr: "تغيير وقت الاجتماع لملاءمة العضو",
+    correctAnswer: "B",
+    explanationEn:
+      "Before taking any action, the project manager should understand the reason for tardiness through a private conversation. There may be a legitimate reason (time zone, personal issue) that can be addressed.",
+    explanationAr:
+      "قبل اتخاذ أي إجراء، يجب على مدير المشروع فهم سبب التأخير من خلال محادثة خاصة. قد يكون هناك سبب مشروع (فارق التوقيت، مشكلة شخصية) يمكن معالجته.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A stakeholder who was initially opposed to the project has become a supporter. What is the BEST way to maintain their support?",
+    questionTextAr:
+      "أصبح صاحب مصلحة كان معارضاً للمشروع في البداية داعماً له. ما أفضل طريقة للحفاظ على دعمه؟",
+    optionAEn: "Keep them minimally informed to avoid overloading them",
+    optionAAr: "إبقاؤهم على اطلاع بحد أدنى لتجنب إثقالهم",
+    optionBEn: "Engage them regularly and involve them in key decisions",
+    optionBAr: "التواصل معهم بانتظام وإشراكهم في القرارات الرئيسية",
+    optionCEn: "Focus on other stakeholders since this one is already on board",
+    optionCAr: "التركيز على أصحاب المصلحة الآخرين بما أن هذا داعم",
+    optionDEn: "Document their support and move on",
+    optionDAr: "توثيق دعمهم والمضي قدماً",
+    correctAnswer: "B",
+    explanationEn:
+      "Maintaining stakeholder engagement requires consistent communication and involvement in relevant decisions. A supportive stakeholder who feels ignored may revert to opposition.",
+    explanationAr:
+      "يتطلب الحفاظ على مشاركة صاحب المصلحة التواصل المستمر والمشاركة في القرارات ذات الصلة. قد يعود صاحب المصلحة الداعم الذي يشعر بالتهميش إلى المعارضة.",
+  },
+  {
+    domain: "People",
+    questionTextEn:
+      "A project manager is leading a team from five different countries. Team members have different communication styles and cultural expectations. What should the project manager do FIRST?",
+    questionTextAr:
+      "يقود مدير المشروع فريقاً من خمس دول مختلفة. لدى أعضاء الفريق أساليب تواصل وتوقعات ثقافية مختلفة. ما الذي يجب أن يفعله مدير المشروع أولاً؟",
+    optionAEn: "Require all team members to follow one communication style",
+    optionAAr: "مطالبة جميع أعضاء الفريق باتباع أسلوب تواصل واحد",
+    optionBEn: "Develop a team charter that acknowledges cultural differences",
+    optionBAr: "تطوير ميثاق فريق يُقرّ بالاختلافات الثقافية",
+    optionCEn: "Hire a cultural consultant to manage the team",
+    optionCAr: "توظيف مستشار ثقافي لإدارة الفريق",
+    optionDEn: "Select team members from fewer cultures to reduce complexity",
+    optionDAr: "اختيار أعضاء الفريق من ثقافات أقل لتقليل التعقيد",
+    correctAnswer: "B",
+    explanationEn:
+      "Developing a team charter that establishes shared norms while acknowledging cultural differences helps set expectations, improve communication, and build team cohesion in a diverse environment.",
+    explanationAr:
+      "يساعد تطوير ميثاق فريق يُرسي معاييراً مشتركة مع الإقرار بالاختلافات الثقافية في تحديد التوقعات وتحسين التواصل وبناء تماسك الفريق في بيئة متنوعة.",
+  },
+
+  // ── BUSINESS ENVIRONMENT DOMAIN (5 questions) ──────────────────────────────
+  {
+    domain: "Business Environment",
+    questionTextEn:
+      "A project manager is asked to justify a new project by comparing its benefits against its costs over time. Which tool is MOST appropriate?",
+    questionTextAr:
+      "يُطلب من مدير المشروع تبرير مشروع جديد من خلال مقارنة فوائده بتكاليفه عبر الزمن. أي أداة هي الأنسب؟",
+    optionAEn: "Payback period analysis",
+    optionAAr: "تحليل فترة الاسترداد",
+    optionBEn: "Benefits realization plan",
+    optionBAr: "خطة تحقيق الفوائد",
+    optionCEn: "Business case",
+    optionCAr: "دراسة الجدوى التجارية",
+    optionDEn: "Project charter",
+    optionDAr: "ميثاق المشروع",
+    correctAnswer: "C",
+    explanationEn:
+      "The business case documents the justification for the project, including a cost-benefit analysis. It is the primary document used to justify project investment to stakeholders.",
+    explanationAr:
+      "توثق دراسة الجدوى التجارية المبررات للمشروع بما في ذلك تحليل التكلفة والفائدة. وهي الوثيقة الرئيسية المستخدمة لتبرير الاستثمار في المشروع لأصحاب المصلحة.",
+  },
+  {
+    domain: "Business Environment",
+    questionTextEn:
+      "A company is undergoing organizational change that may impact ongoing projects. What should the project manager do to protect project value?",
+    questionTextAr:
+      "تمر الشركة بتغيير تنظيمي قد يؤثر على المشاريع الجارية. ما الذي يجب أن يفعله مدير المشروع لحماية قيمة المشروع؟",
+    optionAEn: "Pause all project activities until the change is complete",
+    optionAAr: "إيقاف جميع أنشطة المشروع حتى اكتمال التغيير",
+    optionBEn: "Assess the impact of changes and update the project plan accordingly",
+    optionBAr: "تقييم تأثير التغييرات وتحديث خطة المشروع وفقاً لذلك",
+    optionCEn: "Ignore the organizational change and continue as planned",
+    optionCAr: "تجاهل التغيير التنظيمي والاستمرار كما هو مخطط",
+    optionDEn: "Request project cancellation to avoid risk",
+    optionDAr: "طلب إلغاء المشروع لتجنب المخاطر",
+    correctAnswer: "B",
+    explanationEn:
+      "When organizational changes occur, the project manager must assess their impact on the project and update the project management plan to address new risks, constraints, or opportunities.",
+    explanationAr:
+      "عند حدوث تغييرات تنظيمية، يجب على مدير المشروع تقييم تأثيرها على المشروع وتحديث خطة إدارة المشروع لمعالجة المخاطر أو القيود أو الفرص الجديدة.",
+  },
+  {
+    domain: "Business Environment",
+    questionTextEn:
+      "An organization uses a portfolio management approach. A project manager's project is consuming excessive resources without showing sufficient strategic value. What is the LIKELY outcome?",
+    questionTextAr:
+      "تستخدم المنظمة نهج إدارة المحفظة. مشروع مدير المشروع يستهلك موارد مفرطة دون إظهار قيمة استراتيجية كافية. ما النتيجة المحتملة؟",
+    optionAEn: "The project will receive additional funding",
+    optionAAr: "سيحصل المشروع على تمويل إضافي",
+    optionBEn: "The project may be terminated or deprioritized",
+    optionBAr: "قد يتم إنهاء المشروع أو تراجع أولويته",
+    optionCEn: "The project manager will be replaced",
+    optionCAr: "سيتم استبدال مدير المشروع",
+    optionDEn: "The project will be merged with another project",
+    optionDAr: "سيتم دمج المشروع مع مشروع آخر",
+    correctAnswer: "B",
+    explanationEn:
+      "In portfolio management, projects are regularly reviewed for strategic alignment. Projects that consume excessive resources without sufficient strategic value risk being terminated or deprioritized.",
+    explanationAr:
+      "في إدارة المحفظة، تُراجَع المشاريع بانتظام للتحقق من توافقها الاستراتيجي. المشاريع التي تستهلك موارد مفرطة دون قيمة استراتيجية كافية معرضة للإنهاء أو تراجع الأولوية.",
+  },
+  {
+    domain: "Business Environment",
+    questionTextEn:
+      "A project manager is working on a project that must comply with new government regulations. What is the BEST approach to ensure compliance?",
+    questionTextAr:
+      "يعمل مدير المشروع على مشروع يجب أن يمتثل للوائح حكومية جديدة. ما أفضل نهج لضمان الامتثال؟",
+    optionAEn: "Wait for formal guidance before making any changes",
+    optionAAr: "انتظار التوجيهات الرسمية قبل إجراء أي تغييرات",
+    optionBEn: "Identify regulatory requirements early and integrate them into the project plan",
+    optionBAr: "تحديد المتطلبات التنظيمية مبكراً ودمجها في خطة المشروع",
+    optionCEn: "Assign compliance to the legal team and continue project work",
+    optionCAr: "إسناد الامتثال إلى الفريق القانوني ومواصلة العمل",
+    optionDEn: "Document the regulation and submit a change request",
+    optionDAr: "توثيق اللائحة وتقديم طلب تغيير",
+    correctAnswer: "B",
+    explanationEn:
+      "Regulatory requirements should be identified early and integrated into project planning. This ensures compliance is built in rather than bolted on, reducing risk of non-compliance and costly rework.",
+    explanationAr:
+      "يجب تحديد المتطلبات التنظيمية مبكراً ودمجها في تخطيط المشروع. يضمن ذلك أن الامتثال مُدمج في العمل وليس مُضافاً لاحقاً، مما يقلل من خطر عدم الامتثال وإعادة العمل المكلفة.",
+  },
+  {
+    domain: "Business Environment",
+    questionTextEn:
+      "A project manager completes a project successfully. However, the intended business benefits have not been realized. What should have been done differently?",
+    questionTextAr:
+      "أكمل مدير المشروع مشروعاً بنجاح. ومع ذلك، لم تتحقق الفوائد التجارية المقصودة. ما الذي كان ينبغي فعله بشكل مختلف؟",
+    optionAEn: "The project scope should have been expanded",
+    optionAAr: "كان ينبغي توسيع نطاق المشروع",
+    optionBEn: "A benefits realization plan should have been developed",
+    optionBAr: "كان ينبغي تطوير خطة تحقيق الفوائد",
+    optionCEn: "The project should have been cancelled earlier",
+    optionCAr: "كان ينبغي إلغاء المشروع في وقت أبكر",
+    optionDEn: "The project manager should have managed the budget more tightly",
+    optionDAr: "كان ينبغي لمدير المشروع إدارة الميزانية بشكل أكثر صرامة",
+    correctAnswer: "B",
+    explanationEn:
+      "A benefits realization plan defines how and when benefits will be achieved, assigns responsibility for tracking them, and ensures projects deliver their intended strategic value beyond just completing deliverables.",
+    explanationAr:
+      "تُحدد خطة تحقيق الفوائد كيف ومتى ستُحقَّق الفوائد، وتُسند مسؤولية تتبعها، وتضمن تحقيق المشاريع لقيمتها الاستراتيجية المقصودة بما يتجاوز إكمال المخرجات.",
+  },
+];
+
+async function main() {
+  console.log("Seeding database with PMP questions...");
+
+  await prisma.question.deleteMany();
+
+  for (const q of questions) {
+    await prisma.question.create({ data: q });
+  }
+
+  console.log(`✅ Seeded ${questions.length} questions.`);
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

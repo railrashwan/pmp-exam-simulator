@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Question {
+  id             Int      @id @default(autoincrement())
+  domain         String
+  questionTextEn String
+  questionTextAr String
+  optionAEn      String
+  optionAAr      String
+  optionBEn      String
+  optionBAr      String
+  optionCEn      String
+  optionCAr      String
+  optionDEn      String
+  optionDAr      String
+  correctAnswer      String
+  explanationEn      String
+  explanationAr      String
+  examSet            String   @default("pmp")
+  globalBank         Boolean  @default(false)
+  wrongExplanationEn String?
+  wrongExplanationAr String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ExamAttempt {
+  id              Int             @id @default(autoincrement())
+  examSet         String
+  takenAt         DateTime        @default(now())
+  totalQuestions  Int
+  correctAnswers  Int
+  score           Float
+  passed          Boolean
+  domainBreakdown String          // JSON string
+  results         AttemptResult[]
+}
+
+model AttemptResult {
+  id             Int         @id @default(autoincrement())
+  attemptId      Int
+  attempt        ExamAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  questionId     Int
+  selectedAnswer String?
+  isCorrect      Boolean
+}

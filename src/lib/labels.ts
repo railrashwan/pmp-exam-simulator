@@ -1,0 +1,68 @@
+export const labels = {
+  en: {
+    examTitle: "PMP Examination",
+    questionOf: (current: number, total: number) => `Question ${current} of ${total}`,
+    timeRemaining: "Time Remaining:",
+    english: "English",
+    arabic: "العربية",
+    previous: "Previous",
+    next: "Next",
+    markForReview: "Mark for Review",
+    unmarkForReview: "Unmark Review",
+    calculator: "Calculator",
+    endExam: "End Exam",
+    questionReviewList: "QUESTION REVIEW LIST",
+    answered: "Answered",
+    current: "Current",
+    markedForReview: "Marked for Review",
+    endExamConfirm: "End Exam?",
+    endExamMessage: (unanswered: number) =>
+      unanswered > 0
+        ? `You have ${unanswered} unanswered question(s). Are you sure you want to end the exam?`
+        : "Are you sure you want to end the exam?",
+    confirm: "Yes, End Exam",
+    cancel: "Cancel",
+    timeUp: "Time's Up!",
+    timeUpMessage: "Your exam time has expired. Your answers have been submitted.",
+    viewResults: "View Results",
+    startNewExam: "Start New Exam",
+    pause: "Pause",
+    resume: "Resume",
+    examPaused: "Exam Paused",
+    examPausedMessage: "Your exam is paused. Your timer is frozen.",
+  },
+  ar: {
+    examTitle: "اختبار PMP",
+    questionOf: (current: number, total: number) => `السؤال ${current} من ${total}`,
+    timeRemaining: "الوقت المتبقي:",
+    english: "English",
+    arabic: "العربية",
+    previous: "السابق",
+    next: "التالي",
+    markForReview: "علامة للمراجعة",
+    unmarkForReview: "إزالة علامة المراجعة",
+    calculator: "الآلة الحاسبة",
+    endExam: "إنهاء الاختبار",
+    questionReviewList: "قائمة مراجعة الأسئلة",
+    answered: "تمت الإجابة",
+    current: "الحالي",
+    markedForReview: "مُعلَّم للمراجعة",
+    endExamConfirm: "إنهاء الاختبار؟",
+    endExamMessage: (unanswered: number) =>
+      unanswered > 0
+        ? `لديك ${unanswered} سؤال/أسئلة بدون إجابة. هل أنت متأكد من إنهاء الاختبار؟`
+        : "هل أنت متأكد من إنهاء الاختبار؟",
+    confirm: "نعم، أنهِ الاختبار",
+    cancel: "إلغاء",
+    timeUp: "انتهى الوقت!",
+    timeUpMessage: "انتهى وقت الاختبار. تم إرسال إجاباتك.",
+    viewResults: "عرض النتائج",
+    startNewExam: "بدء اختبار جديد",
+    pause: "إيقاف مؤقت",
+    resume: "استئناف",
+    examPaused: "الاختبار متوقف",
+    examPausedMessage: "اختبارك متوقف. الوقت مجمّد.",
+  },
+};
+
+export type Labels = typeof labels.en;
