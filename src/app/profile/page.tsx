@@ -147,7 +147,6 @@ export default function ProfilePage() {
               onClick={handleStartKillMistakes}
               disabled={mistakeCount === 0 || startingKill}
               className="shrink-0 px-5 py-2 bg-err text-inverse text-xs-type font-semibold rounded hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
-              style={{ backgroundColor: "var(--color-err)" }}
             >
               {startingKill ? "Loading..." : "Start"}
             </button>
@@ -241,8 +240,7 @@ export default function ProfilePage() {
               <button
                 onClick={handleReset}
                 disabled={resetting}
-                className="px-5 py-2 text-xs-type text-inverse rounded hover:opacity-90 font-medium disabled:opacity-50 transition-opacity"
-                style={{ backgroundColor: "var(--color-err)" }}
+                className="px-5 py-2 text-xs-type bg-err text-inverse rounded hover:opacity-90 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
               >
                 {resetting ? "Resetting..." : "Reset"}
               </button>

@@ -41,7 +41,7 @@ export default function ExamPage() {
         {/* Pause overlay */}
         {isPaused && (
           <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-5 z-10">
-            <div className="text-inverse text-2xl font-bold">{pauseLabel}</div>
+            <div className="text-inverse text-xl-type font-bold">{pauseLabel}</div>
             <div className="text-inverse/70 text-sm-type">{pauseMsg}</div>
             <button
               onClick={resumeExam}

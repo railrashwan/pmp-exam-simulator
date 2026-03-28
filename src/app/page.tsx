@@ -99,12 +99,12 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
           {/* PMP Classic */}
-          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm">
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col">
             <div className="bg-primary px-5 py-4">
               <h2 className="text-md-type font-bold text-inverse">PMP Exam</h2>
               <p className="text-xs-type text-inverse/70 mt-0.5">Classic Question Bank</p>
             </div>
-            <div className="p-5 space-y-4">
+            <div className="p-5 space-y-4 flex flex-col grow">
               <div>
                 <label className="block text-label-caps text-muted mb-2">
                   Number of Questions
@@ -142,7 +142,7 @@ export default function HomePage() {
               <button
                 onClick={() => handleStart("pmp")}
                 disabled={loading !== null}
-                className="w-full py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 font-semibold text-sm-type transition-colors"
+                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm-type transition-colors"
               >
                 {loading === "pmp" ? "Loading..." : "Start Exam"}
               </button>
@@ -150,12 +150,12 @@ export default function HomePage() {
           </div>
 
           {/* UNDRAW */}
-          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm">
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col">
             <div className="bg-primary px-5 py-4">
               <h2 className="text-md-type font-bold text-inverse">UNDRAW Exam</h2>
               <p className="text-xs-type text-inverse/70 mt-0.5">PMP Mindset Practice</p>
             </div>
-            <div className="p-5 space-y-4">
+            <div className="p-5 space-y-4 flex flex-col grow">
               <div className="bg-surface rounded-md p-3 text-xs-type text-content space-y-1.5 border border-edge">
                 <div className="flex justify-between">
                   <span className="text-muted">Questions</span>
@@ -180,7 +180,7 @@ export default function HomePage() {
               <button
                 onClick={() => handleStart("undraw")}
                 disabled={loading !== null}
-                className="w-full py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 font-semibold text-sm-type transition-colors"
+                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm-type transition-colors"
               >
                 {loading === "undraw" ? "Loading..." : "Start Exam"}
               </button>
@@ -188,12 +188,12 @@ export default function HomePage() {
           </div>
 
           {/* Andrew 200 */}
-          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm">
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col">
             <div className="bg-primary px-5 py-4">
               <h2 className="text-md-type font-bold text-inverse">Andrew 200</h2>
               <p className="text-xs-type text-inverse/70 mt-0.5">Ultra Hard Questions</p>
             </div>
-            <div className="p-5 space-y-4">
+            <div className="p-5 space-y-4 flex flex-col grow">
               <div className="bg-surface rounded-md p-3 text-xs-type text-content space-y-1.5 border border-edge">
                 <div className="flex justify-between">
                   <span className="text-muted">Questions</span>
@@ -218,7 +218,7 @@ export default function HomePage() {
               <button
                 onClick={() => handleStart("andrew-ultra")}
                 disabled={loading !== null}
-                className="w-full py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 font-semibold text-sm-type transition-colors"
+                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm-type transition-colors"
               >
                 {loading === "andrew-ultra" ? "Loading..." : "Start Exam"}
               </button>
@@ -226,12 +226,12 @@ export default function HomePage() {
           </div>
 
           {/* Yassine */}
-          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm">
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col">
             <div className="bg-primary px-5 py-4">
               <h2 className="text-md-type font-bold text-inverse">Yassine Exam Set</h2>
               <p className="text-xs-type text-inverse/70 mt-0.5">Full Real Exam Simulation</p>
             </div>
-            <div className="p-5 space-y-4">
+            <div className="p-5 space-y-4 flex flex-col grow">
               <div className="bg-surface rounded-md p-3 text-xs-type text-content space-y-1.5 border border-edge">
                 <div className="flex justify-between">
                   <span className="text-muted">Questions</span>
@@ -256,7 +256,7 @@ export default function HomePage() {
               <button
                 onClick={() => handleStart("yassine")}
                 disabled={loading !== null}
-                className="w-full py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 font-semibold text-sm-type transition-colors"
+                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm-type transition-colors"
               >
                 {loading === "yassine" ? "Loading..." : "Start Exam"}
               </button>

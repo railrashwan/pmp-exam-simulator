@@ -115,14 +115,14 @@ export default function ResultsPage() {
 
         {/* Score Card */}
         <div className={`bg-canvas border rounded-lg overflow-hidden ${passed ? "border-correct" : "border-wrong"}`}>
-          <div className={`px-6 py-3 text-xs-type font-semibold ${passed ? "bg-correct text-inverse" : "bg-wrong text-inverse"}`}>
+          <div className={`px-6 py-3 text-xs-type font-semibold text-inverse ${passed ? "bg-ok" : "bg-err"}`}>
             {language === "ar" ? "نتيجة الاختبار" : "Exam Results"}
           </div>
           <div className="p-6 text-center">
             <div className={`text-6xl font-bold my-4 tabular-nums ${passed ? "text-correct" : "text-wrong"}`}>
               {score}%
             </div>
-            <div className={`text-xl font-bold mb-2 ${passed ? "text-correct" : "text-wrong"}`}>
+            <div className={`text-xl-type font-bold mb-2 ${passed ? "text-correct" : "text-wrong"}`}>
               {passed
                 ? language === "ar" ? "ناجح" : "PASSED"
                 : language === "ar" ? "راسب" : "FAILED"}

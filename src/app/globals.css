@@ -105,6 +105,13 @@
   /* Tabular-nums utility for timers, scores, counts */
   .tabular-nums { font-variant-numeric: tabular-nums; }
 
+  /* Explicit solid color utilities for status actions */
+  .bg-ok        { background-color: var(--color-ok); }   /* solid correct green */
+  .bg-err       { background-color: var(--color-err); }  /* solid incorrect red */
+  /* wrong-bg / ok-bg = light tint variants (same as bg-wrong/bg-correct, alias for readability) */
+  .bg-wrong-bg  { background-color: var(--color-err-bg); }
+  .hover\:bg-wrong-bg:hover { background-color: var(--color-err-bg); }
+
   /* backgrounds */
   .bg-canvas      { background-color: var(--color-bg); }
   .bg-surface     { background-color: var(--color-surface); }

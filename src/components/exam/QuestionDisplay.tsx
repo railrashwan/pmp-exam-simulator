@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useExamStore } from "@/store/examStore";
 import { LanguageToggle } from "./LanguageToggle";
 import type { ExamQuestion } from "@/lib/types";
@@ -19,6 +20,11 @@ function getOptionText(q: ExamQuestion, key: string, lang: "en" | "ar"): string 
 
 export function QuestionDisplay() {
   const { questions, currentIndex, answers, language, selectAnswer } = useExamStore();
+
+  // Scroll the question area back to the top on every question change
+  useEffect(() => {
+    document.getElementById("question-area")?.scrollTo(0, 0);
+  }, [currentIndex]);
   const question = questions[currentIndex];
 
   if (!question) return null;
