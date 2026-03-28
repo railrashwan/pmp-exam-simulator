@@ -10,10 +10,11 @@ const PMP_COUNTS = [10, 20, 40, 60, 100, 120, 150, 180];
 const UNDRAW_COUNT = 49;
 const ANDREW_COUNT = 200;
 const YASSINE_COUNT = 180;
+const HELENA_COUNT = 177;
 
 export default function HomePage() {
   const [pmpCount, setPmpCount] = useState(40);
-  const [loading, setLoading] = useState<"pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | null>(null);
+  const [loading, setLoading] = useState<"pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | "helena" | null>(null);
   const [error, setError] = useState<{ set: string; msg: string } | null>(null);
   const [mistakeCount, setMistakeCount] = useState<number | null>(null);
 
@@ -27,7 +28,7 @@ export default function HomePage() {
   const startExam = useExamStore((s) => s.startExam);
   const router = useRouter();
 
-  async function handleStart(examSet: "pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes") {
+  async function handleStart(examSet: "pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | "helena") {
     setLoading(examSet);
     setError(null);
     try {
@@ -42,6 +43,9 @@ export default function HomePage() {
       } else if (examSet === "yassine") {
         count = YASSINE_COUNT;
         url = `/api/exam/start?examSet=yassine`;
+      } else if (examSet === "helena") {
+        count = HELENA_COUNT;
+        url = `/api/exam/start?examSet=helena`;
       } else if (examSet === "kill-mistakes") {
         count = mistakeCount ?? 0;
         url = `/api/exam/start?examSet=kill-mistakes`;
@@ -69,6 +73,7 @@ export default function HomePage() {
   const undrawDurationMin = Math.round((UNDRAW_COUNT * 77) / 60);
   const andrewDurationMin = Math.round((ANDREW_COUNT * 77) / 60);
   const yassineDurationMin = Math.round((YASSINE_COUNT * 77) / 60);
+  const helenaDurationMin = Math.round((HELENA_COUNT * 77) / 60);
 
   return (
     <div className="min-h-screen bg-canvas" dir="ltr">
@@ -138,7 +143,7 @@ export default function HomePage() {
         </div>
 
         {/* ── SECONDARY: Specialty exam sets ──────────────────────────── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
           {/* UNDRAW */}
           <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-interact)" }}>
@@ -246,6 +251,43 @@ export default function HomePage() {
                 {loading === "yassine" ? "Loading..." : "Start Exam"}
               </button>
               {error?.set === "yassine" && (
+                <p className="text-wrong text-xs-type">{error.msg}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Helena Liu */}
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-interact)" }}>
+            <div className="px-4 py-4 border-b border-edge bg-surface">
+              <h2 className="text-sm-type font-bold text-content">Helena Liu Exam Set</h2>
+              <p className="text-xs-type text-muted mt-0.5">Community Practice Set</p>
+            </div>
+            <div className="p-4 space-y-3 flex flex-col grow">
+              <div className="space-y-1.5 text-xs-type border border-edge rounded-md p-3 bg-surface">
+                <div className="flex justify-between">
+                  <span className="text-muted">Questions</span>
+                  <span className="font-semibold">{HELENA_COUNT} (fixed)</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted">Duration</span>
+                  <span className="font-semibold tabular-nums">{helenaDurationMin} min</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted">Format</span>
+                  <span className="font-semibold text-interact">Full simulation</span>
+                </div>
+              </div>
+              <p className="text-xs-type text-muted leading-relaxed">
+                177 scenario questions targeting process and people domains to refine your PMP readiness.
+              </p>
+              <button
+                onClick={() => handleStart("helena")}
+                disabled={loading !== null}
+                className="w-full mt-auto py-2.5 bg-interact text-white rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
+              >
+                {loading === "helena" ? "Loading..." : "Start Exam"}
+              </button>
+              {error?.set === "helena" && (
                 <p className="text-wrong text-xs-type">{error.msg}</p>
               )}
             </div>
