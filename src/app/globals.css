@@ -110,3 +110,19 @@ body {
   outline-offset: 2px;
   border-radius: 2px;
 }
+
+/* Prevent long words / Arabic text from overflowing containers */
+p, li, td, th, label, span, button, h1, h2, h3, h4 {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

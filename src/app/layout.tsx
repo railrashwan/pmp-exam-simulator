@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { LangSync } from "@/components/LangSync";
 
 export const metadata: Metadata = {
   title: "PMP Exam Simulator",
@@ -22,6 +23,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col antialiased bg-canvas text-content">
+        <LangSync />
         {children}
       </body>
     </html>
