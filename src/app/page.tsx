@@ -77,15 +77,15 @@ export default function HomePage() {
       <header className="bg-primary border-b border-primary">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
           <div>
-            <h1 className="text-xl-type font-bold text-inverse tracking-wide">PMP Exam Simulator</h1>
-            <p className="text-xs-type text-inverse/70 mt-0.5">Project Management Professional</p>
+            <h1 className="text-2xl font-bold text-white tracking-wide drop-shadow-sm">PMP Exam Simulator</h1>
+            <p className="text-sm text-white/90 mt-0.5">Project Management Professional</p>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/profile" className="text-xs-type text-inverse/80 hover:text-inverse transition-colors">
+            <a href="/profile" className="text-xs-type text-white/90 hover:text-white transition-colors">
               My Profile
             </a>
-            <span className="text-inverse/30">|</span>
-            <a href="/admin" className="text-xs-type text-inverse/50 hover:text-inverse/80 transition-colors">
+            <span className="text-white/40">|</span>
+            <a href="/admin" className="text-xs-type text-white/70 hover:text-white transition-colors">
               Admin
             </a>
             <ThemeToggle className="border-white/20 text-white/70 hover:bg-white/10 hover:text-white ml-1" />
@@ -96,53 +96,41 @@ export default function HomePage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
         {/* ── PRIMARY: PMP Classic ─────────────────────────────────────── */}
-        <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm">
-          <div className="bg-primary px-6 py-5">
-            <h2 className="text-xl-type font-bold text-inverse">PMP Exam</h2>
-            <p className="text-xs-type text-inverse/70 mt-1">
+        <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-interact)" }}>
+          <div className="px-4 py-4 border-b border-edge bg-surface">
+            <h2 className="text-sm-type font-bold text-content">PMP Exam</h2>
+            <p className="text-xs-type text-muted mt-0.5">
               The core question bank. Choose your question count, set your session length, and practice at your own pace.
             </p>
           </div>
-          <div className="p-5 sm:p-6 space-y-4">
-            <div>
-              <label className="block text-label-caps text-muted mb-2">Number of Questions</label>
-              <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
+          <div className="p-4 flex flex-col gap-3">
+            <label className="block text-label-caps text-muted mb-1">Number of Questions</label>
+            <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+              <div className="flex flex-wrap gap-2 flex-grow">
                 {PMP_COUNTS.map((n) => (
                   <button
                     key={n}
                     onClick={() => setPmpCount(n)}
-                    className={`py-2.5 rounded border text-sm-type font-semibold transition-colors ${
+                    className={`px-4 py-1.5 rounded-md border text-xs-type font-semibold transition-colors ${
                       pmpCount === n
-                        ? "bg-primary text-inverse border-primary"
-                        : "bg-canvas text-content border-edge hover:border-edge-2"
+                        ? "bg-primary text-white border-primary"
+                        : "bg-surface text-content border-edge hover:border-edge-2"
                     }`}
                   >
                     {n}
                   </button>
                 ))}
               </div>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <div className="bg-surface rounded-md p-3 text-xs-type border border-edge space-y-1.5 sm:flex-1">
-                <div className="flex justify-between">
-                  <span className="text-muted">Questions</span>
-                  <span className="font-semibold tabular-nums">{pmpCount}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Duration</span>
-                  <span className="font-semibold tabular-nums">{pmpDurationMin} min</span>
-                </div>
-              </div>
-              <div className="sm:w-44 shrink-0">
+              <div className="w-full sm:w-44 shrink-0">
                 <button
                   onClick={() => handleStart("pmp")}
                   disabled={loading !== null}
-                  className="w-full py-3 bg-interact text-inverse rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-bold text-sm-type transition-colors"
+                  className="w-full py-2.5 bg-interact text-white rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
                 >
-                  {loading === "pmp" ? "Loading..." : "Start Exam →"}
+                  {loading === "pmp" ? "Loading..." : "Start Exam"}
                 </button>
                 {error?.set === "pmp" && (
-                  <p className="mt-1.5 text-wrong text-xs-type">{error.msg}</p>
+                  <p className="mt-2 text-wrong text-xs-type text-center">{error.msg}</p>
                 )}
               </div>
             </div>
@@ -179,7 +167,7 @@ export default function HomePage() {
               <button
                 onClick={() => handleStart("undraw")}
                 disabled={loading !== null}
-                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
+                className="w-full mt-auto py-2.5 bg-interact text-white rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
               >
                 {loading === "undraw" ? "Loading..." : "Start Exam"}
               </button>
@@ -190,7 +178,7 @@ export default function HomePage() {
           </div>
 
           {/* Andrew 200 */}
-          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-warn)" }}>
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-interact)" }}>
             <div className="px-4 py-4 border-b border-edge bg-surface">
               <h2 className="text-sm-type font-bold text-content">Andrew 200</h2>
               <p className="text-xs-type text-muted mt-0.5">Ultra Hard Questions</p>
@@ -216,7 +204,7 @@ export default function HomePage() {
               <button
                 onClick={() => handleStart("andrew-ultra")}
                 disabled={loading !== null}
-                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
+                className="w-full mt-auto py-2.5 bg-interact text-white rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
               >
                 {loading === "andrew-ultra" ? "Loading..." : "Start Exam"}
               </button>
@@ -227,7 +215,7 @@ export default function HomePage() {
           </div>
 
           {/* Yassine */}
-          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-primary)" }}>
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-interact)" }}>
             <div className="px-4 py-4 border-b border-edge bg-surface">
               <h2 className="text-sm-type font-bold text-content">Yassine Exam Set</h2>
               <p className="text-xs-type text-muted mt-0.5">Full Real Exam Simulation</p>
@@ -253,7 +241,7 @@ export default function HomePage() {
               <button
                 onClick={() => handleStart("yassine")}
                 disabled={loading !== null}
-                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
+                className="w-full mt-auto py-2.5 bg-interact text-white rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
               >
                 {loading === "yassine" ? "Loading..." : "Start Exam"}
               </button>
@@ -265,7 +253,7 @@ export default function HomePage() {
         </div>
 
         {/* ── Kill Mistakes ──────────────────────────────────────────── */}
-        <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm">
+        <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-err)" }}>
           <div className="px-5 py-4 border-b border-edge flex items-center justify-between bg-surface">
             <div>
               <h2 className="text-sm-type font-bold text-content">Kill Mistakes Exam</h2>
@@ -283,16 +271,16 @@ export default function HomePage() {
                 ? "No wrong answers yet. Complete an exam to start tracking your mistakes."
                 : `${mistakeCount} unique question${mistakeCount !== 1 ? "s" : ""} answered incorrectly — time to fix them.`}
             </p>
-            <div className="shrink-0 flex flex-col items-end gap-1.5">
+            <div className="w-full sm:w-44 shrink-0">
               <button
                 onClick={() => handleStart("kill-mistakes")}
                 disabled={!mistakeCount || loading !== null}
-                className="px-6 py-2.5 bg-err text-inverse text-xs-type font-semibold rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
+                className="w-full py-2.5 bg-err text-white text-xs-type font-semibold rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
               >
-                {loading === "kill-mistakes" ? "Loading..." : "Start"}
+                {loading === "kill-mistakes" ? "Loading..." : "Start Exam"}
               </button>
               {error?.set === "kill-mistakes" && (
-                <p className="text-wrong text-xs-type">{error.msg}</p>
+                <p className="mt-2 text-wrong text-xs-type text-center">{error.msg}</p>
               )}
             </div>
           </div>

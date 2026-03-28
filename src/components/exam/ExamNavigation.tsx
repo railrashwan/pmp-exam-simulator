@@ -34,21 +34,21 @@ export function ExamNavigation({ onToggleReview }: Props) {
   return (
     <>
       {/* Main nav bar */}
-      <div className="border-t border-edge bg-surface px-4 sm:px-6 py-3 flex items-center justify-between gap-2 shadow-[0_-2px_8px_rgba(0,0,0,0.06)]">
+      <div className="border-t border-edge bg-surface px-4 sm:px-6 py-4 flex items-center justify-between gap-3 shadow-[0_-2px_8px_rgba(0,0,0,0.06)]">
         <button
           onClick={prevQuestion}
           disabled={currentIndex === 0}
-          className="px-6 sm:px-8 py-2.5 text-xl font-semibold bg-canvas text-content border-2 border-edge rounded-lg hover:bg-surface disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-6 sm:px-8 py-2.5 text-sm font-bold bg-canvas text-content border border-edge rounded-lg hover:bg-surface-2 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
         >
           {L.previous}
         </button>
 
         <button
           onClick={() => currentQuestion && toggleMarkForReview(currentQuestion.id)}
-          className={`px-4 sm:px-6 py-2.5 text-xl font-semibold rounded-lg border-2 flex items-center gap-2 transition-colors ${
+          className={`px-4 sm:px-6 py-2.5 text-sm font-bold rounded-lg border flex items-center gap-2 transition-colors shadow-sm ${
             isMarked
-              ? "bg-red-50 border-red-400 text-red-700 hover:bg-red-100"
-              : "bg-canvas border-edge text-content hover:bg-surface"
+              ? "bg-red-50 border-red-300 text-red-700 hover:bg-red-100"
+              : "bg-surface border-edge text-content hover:bg-surface-2"
           }`}
         >
           <span>🚩</span>
@@ -58,18 +58,18 @@ export function ExamNavigation({ onToggleReview }: Props) {
         <button
           onClick={nextQuestion}
           disabled={currentIndex === questions.length - 1}
-          className="px-8 sm:px-10 py-2.5 text-xl font-semibold bg-primary text-inverse border-2 border-primary rounded-lg hover:bg-primary-h disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-8 sm:px-10 py-2.5 text-sm font-bold bg-interact text-white rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
         >
           {L.next}
         </button>
       </div>
 
       {/* Tools row — always LTR so Calculator/End Exam stay on the right */}
-      <div dir="ltr" className="border-t border-edge bg-canvas px-4 sm:px-6 py-2.5 flex items-center gap-3">
+      <div dir="ltr" className="border-t border-edge bg-canvas px-4 sm:px-6 py-3 flex items-center gap-3">
         {/* Review toggle — only shown on mobile/tablet */}
         <button
           onClick={onToggleReview}
-          className="lg:hidden px-4 py-2 text-xl font-medium bg-surface text-content border-2 border-edge rounded-lg hover:bg-surface-2 transition-colors"
+          className="lg:hidden px-4 py-2 text-sm font-semibold bg-surface text-content border border-edge rounded-lg hover:bg-surface-2 transition-colors shadow-sm"
           aria-label="Open question review panel"
         >
           {language === "ar" ? "المراجعة" : "Review"}
@@ -77,13 +77,13 @@ export function ExamNavigation({ onToggleReview }: Props) {
         <div className="flex items-center gap-3 ml-auto">
           <button
             onClick={() => setShowCalc(true)}
-            className="px-5 py-2 text-xl font-medium bg-canvas text-content border-2 border-edge rounded-lg hover:bg-surface transition-colors"
+            className="px-5 py-2 text-sm font-semibold bg-surface text-content border border-edge rounded-lg hover:bg-surface-2 transition-colors shadow-sm"
           >
             {L.calculator}
           </button>
           <button
             onClick={() => setShowEndDialog(true)}
-            className="px-5 py-2 text-xl font-medium bg-canvas text-wrong border-2 border-wrong rounded-lg hover:bg-wrong-bg transition-colors"
+            className="px-5 py-2 text-sm font-bold bg-err text-white rounded-lg hover:opacity-90 transition-opacity shadow-sm"
           >
             {L.endExam}
           </button>

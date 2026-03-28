@@ -46,40 +46,43 @@ export default function AdminQuestionsPage() {
   const totalPages = Math.ceil(total / 20);
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Questions ({total})</h1>
+    <div className="p-4 sm:p-6 space-y-4">
+      <div className="flex items-center justify-between bg-surface border border-edge px-4 py-4 rounded-lg shadow-sm">
+        <div>
+          <h1 className="text-sm-type font-bold text-content">Questions Bank</h1>
+          <p className="text-xs-type text-muted mt-0.5">Manage all {total} exam questions</p>
+        </div>
         <Link
           href="/admin/questions/new"
-          className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-2xl font-semibold shadow-md hover:shadow-lg transition-all"
+          className="px-4 py-2 bg-interact text-white rounded-lg hover:bg-interact-h text-xs-type font-semibold shadow-sm transition-colors"
         >
           + Add Question
         </Link>
       </div>
 
       {deleteError && (
-        <div className="mb-4 px-4 py-3 bg-red-50 border border-red-300 text-red-700 rounded-xl text-2xl">
+        <div className="px-4 py-3 bg-err-bg border border-err text-err rounded-lg text-sm">
           {deleteError}
         </div>
       )}
 
       {/* Filters */}
-      <div className="flex gap-4 mb-6">
-        <form onSubmit={handleSearch} className="flex gap-3 flex-1">
+      <div className="flex flex-col sm:flex-row gap-3">
+        <form onSubmit={handleSearch} className="flex gap-2 flex-1">
           <input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search questions..."
-            className="flex-1 border-2 border-gray-300 rounded-xl px-4 py-3 text-2xl focus:outline-none focus:border-blue-400"
+            className="flex-1 border border-edge bg-canvas text-content rounded-lg px-3 py-2 text-xs-type focus:outline-none focus:border-interact shadow-sm"
           />
-          <button type="submit" className="px-6 py-3 bg-gray-200 rounded-xl hover:bg-gray-300 text-2xl font-medium shadow-sm">
+          <button type="submit" className="px-4 py-2 bg-surface border border-edge text-content rounded-lg hover:bg-surface-2 text-xs-type font-semibold shadow-sm transition-colors">
             Search
           </button>
         </form>
         <select
           value={domain}
           onChange={(e) => { setDomain(e.target.value); setPage(1); }}
-          className="border-2 border-gray-300 rounded-xl px-4 py-3 text-2xl focus:outline-none focus:border-blue-400"
+          className="border border-edge bg-canvas text-content rounded-lg px-3 py-2 text-xs-type focus:outline-none focus:border-interact shadow-sm shrink-0"
         >
           {DOMAINS.map((d) => <option key={d}>{d}</option>)}
         </select>
@@ -87,53 +90,57 @@ export default function AdminQuestionsPage() {
 
       {/* Table */}
       {loading ? (
-        <div className="text-gray-500 text-2xl p-8">Loading...</div>
+        <div className="text-muted text-sm p-8 text-center bg-canvas border border-edge rounded-lg">Loading...</div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden">
-          <table className="w-full text-2xl">
-            <thead className="bg-gray-100 border-b">
-              <tr>
-                <th className="px-5 py-4 text-left font-semibold text-gray-600 w-16">#</th>
-                <th className="px-5 py-4 text-left font-semibold text-gray-600 w-52">Domain</th>
-                <th className="px-5 py-4 text-left font-semibold text-gray-600">Question (EN)</th>
-                <th className="px-5 py-4 text-center font-semibold text-gray-600 w-24">Ans</th>
-                <th className="px-5 py-4 text-right font-semibold text-gray-600 w-36">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
+        <div className="bg-canvas border border-edge rounded-lg shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-surface border-b border-edge text-xs-type text-muted uppercase tracking-wider">
+                <tr>
+                  <th className="px-4 py-3 font-semibold w-16">#</th>
+                  <th className="px-4 py-3 font-semibold w-48">Domain</th>
+                  <th className="px-4 py-3 font-semibold min-w-[200px]">Question (EN)</th>
+                  <th className="px-4 py-3 font-semibold text-center w-20">Ans</th>
+                  <th className="px-4 py-3 font-semibold text-right w-32">Actions</th>
+                </tr>
+              </thead>
+            <tbody className="divide-y divide-edge">
               {questions.map((q) => (
-                <tr key={q.id} className="hover:bg-gray-50">
-                  <td className="px-5 py-4 text-gray-500">{q.id}</td>
-                  <td className="px-5 py-4">
-                    <span className={`px-3 py-1 rounded-full text-xl font-medium ${
-                      q.domain === "People" ? "bg-blue-100 text-blue-700" :
-                      q.domain === "Process" ? "bg-green-100 text-green-700" :
-                      "bg-orange-100 text-orange-700"
+                <tr key={q.id} className="hover:bg-surface transition-colors">
+                  <td className="px-4 py-3 text-muted">{q.id}</td>
+                  <td className="px-4 py-3">
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${
+                      q.domain === "People" ? "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800" :
+                      q.domain === "Process" ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/40 dark:text-green-300 dark:border-green-800" :
+                      "bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/40 dark:text-orange-300 dark:border-orange-800"
                     }`}>
                       {q.domain}
                     </span>
                   </td>
-                  <td className="px-5 py-4 text-gray-800 max-w-xs truncate">{q.questionTextEn}</td>
-                  <td className="px-5 py-4 text-center font-bold text-blue-600">{q.correctAnswer}</td>
-                  <td className="px-5 py-4 text-right space-x-3">
-                    <Link href={`/admin/questions/${q.id}/edit`} className="text-blue-600 hover:text-blue-800 font-semibold">Edit</Link>
-                    <button onClick={() => handleDelete(q.id)} className="text-red-600 hover:text-red-800 font-semibold">Delete</button>
+                  <td className="px-4 py-3 text-content max-w-[200px] sm:max-w-xs truncate">{q.questionTextEn}</td>
+                  <td className="px-4 py-3 text-center font-bold text-interact">{q.correctAnswer}</td>
+                  <td className="px-4 py-3 text-right space-x-3">
+                    <Link href={`/admin/questions/${q.id}/edit`} className="text-interact hover:text-interact-h font-semibold transition-colors">Edit</Link>
+                    <button onClick={() => handleDelete(q.id)} className="text-err hover:text-red-700 font-semibold transition-colors">Delete</button>
                   </td>
                 </tr>
               ))}
               {questions.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="px-5 py-12 text-center text-gray-500 text-2xl">No questions found.</td>
+                  <td colSpan={5} className="px-4 py-8 text-center text-muted text-sm">No questions found.</td>
                 </tr>
               )}
             </tbody>
           </table>
+          </div>
 
           {totalPages > 1 && (
-            <div className="px-5 py-4 border-t flex items-center gap-3 text-2xl">
-              <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className="px-5 py-2 border-2 rounded-lg disabled:opacity-40 font-medium shadow-sm hover:shadow-md">‹ Prev</button>
-              <span className="text-gray-600">Page {page} of {totalPages}</span>
-              <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page >= totalPages} className="px-5 py-2 border-2 rounded-lg disabled:opacity-40 font-medium shadow-sm hover:shadow-md">Next ›</button>
+            <div className="px-4 py-3 border-t border-edge bg-surface flex items-center justify-center sm:justify-between gap-3 text-sm">
+              <span className="text-muted hidden sm:inline">Page <span className="font-medium text-content">{page}</span> of <span className="font-medium text-content">{totalPages}</span></span>
+              <div className="flex gap-2">
+                <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className="px-4 py-1.5 bg-canvas border border-edge rounded-md disabled:opacity-40 font-semibold shadow-sm hover:bg-surface-2 transition-colors">‹ Prev</button>
+                <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page >= totalPages} className="px-4 py-1.5 bg-canvas border border-edge rounded-md disabled:opacity-40 font-semibold shadow-sm hover:bg-surface-2 transition-colors">Next ›</button>
+              </div>
             </div>
           )}
         </div>
