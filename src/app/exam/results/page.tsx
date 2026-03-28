@@ -104,7 +104,7 @@ export default function ResultsPage() {
       <div className="sticky top-0 z-20 bg-canvas border-b border-edge px-4 sm:px-6 py-3 flex items-center justify-between">
         <a
           href="/"
-          className="text-xs-type font-medium text-content border border-edge rounded px-3 py-1.5 hover:bg-surface transition-colors"
+          className="text-sm-type font-semibold text-content border border-edge rounded-lg px-4 py-2 hover:bg-surface-2 transition-colors shadow-sm"
         >
           {language === "ar" ? "← الرئيسية" : "← Home"}
         </a>
