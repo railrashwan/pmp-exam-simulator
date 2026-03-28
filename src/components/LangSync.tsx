@@ -12,7 +12,7 @@ export function LangSync() {
 
   useEffect(() => {
     document.documentElement.lang = language;
-    document.documentElement.dir = "ltr";
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
   }, [language]);
 
   return null;

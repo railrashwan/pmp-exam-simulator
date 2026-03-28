@@ -99,7 +99,7 @@ export default function ResultsPage() {
   const { score, passed, correctAnswers, totalQuestions, domainBreakdown, results: qResults } = results;
 
   return (
-    <div className="min-h-screen bg-surface" dir={isRtl ? "rtl" : "ltr"}>
+    <div className="min-h-screen bg-surface">
       {/* Sticky top bar */}
       <div className="sticky top-0 z-20 bg-canvas border-b border-edge px-4 sm:px-6 py-3 flex items-center justify-between">
         <a
@@ -233,15 +233,15 @@ export default function ResultsPage() {
                               )}
                             </div>
                             {isCorrectOption && (
-                              <div className={`mt-1 px-3 py-2 text-xs-type bg-surface ${isRtl ? "rounded-l border-r-2" : "rounded-r border-l-2"}`}
-                                style={{ [isRtl ? "borderRightColor" : "borderLeftColor"]: "var(--color-ok)", color: "var(--color-ok)" }}>
+                              <div className="mt-1 px-3 py-2 text-xs-type rounded-r border-l-2 bg-surface"
+                                style={{ borderLeftColor: "var(--color-ok)", color: "var(--color-ok)" }}>
                                 <span className="font-semibold">{isRtl ? "لماذا صحيح: " : "Why correct: "}</span>
                                 <span className="text-content">{isRtl ? r.explanationAr : r.explanationEn}</span>
                               </div>
                             )}
                             {!isCorrectOption && wrongExpl && (
-                              <div className={`mt-1 px-3 py-2 text-xs-type bg-surface ${isRtl ? "rounded-l border-r-2" : "rounded-r border-l-2"}`}
-                                style={{ [isRtl ? "borderRightColor" : "borderLeftColor"]: isSelected ? "var(--color-err)" : "var(--color-border)", color: isSelected ? "var(--color-err)" : "var(--color-text-2)" }}>
+                              <div className={`mt-1 px-3 py-2 text-xs-type rounded-r border-l-2 bg-surface`}
+                                style={{ borderLeftColor: isSelected ? "var(--color-err)" : "var(--color-border)", color: isSelected ? "var(--color-err)" : "var(--color-text-2)" }}>
                                 <span className="font-semibold">{isRtl ? "لماذا خطأ: " : "Why wrong: "}</span>
                                 <span className="text-content">{wrongExpl}</span>
                               </div>
