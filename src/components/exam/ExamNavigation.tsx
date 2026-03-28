@@ -64,8 +64,8 @@ export function ExamNavigation({ onToggleReview }: Props) {
         </button>
       </div>
 
-      {/* Tools row */}
-      <div className="border-t border-edge bg-canvas px-4 sm:px-6 py-2.5 flex items-center gap-3">
+      {/* Tools row — always LTR so Calculator/End Exam stay on the right */}
+      <div dir="ltr" className="border-t border-edge bg-canvas px-4 sm:px-6 py-2.5 flex items-center gap-3">
         {/* Review toggle — only shown on mobile/tablet */}
         <button
           onClick={onToggleReview}

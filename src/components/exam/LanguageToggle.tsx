@@ -8,23 +8,24 @@ export function LanguageToggle() {
   const L = labels[language];
 
   return (
-    <div className="inline-flex rounded border border-edge overflow-hidden">
+    <div className="flex items-center gap-3">
       <button
         onClick={() => language === "ar" && toggleLanguage()}
-        className={`px-4 py-1.5 text-xs-type font-medium transition-colors ${
+        className={`px-7 py-2 rounded-full text-2xl font-medium transition-all border-2 ${
           language === "en"
-            ? "bg-primary text-inverse"
-            : "bg-canvas text-muted hover:bg-surface"
+            ? "bg-sky-400 text-white border-sky-400 shadow-md"
+            : "bg-transparent text-gray-500 border-gray-300 hover:border-gray-400"
         }`}
       >
         {L.english}
       </button>
+      <span className="text-gray-400 text-2xl select-none">⇌</span>
       <button
         onClick={() => language === "en" && toggleLanguage()}
-        className={`px-4 py-1.5 text-xs-type font-medium transition-colors border-l border-edge ${
+        className={`px-7 py-2 rounded-full text-2xl font-medium transition-all border-2 ${
           language === "ar"
-            ? "bg-primary text-inverse"
-            : "bg-canvas text-muted hover:bg-surface"
+            ? "bg-sky-400 text-white border-sky-400 shadow-md"
+            : "bg-transparent text-gray-500 border-gray-300 hover:border-gray-400"
         }`}
       >
         {L.arabic}
