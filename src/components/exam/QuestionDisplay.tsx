@@ -6,7 +6,6 @@ import type { ExamQuestion } from "@/lib/types";
 
 const OPTION_KEYS = ["A", "B", "C", "D"] as const;
 const ARABIC_LABELS: Record<string, string> = { A: "أ", B: "ب", C: "ج", D: "د" };
-const FONT_SIZE = 24;
 
 function getOptionText(q: ExamQuestion, key: string, lang: "en" | "ar"): string {
   const map: Record<string, keyof ExamQuestion> = {
@@ -29,7 +28,7 @@ export function QuestionDisplay() {
   const isRtl = language === "ar";
 
   return (
-    <div className="flex-1 p-4 flex flex-col gap-3">
+    <div className="flex-1 p-5 flex flex-col gap-4">
       {/* Language toggle */}
       <div className="flex justify-center">
         <LanguageToggle />
@@ -38,11 +37,11 @@ export function QuestionDisplay() {
       {/* Question card */}
       <div
         dir={isRtl ? "rtl" : "ltr"}
-        className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm"
+        className="border border-edge rounded-md p-4 bg-canvas"
       >
         <p
-          className={`font-bold text-gray-900 leading-relaxed ${isRtl ? "text-right" : ""}`}
-          style={{ fontSize: `${FONT_SIZE}px` }}
+          className={`font-semibold text-content leading-relaxed ${isRtl ? "text-right" : ""}`}
+          style={{ fontSize: "17px" }}
         >
           {qText}
         </p>
@@ -57,10 +56,10 @@ export function QuestionDisplay() {
           return (
             <label
               key={key}
-              className={`flex items-start gap-3 px-3 py-2.5 border rounded-lg cursor-pointer transition-all ${
+              className={`flex items-start gap-3 px-4 py-3 border rounded-md cursor-pointer transition-colors ${
                 isSelected
-                  ? "border-blue-500 bg-blue-50 shadow-sm"
-                  : "border-gray-300 bg-white hover:bg-gray-50 hover:border-gray-400"
+                  ? "border-selected bg-selected"
+                  : "border-edge bg-canvas hover:bg-surface hover:border-edge-2"
               }`}
             >
               <input
@@ -69,11 +68,11 @@ export function QuestionDisplay() {
                 value={key}
                 checked={isSelected}
                 onChange={() => selectAnswer(question.id, key)}
-                className="mt-0.5 accent-blue-600 shrink-0 w-4 h-4"
+                className="mt-0.5 shrink-0 w-4 h-4 accent-[var(--color-primary)]"
               />
               <span
-                className={`text-gray-800 ${isRtl ? "text-right" : ""}`}
-                style={{ fontSize: `${FONT_SIZE}px` }}
+                className={`text-content ${isRtl ? "text-right" : ""}`}
+                style={{ fontSize: "15px", lineHeight: "1.5" }}
               >
                 <span className="font-semibold">{label}. </span>
                 {optionText}

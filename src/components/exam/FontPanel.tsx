@@ -5,49 +5,17 @@ import { useExamStore } from "@/store/examStore";
 import { usePreferencesStore } from "@/store/preferencesStore";
 
 const ARABIC_FONTS = [
-  "Noto Sans Arabic",
-  "Cairo",
-  "Tajawal",
-  "Amiri",
-  "Scheherazade New",
-  "Harmattan",
-  "Lateef",
-  "Reem Kufi",
-  "Almarai",
-  "Mada",
-  "El Messiri",
-  "Jomhuria",
-  "Mirza",
-  "Rakkas",
-  "Aref Ruqaa",
-  "Markazi Text",
-  "Katibeh",
-  "Lemonada",
-  "IBM Plex Arabic",
-  "Changa",
+  "Noto Sans Arabic", "Cairo", "Tajawal", "Amiri", "Scheherazade New",
+  "Harmattan", "Lateef", "Reem Kufi", "Almarai", "Mada",
+  "El Messiri", "Jomhuria", "Mirza", "Rakkas", "Aref Ruqaa",
+  "Markazi Text", "Katibeh", "Lemonada", "IBM Plex Arabic", "Changa",
 ];
 
 const ENGLISH_FONTS = [
-  "Inter",
-  "Roboto",
-  "Open Sans",
-  "Lato",
-  "Montserrat",
-  "Poppins",
-  "Source Sans 3",
-  "Raleway",
-  "Nunito",
-  "Ubuntu",
-  "Merriweather",
-  "Playfair Display",
-  "PT Serif",
-  "Libre Baskerville",
-  "Crimson Text",
-  "Oswald",
-  "Work Sans",
-  "DM Sans",
-  "Outfit",
-  "Josefin Sans",
+  "Inter", "Roboto", "Open Sans", "Lato", "Montserrat",
+  "Poppins", "Source Sans 3", "Raleway", "Nunito", "Ubuntu",
+  "Merriweather", "Playfair Display", "PT Serif", "Libre Baskerville", "Crimson Text",
+  "Oswald", "Work Sans", "DM Sans", "Outfit", "Josefin Sans",
 ];
 
 const ARABIC_SAMPLE = "ما هي الخطوة الأولى التي يجب عليك اتخاذها؟";
@@ -55,7 +23,6 @@ const ENGLISH_SAMPLE = "What is the first step you should take?";
 
 const ARABIC_FONTS_URL =
   "https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic&family=Cairo&family=Tajawal&family=Amiri&family=Scheherazade+New&family=Harmattan&family=Lateef&family=Reem+Kufi&family=Almarai&family=Mada&family=El+Messiri&family=Jomhuria&family=Mirza&family=Rakkas&family=Aref+Ruqaa&family=Markazi+Text&family=Katibeh&family=Lemonada&family=IBM+Plex+Arabic&family=Changa&display=swap";
-
 const ENGLISH_FONTS_URL =
   "https://fonts.googleapis.com/css2?family=Inter&family=Roboto&family=Open+Sans&family=Lato&family=Montserrat&family=Poppins&family=Source+Sans+3&family=Raleway&family=Nunito&family=Ubuntu&family=Merriweather&family=Playfair+Display&family=PT+Serif&family=Libre+Baskerville&family=Crimson+Text&family=Oswald&family=Work+Sans&family=DM+Sans&family=Outfit&family=Josefin+Sans&display=swap";
 
@@ -68,7 +35,6 @@ export function FontPanel() {
   const fonts = isAr ? ARABIC_FONTS : ENGLISH_FONTS;
   const sample = isAr ? ARABIC_SAMPLE : ENGLISH_SAMPLE;
 
-  // Load all font files
   useEffect(() => {
     ["font-panel-arabic", "font-panel-english"].forEach((id, i) => {
       if (document.getElementById(id)) return;
@@ -80,22 +46,15 @@ export function FontPanel() {
     });
   }, []);
 
-  // Apply selected font to question area
   useEffect(() => {
     const STYLE_ID = "font-panel-override";
     let style = document.getElementById(STYLE_ID) as HTMLStyleElement | null;
-
-    if (!questionFont) {
-      style?.remove();
-      return;
-    }
-
+    if (!questionFont) { style?.remove(); return; }
     if (!style) {
       style = document.createElement("style");
       style.id = STYLE_ID;
       document.head.appendChild(style);
     }
-
     style.textContent = `
       #question-area p,
       #question-area label span,
@@ -107,13 +66,13 @@ export function FontPanel() {
 
   return (
     <>
-      {/* Tab button — fixed to lower-left corner */}
+      {/* Trigger button */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-4 left-4 z-40 bg-white border-2 border-indigo-300 text-indigo-700 font-semibold shadow-md hover:bg-indigo-50 hover:border-indigo-400 transition-colors rounded-xl px-5 py-2 text-xl"
+        className="fixed bottom-4 left-4 z-40 bg-canvas border border-edge text-muted font-medium shadow-sm hover:bg-surface hover:text-content transition-colors rounded px-4 py-1.5 text-[13px]"
         aria-label="Open font selector"
       >
-        🔤 Fonts
+        Aa
       </button>
 
       {/* Backdrop */}
@@ -123,35 +82,41 @@ export function FontPanel() {
 
       {/* Slide-out panel */}
       <div
-        className={`fixed top-0 left-0 h-full z-50 bg-white shadow-2xl flex flex-col transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"}`}
-        style={{ width: "440px" }}
+        className={`fixed top-0 left-0 h-full z-50 bg-canvas shadow-xl flex flex-col transition-transform duration-300 border-r border-edge ${open ? "translate-x-0" : "-translate-x-full"}`}
+        style={{ width: "400px" }}
       >
         {/* Header */}
-        <div className="bg-indigo-600 text-white px-5 py-4 flex items-center justify-between shrink-0">
+        <div className="bg-surface border-b border-edge px-5 py-4 flex items-center justify-between shrink-0">
           <div>
-            <div className="text-2xl font-bold">Font Settings</div>
-            <div className="text-lg text-indigo-200">
+            <div className="text-[15px] font-bold text-content">Font Settings</div>
+            <div className="text-[13px] text-muted mt-0.5">
               {isAr ? "Choose your Arabic font" : "Choose your English font"}
             </div>
           </div>
-          <button onClick={() => setOpen(false)} aria-label="Close" className="text-3xl text-indigo-200 hover:text-white px-2">×</button>
+          <button
+            onClick={() => setOpen(false)}
+            aria-label="Close"
+            className="text-muted hover:text-content text-xl px-1 transition-colors"
+          >
+            ×
+          </button>
         </div>
 
         {/* Active font bar */}
         {questionFont && (
-          <div className="bg-indigo-50 border-b border-indigo-200 px-5 py-3 flex items-center justify-between shrink-0">
-            <span className="text-indigo-700 text-xl font-semibold">Active: {questionFont}</span>
+          <div className="bg-surface-2 border-b border-edge px-5 py-2.5 flex items-center justify-between shrink-0">
+            <span className="text-interact text-[13px] font-semibold">Active: {questionFont}</span>
             <button
               onClick={() => setQuestionFont("")}
-              className="text-indigo-400 hover:text-indigo-700 text-lg underline"
+              className="text-muted hover:text-content text-[12px] underline transition-colors"
             >
-              Reset to default
+              Reset
             </button>
           </div>
         )}
 
         {/* Font list */}
-        <div className="flex-1 overflow-y-auto divide-y divide-gray-100">
+        <div className="flex-1 overflow-y-auto divide-y divide-edge">
           {fonts.map((font) => {
             const isActive = questionFont === font;
             return (
@@ -159,20 +124,20 @@ export function FontPanel() {
                 key={font}
                 onClick={() => setQuestionFont(isActive ? "" : font)}
                 className={`w-full text-left px-5 py-4 transition-colors ${
-                  isActive ? "bg-indigo-600 text-white" : "hover:bg-indigo-50"
+                  isActive ? "bg-selected border-l-2 border-primary" : "hover:bg-surface"
                 }`}
               >
-                <div className="text-base font-semibold mb-1" style={{ fontFamily: "system-ui" }}>
+                <div className="text-[12px] font-semibold text-muted mb-1.5" style={{ fontFamily: "system-ui" }}>
                   {isActive && "✓ "}{font}
                 </div>
                 <div
                   style={{
                     fontFamily: `'${font}', sans-serif`,
-                    fontSize: "20px",
+                    fontSize: "15px",
                     direction: isAr ? "rtl" : "ltr",
-                    color: isActive ? "rgba(255,255,255,0.9)" : "#374151",
                     lineHeight: "1.6",
                   }}
+                  className="text-content"
                 >
                   {sample}
                 </div>
@@ -182,7 +147,7 @@ export function FontPanel() {
         </div>
 
         {/* Footer */}
-        <div className="border-t px-5 py-4 bg-gray-50 text-gray-500 text-xl shrink-0">
+        <div className="border-t border-edge px-5 py-3 bg-surface text-muted text-[12px] shrink-0">
           Your font choice is saved automatically.
         </div>
       </div>

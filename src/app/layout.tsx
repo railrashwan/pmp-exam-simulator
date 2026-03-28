@@ -13,7 +13,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-      <body className="min-h-full flex flex-col antialiased">{children}</body>
+      <head>
+        {/* Apply saved theme before hydration to prevent flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var p=JSON.parse(localStorage.getItem('pmp-preferences')||'{}');if(p.state?.theme==='dark')document.documentElement.classList.add('dark');}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col antialiased bg-canvas text-content">
+        {children}
+      </body>
     </html>
   );
 }

@@ -29,26 +29,28 @@ export function ExamHeader() {
   const isLow = timeRemaining < 300 && !isPaused;
 
   return (
-    <div className="bg-white border-b border-gray-300 px-6 py-4 flex items-center justify-between shadow-sm">
+    <div className="bg-canvas border-b border-edge px-6 py-3 flex items-center justify-between">
       <div>
-        <div className="font-bold text-gray-900 text-2xl leading-tight">{L.examTitle}</div>
-        <div className="text-gray-500 text-xl mt-1">
+        <div className="font-semibold text-content text-[15px] leading-tight">{L.examTitle}</div>
+        <div className="text-muted text-[13px] mt-0.5">
           {L.questionOf(currentIndex + 1, questions.length)}
         </div>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <button
           onClick={isPaused ? resumeExam : pauseExam}
-          className={`px-5 py-2 text-xl font-semibold rounded-lg border-2 transition-all ${
+          className={`px-4 py-1.5 text-[13px] font-semibold rounded border transition-colors ${
             isPaused
-              ? "bg-green-600 text-white border-green-700 hover:bg-green-700"
-              : "bg-white text-gray-700 border-gray-400 hover:bg-gray-50"
+              ? "bg-correct text-inverse border-correct hover:opacity-90"
+              : "bg-canvas text-content border-edge hover:bg-surface"
           }`}
         >
           {isPaused ? L.resume : L.pause}
         </button>
         <div
-          className={`font-mono font-bold text-2xl tracking-wide ${isLow ? "text-red-600 animate-pulse" : isPaused ? "text-yellow-600" : "text-gray-800"}`}
+          className={`font-mono font-bold text-[15px] tracking-wider ${
+            isLow ? "text-caution animate-pulse" : isPaused ? "text-muted" : "text-content"
+          }`}
           aria-live="polite"
           aria-atomic="true"
         >

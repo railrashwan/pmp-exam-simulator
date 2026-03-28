@@ -1,21 +1,112 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* ── Design Tokens ────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary:     #364395;   /* Pearson Chambray — structure, headers */
+  --color-primary-h:   #2b3477;   /* primary hover */
+  --color-interact:    #047b9c;   /* interactive — buttons, links, focus */
+  --color-interact-h:  #035f78;   /* interactive hover */
+
+  --color-bg:          #ffffff;   /* page background */
+  --color-surface:     #f5f7fa;   /* cards, panels */
+  --color-surface-2:   #eef0f5;   /* alternate surface */
+  --color-border:      #d0d5dd;   /* default borders */
+  --color-border-2:    #9aa3b2;   /* strong borders */
+
+  --color-text-1:      #1c1c1e;   /* primary text */
+  --color-text-2:      #6b7280;   /* secondary/muted text */
+  --color-text-inv:    #ffffff;   /* text on dark backgrounds */
+
+  --color-sel-bg:      #ebf0fb;   /* selected answer background */
+  --color-sel-border:  #364395;   /* selected answer border */
+
+  --color-ok:          #166534;   /* correct — text & border */
+  --color-ok-bg:       #f0fdf4;   /* correct — background */
+  --color-err:         #991b1b;   /* incorrect — text & border */
+  --color-err-bg:      #fff1f2;   /* incorrect — background */
+  --color-warn:        #b45309;   /* warning — text */
+  --color-warn-bg:     #fffbeb;   /* warning — background */
 }
 
+.dark {
+  --color-primary:     #5b6fcc;
+  --color-primary-h:   #6f82d4;
+  --color-interact:    #22a8c8;
+  --color-interact-h:  #2bbfde;
+
+  --color-bg:          #0f1117;
+  --color-surface:     #1a1f2e;
+  --color-surface-2:   #212638;
+  --color-border:      #2d3748;
+  --color-border-2:    #4a5568;
+
+  --color-text-1:      #e2e8f0;
+  --color-text-2:      #94a3b8;
+  --color-text-inv:    #0f1117;
+
+  --color-sel-bg:      #1e2a4a;
+  --color-sel-border:  #5b6fcc;
+
+  --color-ok:          #4ade80;
+  --color-ok-bg:       #052e16;
+  --color-err:         #f87171;
+  --color-err-bg:      #2d0a0a;
+  --color-warn:        #fbbf24;
+  --color-warn-bg:     #1c1200;
+}
+
+/* ── Semantic Utilities ───────────────────────────────────────────────────── */
+@layer utilities {
+  /* backgrounds */
+  .bg-canvas      { background-color: var(--color-bg); }
+  .bg-surface     { background-color: var(--color-surface); }
+  .bg-surface-2   { background-color: var(--color-surface-2); }
+  .bg-primary     { background-color: var(--color-primary); }
+  .bg-interact    { background-color: var(--color-interact); }
+  .bg-selected    { background-color: var(--color-sel-bg); }
+  .bg-correct     { background-color: var(--color-ok-bg); }
+  .bg-wrong       { background-color: var(--color-err-bg); }
+  .bg-caution     { background-color: var(--color-warn-bg); }
+
+  /* text */
+  .text-content   { color: var(--color-text-1); }
+  .text-muted     { color: var(--color-text-2); }
+  .text-inverse   { color: var(--color-text-inv); }
+  .text-primary   { color: var(--color-primary); }
+  .text-interact  { color: var(--color-interact); }
+  .text-correct   { color: var(--color-ok); }
+  .text-wrong     { color: var(--color-err); }
+  .text-caution   { color: var(--color-warn); }
+
+  /* borders */
+  .border-edge      { border-color: var(--color-border); }
+  .border-edge-2    { border-color: var(--color-border-2); }
+  .border-primary   { border-color: var(--color-primary); }
+  .border-interact  { border-color: var(--color-interact); }
+  .border-selected  { border-color: var(--color-sel-border); }
+  .border-correct   { border-color: var(--color-ok); }
+  .border-wrong     { border-color: var(--color-err); }
+
+  /* hover overrides */
+  .hover\:bg-primary-h:hover  { background-color: var(--color-primary-h); }
+  .hover\:bg-interact-h:hover { background-color: var(--color-interact-h); }
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-1);
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 }
 
-.font-arabic {
-  font-family: 'Noto Sans Arabic', Arial, sans-serif;
-}
-
+.font-arabic,
 [dir="rtl"] {
   font-family: 'Noto Sans Arabic', Arial, sans-serif;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-interact);
+  outline-offset: 2px;
+  border-radius: 2px;
 }

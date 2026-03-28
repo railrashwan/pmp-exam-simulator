@@ -18,25 +18,32 @@ export function EndExamDialog({ unanswered, onConfirm, onCancel }: Props) {
   useEffect(() => { cancelRef.current?.focus(); }, []);
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="end-exam-title">
-      <div className="bg-white rounded-xl shadow-2xl w-[480px] overflow-hidden">
-        <div className="bg-gray-700 text-white px-6 py-4">
-          <h2 id="end-exam-title" className="font-semibold text-2xl">{L.endExamConfirm}</h2>
+    <div
+      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="end-exam-title"
+    >
+      <div className="bg-canvas border border-edge rounded-lg shadow-xl w-[440px] overflow-hidden">
+        <div className="bg-surface border-b border-edge px-5 py-4">
+          <h2 id="end-exam-title" className="font-semibold text-content text-[15px]">
+            {L.endExamConfirm}
+          </h2>
         </div>
-        <div className="p-6">
-          <p className="text-2xl text-gray-700 leading-relaxed">{L.endExamMessage(unanswered)}</p>
+        <div className="p-5">
+          <p className="text-[14px] text-content leading-relaxed">{L.endExamMessage(unanswered)}</p>
         </div>
-        <div className="flex gap-3 px-6 pb-6 justify-end">
+        <div className="flex gap-2 px-5 pb-5 justify-end">
           <button
             ref={cancelRef}
             onClick={onCancel}
-            className="px-7 py-3 text-2xl border-2 border-gray-300 rounded-lg hover:bg-gray-50 font-medium shadow-sm hover:shadow-md transition-all"
+            className="px-5 py-2 text-[14px] border border-edge rounded text-content hover:bg-surface font-medium transition-colors"
           >
             {L.cancel}
           </button>
           <button
             onClick={onConfirm}
-            className="px-7 py-3 text-2xl bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium shadow-sm hover:shadow-md transition-all"
+            className="px-5 py-2 text-[14px] bg-err text-inverse rounded hover:opacity-90 font-medium transition-opacity"
           >
             {L.confirm}
           </button>

@@ -14,42 +14,37 @@ export default function ExamPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (questions.length === 0) {
-      router.replace("/");
-    }
+    if (questions.length === 0) router.replace("/");
   }, [questions, router]);
 
   useEffect(() => {
-    if (isFinished && questions.length > 0) {
-      router.push("/exam/results");
-    }
+    if (isFinished && questions.length > 0) router.push("/exam/results");
   }, [isFinished, questions, router]);
 
   if (questions.length === 0) return null;
 
   const pauseLabel = language === "ar" ? "الاختبار متوقف" : "Exam Paused";
-  const pauseMsg = language === "ar" ? "اختبارك متوقف. الوقت مجمّد." : "Your exam is paused. Your timer is frozen.";
+  const pauseMsg   = language === "ar" ? "اختبارك متوقف. الوقت مجمّد." : "Your exam is paused. Your timer is frozen.";
   const resumeLabel = language === "ar" ? "استئناف" : "Resume Exam";
 
   return (
-    <div className="h-screen flex flex-col bg-white overflow-hidden">
+    <div className="h-screen flex flex-col bg-canvas overflow-hidden">
       <ExamHeader />
 
-      {/* Main content */}
       <div className="relative flex flex-1 overflow-hidden">
-        <div id="question-area" className="flex-1 overflow-y-auto bg-gray-50">
+        <div id="question-area" className="flex-1 overflow-y-auto bg-surface">
           <QuestionDisplay />
         </div>
         <QuestionReviewGrid />
 
         {/* Pause overlay */}
         {isPaused && (
-          <div className="absolute inset-0 bg-gray-900/80 flex flex-col items-center justify-center gap-6 z-10">
-            <div className="text-white text-5xl font-bold">{pauseLabel}</div>
-            <div className="text-gray-300 text-2xl">{pauseMsg}</div>
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-5 z-10">
+            <div className="text-inverse text-2xl font-bold">{pauseLabel}</div>
+            <div className="text-inverse/70 text-[15px]">{pauseMsg}</div>
             <button
               onClick={resumeExam}
-              className="mt-2 px-10 py-4 bg-green-500 text-white text-2xl font-bold rounded-xl hover:bg-green-600 transition-all shadow-lg"
+              className="mt-1 px-8 py-2.5 bg-interact text-inverse text-[15px] font-semibold rounded hover:bg-interact-h transition-colors"
             >
               {resumeLabel}
             </button>
@@ -57,9 +52,7 @@ export default function ExamPage() {
         )}
       </div>
 
-      {/* Navigation */}
       <ExamNavigation />
-
       <FontPanel />
     </div>
   );

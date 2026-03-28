@@ -9,9 +9,9 @@ export function QuestionReviewGrid() {
   const L = labels[language];
 
   return (
-    <div className="w-80 border-l border-gray-300 bg-gray-50 flex flex-col shrink-0">
+    <div className="w-72 border-l border-edge bg-surface flex flex-col shrink-0">
       {/* Header */}
-      <div className="bg-gray-200 px-3 py-3 text-lg font-bold text-gray-700 text-center border-b border-gray-300 tracking-wide uppercase">
+      <div className="bg-surface-2 px-3 py-2.5 text-[11px] font-bold text-muted text-center border-b border-edge tracking-widest uppercase">
         {L.questionReviewList}
       </div>
 
@@ -23,26 +23,28 @@ export function QuestionReviewGrid() {
             const isCurrent = idx === currentIndex;
             const isMarked = markedForReview.includes(q.id);
 
-            let cellCls = "bg-white border border-gray-400 text-gray-700";
-            if (isCurrent) cellCls = "bg-teal-500 border-teal-600 text-white font-bold";
-            else if (isAnswered) cellCls = "bg-green-100 border-green-500 text-green-700";
+            let cellCls = "bg-canvas border-edge text-muted";
+            if (isCurrent) cellCls = "bg-primary border-primary text-inverse font-bold";
+            else if (isAnswered) cellCls = "bg-correct border-correct text-correct";
 
             return (
               <button
                 key={q.id}
                 onClick={() => goToQuestion(idx)}
-                aria-label={`Question ${idx + 1}${isCurrent ? ", current" : isAnswered ? ", answered" : ""}${isMarked ? ", marked" : ""}`}
+                aria-label={`Question ${idx + 1}${isCurrent ? ", current" : isAnswered ? ", answered" : ""}${isMarked ? ", marked for review" : ""}`}
                 aria-current={isCurrent ? "true" : undefined}
-                className={`relative border rounded text-2xl font-medium h-14 flex items-center justify-center transition-all hover:opacity-80 ${cellCls}`}
+                className={`relative border rounded text-[13px] font-medium h-11 flex items-center justify-center transition-colors hover:opacity-80 ${cellCls}`}
               >
                 {isAnswered && !isCurrent ? (
-                  <span className="text-green-600 font-bold text-2xl" aria-hidden="true">✓</span>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 ) : (
                   <span aria-hidden="true">{idx + 1}</span>
                 )}
                 {isMarked && (
                   <span
-                    className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-bl"
+                    className="absolute top-0 right-0 w-2.5 h-2.5 bg-wrong rounded-bl"
                     aria-hidden="true"
                   />
                 )}
@@ -53,18 +55,22 @@ export function QuestionReviewGrid() {
       </div>
 
       {/* Legend */}
-      <div className="border-t border-gray-300 p-3 space-y-2 bg-white">
-        <div className="flex items-center gap-2 text-xl text-gray-700">
-          <span className="w-7 h-7 bg-green-100 border border-green-500 rounded flex items-center justify-center text-green-600 font-bold shrink-0 text-xl" aria-hidden="true">✓</span>
+      <div className="border-t border-edge p-3 space-y-2 bg-canvas">
+        <div className="flex items-center gap-2 text-[12px] text-content">
+          <span className="w-6 h-6 bg-correct border border-correct rounded flex items-center justify-center text-correct shrink-0" aria-hidden="true">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
           {L.answered}
         </div>
-        <div className="flex items-center gap-2 text-xl text-gray-700">
-          <span className="w-7 h-7 bg-teal-500 border border-teal-600 rounded shrink-0" aria-hidden="true" />
+        <div className="flex items-center gap-2 text-[12px] text-content">
+          <span className="w-6 h-6 bg-primary border border-primary rounded shrink-0" aria-hidden="true" />
           {L.current}
         </div>
-        <div className="flex items-center gap-2 text-xl text-gray-700">
-          <span className="w-7 h-7 relative bg-white border border-gray-400 rounded shrink-0" aria-hidden="true">
-            <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-bl" />
+        <div className="flex items-center gap-2 text-[12px] text-content">
+          <span className="w-6 h-6 relative bg-canvas border border-edge rounded shrink-0" aria-hidden="true">
+            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-wrong rounded-bl" />
           </span>
           {L.markedForReview}
         </div>

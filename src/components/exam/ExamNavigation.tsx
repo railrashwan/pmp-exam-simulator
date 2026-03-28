@@ -29,48 +29,50 @@ export function ExamNavigation() {
 
   return (
     <>
-      {/* Main nav */}
-      <div className="border-t border-gray-300 bg-gray-100 px-6 py-4 flex items-center justify-between shadow-[0_-2px_8px_rgba(0,0,0,0.07)]">
+      {/* Main nav bar */}
+      <div className="border-t border-edge bg-canvas px-6 py-3 flex items-center justify-between">
         <button
           onClick={prevQuestion}
           disabled={currentIndex === 0}
-          className="px-8 py-3 text-2xl font-semibold bg-white text-gray-700 border-2 border-gray-400 rounded-lg shadow-md hover:bg-gray-50 hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none transition-all"
+          className="px-6 py-2 text-[14px] font-semibold bg-canvas text-content border border-edge rounded hover:bg-surface disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {L.previous}
         </button>
 
         <button
           onClick={() => currentQuestion && toggleMarkForReview(currentQuestion.id)}
-          className={`px-6 py-3 text-2xl font-semibold rounded-lg border-2 shadow-md flex items-center gap-2 transition-all hover:shadow-lg ${
+          className={`px-5 py-2 text-[14px] font-semibold rounded border flex items-center gap-2 transition-colors ${
             isMarked
-              ? "bg-red-50 border-red-400 text-red-700 hover:bg-red-100"
-              : "bg-white border-gray-400 text-gray-700 hover:bg-gray-50"
+              ? "bg-wrong-bg border-wrong text-wrong hover:opacity-90"
+              : "bg-canvas border-edge text-muted hover:bg-surface"
           }`}
         >
-          <span>🚩</span>
+          <svg width="13" height="13" viewBox="0 0 16 16" fill={isMarked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M3 2h10v10l-5-3-5 3V2z"/>
+          </svg>
           {isMarked ? L.unmarkForReview : L.markForReview}
         </button>
 
         <button
           onClick={nextQuestion}
           disabled={currentIndex === questions.length - 1}
-          className="px-10 py-3 text-2xl font-semibold bg-blue-600 text-white border-2 border-blue-700 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none transition-all"
+          className="px-6 py-2 text-[14px] font-semibold bg-primary text-inverse border border-primary rounded hover:bg-primary-h disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {L.next}
         </button>
       </div>
 
       {/* Tools row */}
-      <div className="border-t border-gray-200 bg-gray-50 px-6 py-3 flex items-center justify-end gap-4">
+      <div className="border-t border-edge bg-surface px-6 py-2 flex items-center justify-end gap-3">
         <button
           onClick={() => setShowCalc(true)}
-          className="px-6 py-2.5 text-2xl font-medium bg-white text-gray-700 border-2 border-gray-400 rounded-lg shadow-sm hover:bg-gray-50 hover:shadow-md transition-all"
+          className="px-4 py-1.5 text-[13px] font-medium bg-canvas text-content border border-edge rounded hover:bg-surface-2 transition-colors"
         >
           {L.calculator}
         </button>
         <button
           onClick={() => setShowEndDialog(true)}
-          className="px-6 py-2.5 text-2xl font-medium bg-gray-700 text-white border-2 border-gray-600 rounded-lg shadow-sm hover:bg-gray-800 hover:shadow-md transition-all"
+          className="px-4 py-1.5 text-[13px] font-medium bg-canvas text-wrong border border-wrong rounded hover:bg-wrong-bg transition-colors"
         >
           {L.endExam}
         </button>

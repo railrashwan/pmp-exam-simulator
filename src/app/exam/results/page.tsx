@@ -6,7 +6,6 @@ import { useExamStore } from "@/store/examStore";
 import { LanguageToggle } from "@/components/exam/LanguageToggle";
 import type { ExamResultsResponse, ExamResult } from "@/lib/types";
 
-// Parses "A: Wrong; reason. B: Wrong; reason." → { A: "reason", B: "reason" }
 function parseWrongExplanations(text: string | null): Record<string, string> {
   if (!text) return {};
   const result: Record<string, string> = {};
@@ -44,8 +43,6 @@ export default function ResultsPage() {
       .then((data: ExamResultsResponse) => {
         setResults(data);
         setLoading(false);
-
-        // Save attempt once — skip if already saved or currently saving
         if (!savedAttemptId && !savingRef.current) {
           savingRef.current = true;
           fetch("/api/profile/save-attempt", {
@@ -67,7 +64,7 @@ export default function ResultsPage() {
           })
             .then((r) => r.json())
             .then(({ attemptId }) => { if (attemptId) setSavedAttemptId(attemptId); })
-            .catch(() => { /* non-critical — don't block results display */ });
+            .catch(() => {});
         }
       })
       .catch((e) => { setError(e instanceof Error ? e.message : "An error occurred"); setLoading(false); });
@@ -78,18 +75,18 @@ export default function ResultsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-gray-600 text-2xl">Calculating results...</div>
+      <div className="min-h-screen flex items-center justify-center bg-canvas">
+        <div className="text-muted text-[15px]">Calculating results...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-canvas">
         <div className="text-center space-y-4">
-          <p className="text-red-600 text-2xl">{error}</p>
-          <button onClick={handleRetake} className="px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-2xl font-medium shadow-md">
+          <p className="text-wrong text-[15px]">{error}</p>
+          <button onClick={handleRetake} className="px-6 py-2.5 bg-interact text-inverse rounded hover:bg-interact-h text-[14px] font-medium transition-colors">
             Return Home
           </button>
         </div>
@@ -102,46 +99,48 @@ export default function ResultsPage() {
   const { score, passed, correctAnswers, totalQuestions, domainBreakdown, results: qResults } = results;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Sticky language bar */}
-      <div className="sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm px-6 py-3 flex items-center justify-between">
+    <div className="min-h-screen bg-surface">
+      {/* Sticky top bar */}
+      <div className="sticky top-0 z-20 bg-canvas border-b border-edge px-6 py-3 flex items-center justify-between">
         <a
           href="/"
-          className="px-5 py-2 text-xl font-medium text-gray-700 border-2 border-gray-300 rounded-xl hover:bg-gray-50 transition-all"
+          className="text-[13px] font-medium text-content border border-edge rounded px-3 py-1.5 hover:bg-surface transition-colors"
         >
           {language === "ar" ? "← الرئيسية" : "← Home"}
         </a>
         <LanguageToggle />
       </div>
 
-      <div className="max-w-4xl mx-auto space-y-6 px-6 pt-6 pb-10">
+      <div className="max-w-4xl mx-auto space-y-5 px-6 pt-6 pb-10">
 
         {/* Score Card */}
-        <div className={`bg-white rounded-2xl shadow-md p-8 text-center border-t-4 ${passed ? "border-green-500" : "border-red-500"}`}>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+        <div className={`bg-canvas border rounded-lg overflow-hidden ${passed ? "border-correct" : "border-wrong"}`}>
+          <div className={`px-6 py-3 text-[13px] font-semibold ${passed ? "bg-correct text-inverse" : "bg-wrong text-inverse"}`}>
             {language === "ar" ? "نتيجة الاختبار" : "Exam Results"}
-          </h1>
-          <div className={`text-8xl font-bold my-6 ${passed ? "text-green-600" : "text-red-600"}`}>
-            {score}%
           </div>
-          <div className={`text-3xl font-bold mb-3 ${passed ? "text-green-700" : "text-red-700"}`}>
-            {passed
-              ? language === "ar" ? "✓ ناجح" : "✓ PASSED"
-              : language === "ar" ? "✗ راسب" : "✗ FAILED"}
+          <div className="p-6 text-center">
+            <div className={`text-6xl font-bold my-4 ${passed ? "text-correct" : "text-wrong"}`}>
+              {score}%
+            </div>
+            <div className={`text-xl font-bold mb-2 ${passed ? "text-correct" : "text-wrong"}`}>
+              {passed
+                ? language === "ar" ? "ناجح" : "PASSED"
+                : language === "ar" ? "راسب" : "FAILED"}
+            </div>
+            <p className="text-content text-[15px]">
+              {language === "ar"
+                ? `${correctAnswers} إجابة صحيحة من ${totalQuestions}`
+                : `${correctAnswers} correct out of ${totalQuestions} questions`}
+            </p>
+            <p className="text-muted text-[13px] mt-1">
+              {language === "ar" ? "درجة النجاح: 65%" : "Passing score: 65%"}
+            </p>
           </div>
-          <p className="text-gray-600 text-2xl">
-            {language === "ar"
-              ? `${correctAnswers} إجابة صحيحة من ${totalQuestions}`
-              : `${correctAnswers} correct out of ${totalQuestions} questions`}
-          </p>
-          <p className="text-gray-400 text-xl mt-1">
-            {language === "ar" ? "درجة النجاح: 65%" : "Passing score: 65%"}
-          </p>
         </div>
 
         {/* Domain Breakdown */}
-        <div className="bg-white rounded-2xl shadow-md p-6">
-          <h2 className="font-bold text-gray-800 text-2xl mb-4">
+        <div className="bg-canvas border border-edge rounded-lg p-5">
+          <h2 className="font-bold text-content text-[15px] mb-4">
             {language === "ar" ? "الأداء حسب المجال" : "Performance by Domain"}
           </h2>
           <div className="space-y-4">
@@ -149,12 +148,15 @@ export default function ResultsPage() {
               const pct = Math.round((correct / total) * 100);
               return (
                 <div key={domain}>
-                  <div className="flex justify-between text-2xl mb-2">
-                    <span className="text-gray-700">{domain}</span>
-                    <span className="font-semibold">{correct}/{total} ({pct}%)</span>
+                  <div className="flex justify-between text-[14px] mb-1.5">
+                    <span className="text-content">{domain}</span>
+                    <span className="font-semibold text-content">{correct}/{total} ({pct}%)</span>
                   </div>
-                  <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${pct >= 65 ? "bg-green-500" : "bg-red-400"}`} style={{ width: `${pct}%` }} />
+                  <div className="h-2.5 bg-surface-2 rounded-full overflow-hidden border border-edge">
+                    <div
+                      className={`h-full rounded-full transition-all ${pct >= 65 ? "bg-correct" : "bg-wrong"}`}
+                      style={{ width: `${pct}%`, backgroundColor: pct >= 65 ? "var(--color-ok)" : "var(--color-err)" }}
+                    />
                   </div>
                 </div>
               );
@@ -162,12 +164,12 @@ export default function ResultsPage() {
           </div>
         </div>
 
-        {/* Per-question review */}
-        <div className="bg-white rounded-2xl shadow-md">
-          <h2 className="font-bold text-gray-800 text-2xl p-6 border-b">
+        {/* Question Review */}
+        <div className="bg-canvas border border-edge rounded-lg overflow-hidden">
+          <div className="font-bold text-content text-[15px] px-5 py-4 border-b border-edge">
             {language === "ar" ? "مراجعة الأسئلة" : "Question Review"}
-          </h2>
-          <div className="divide-y">
+          </div>
+          <div className="divide-y divide-edge">
             {qResults.map((r: ExamResult, idx: number) => {
               const wrongMap = isRtl
                 ? parseWrongExplanations(r.wrongExplanationAr)
@@ -176,22 +178,24 @@ export default function ResultsPage() {
               return (
                 <div key={r.questionId} className="p-4">
                   <button
-                    className="w-full text-left flex items-start gap-4"
+                    className="w-full text-left flex items-start gap-3"
                     onClick={() => setExpanded(expanded === idx ? null : idx)}
                   >
-                    <span className={`mt-1 shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xl font-bold ${
-                      r.isCorrect ? "bg-green-500 text-white" : "text-white " + (r.selectedAnswer ? "bg-red-500" : "bg-gray-400")
-                    }`}>
+                    <span className={`mt-0.5 shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[12px] font-bold text-inverse ${
+                      r.isCorrect ? "bg-correct" : r.selectedAnswer ? "bg-wrong" : "bg-edge-2"
+                    }`}
+                    style={{ backgroundColor: r.isCorrect ? "var(--color-ok)" : r.selectedAnswer ? "var(--color-err)" : "var(--color-border-2)" }}
+                    >
                       {r.isCorrect ? "✓" : r.selectedAnswer ? "✗" : "—"}
                     </span>
-                    <span className="text-2xl text-gray-700 flex-1 leading-relaxed" dir={isRtl ? "rtl" : "ltr"}>
+                    <span className="text-[15px] text-content flex-1 leading-relaxed" dir={isRtl ? "rtl" : "ltr"}>
                       {idx + 1}. {isRtl ? r.questionTextAr : r.questionTextEn}
                     </span>
-                    <span className="text-gray-400 text-xl shrink-0 mt-1">{expanded === idx ? "▲" : "▼"}</span>
+                    <span className="text-muted text-[12px] shrink-0 mt-1">{expanded === idx ? "▲" : "▼"}</span>
                   </button>
 
                   {expanded === idx && (
-                    <div className="mt-4 ml-12 space-y-3" dir={isRtl ? "rtl" : "ltr"}>
+                    <div className="mt-3 ml-9 space-y-2" dir={isRtl ? "rtl" : "ltr"}>
                       {(["A", "B", "C", "D"] as const).map((key) => {
                         const textMap: Record<string, string> = {
                           A: isRtl ? r.optionAAr : r.optionAEn,
@@ -205,33 +209,41 @@ export default function ResultsPage() {
 
                         return (
                           <div key={key}>
-                            {/* Option row */}
-                            <div className={`px-4 py-3 rounded-lg text-2xl ${
+                            <div className={`px-3 py-2.5 rounded border text-[14px] ${
                               isCorrectOption
-                                ? "bg-green-100 border border-green-400 text-green-900"
+                                ? "bg-correct border-correct text-correct"
                                 : isSelected
-                                ? "bg-red-100 border border-red-400 text-red-900"
-                                : "bg-gray-50 border border-gray-200 text-gray-600"
-                            }`}>
+                                ? "bg-wrong border-wrong text-wrong"
+                                : "bg-surface border-edge text-muted"
+                            }`}
+                            style={
+                              isCorrectOption
+                                ? { backgroundColor: "var(--color-ok-bg)", borderColor: "var(--color-ok)", color: "var(--color-ok)" }
+                                : isSelected
+                                ? { backgroundColor: "var(--color-err-bg)", borderColor: "var(--color-err)", color: "var(--color-err)" }
+                                : undefined
+                            }
+                            >
                               <span className="font-semibold">{key}.</span> {textMap[key]}
-                              {isCorrectOption && <span className="ml-2 font-bold text-green-700">✓</span>}
-                              {isSelected && !isCorrectOption && <span className="ml-2 font-bold text-red-700">✗</span>}
+                              {isCorrectOption && (
+                                <span className="ml-2 font-bold" style={{ color: "var(--color-ok)" }}>✓</span>
+                              )}
+                              {isSelected && !isCorrectOption && (
+                                <span className="ml-2 font-bold" style={{ color: "var(--color-err)" }}>✗</span>
+                              )}
                             </div>
-                            {/* Inline explanation */}
                             {isCorrectOption && (
-                              <div className="mt-1 px-4 py-2 bg-green-50 border-l-4 border-green-400 text-green-800 text-xl rounded-r-lg">
+                              <div className="mt-1 px-3 py-2 text-[13px] rounded-r border-l-2 bg-surface"
+                                style={{ borderLeftColor: "var(--color-ok)", color: "var(--color-ok)" }}>
                                 <span className="font-semibold">{isRtl ? "لماذا صحيح: " : "Why correct: "}</span>
-                                {isRtl ? r.explanationAr : r.explanationEn}
+                                <span className="text-content">{isRtl ? r.explanationAr : r.explanationEn}</span>
                               </div>
                             )}
                             {!isCorrectOption && wrongExpl && (
-                              <div className={`mt-1 px-4 py-2 text-xl rounded-r-lg ${
-                                isSelected
-                                  ? "bg-red-50 border-l-4 border-red-400 text-red-800"
-                                  : "bg-gray-50 border-l-4 border-gray-300 text-gray-600"
-                              }`}>
+                              <div className={`mt-1 px-3 py-2 text-[13px] rounded-r border-l-2 bg-surface`}
+                                style={{ borderLeftColor: isSelected ? "var(--color-err)" : "var(--color-border)", color: isSelected ? "var(--color-err)" : "var(--color-text-2)" }}>
                                 <span className="font-semibold">{isRtl ? "لماذا خطأ: " : "Why wrong: "}</span>
-                                {wrongExpl}
+                                <span className="text-content">{wrongExpl}</span>
                               </div>
                             )}
                           </div>
@@ -246,10 +258,10 @@ export default function ResultsPage() {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-4 justify-center pb-4">
+        <div className="flex justify-center pb-2">
           <button
             onClick={handleRetake}
-            className="px-10 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-bold text-2xl shadow-md hover:shadow-lg transition-all"
+            className="px-8 py-2.5 bg-interact text-inverse rounded hover:bg-interact-h font-semibold text-[15px] transition-colors"
           >
             {language === "ar" ? "بدء اختبار جديد" : "Start New Exam"}
           </button>
