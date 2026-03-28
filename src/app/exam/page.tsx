@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useExamStore } from "@/store/examStore";
 import { ExamHeader } from "@/components/exam/ExamHeader";
@@ -12,6 +12,7 @@ import { FontPanel } from "@/components/exam/FontPanel";
 export default function ExamPage() {
   const { questions, isFinished, isPaused, resumeExam, language } = useExamStore();
   const router = useRouter();
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
 
   useEffect(() => {
     if (questions.length === 0) router.replace("/");
@@ -35,7 +36,7 @@ export default function ExamPage() {
         <div id="question-area" className="flex-1 overflow-y-auto bg-surface">
           <QuestionDisplay />
         </div>
-        <QuestionReviewGrid />
+        <QuestionReviewGrid isOpen={isReviewOpen} onClose={() => setIsReviewOpen(false)} />
 
         {/* Pause overlay */}
         {isPaused && (
@@ -52,7 +53,7 @@ export default function ExamPage() {
         )}
       </div>
 
-      <ExamNavigation />
+      <ExamNavigation onToggleReview={() => setIsReviewOpen((o) => !o)} />
       <FontPanel />
     </div>
   );

@@ -75,7 +75,7 @@ export default function HomePage() {
 
       {/* Page header */}
       <header className="bg-primary border-b border-primary">
-        <div className="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
           <div>
             <h1 className="text-xl-type font-bold text-inverse tracking-wide">PMP Exam Simulator</h1>
             <p className="text-xs-type text-inverse/70 mt-0.5">Project Management Professional</p>
@@ -93,7 +93,7 @@ export default function HomePage() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-8 space-y-6">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
         {/* Exam cards grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

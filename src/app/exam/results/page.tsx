@@ -101,7 +101,7 @@ export default function ResultsPage() {
   return (
     <div className="min-h-screen bg-surface">
       {/* Sticky top bar */}
-      <div className="sticky top-0 z-20 bg-canvas border-b border-edge px-6 py-3 flex items-center justify-between">
+      <div className="sticky top-0 z-20 bg-canvas border-b border-edge px-4 sm:px-6 py-3 flex items-center justify-between">
         <a
           href="/"
           className="text-xs-type font-medium text-content border border-edge rounded px-3 py-1.5 hover:bg-surface transition-colors"
@@ -111,7 +111,7 @@ export default function ResultsPage() {
         <LanguageToggle />
       </div>
 
-      <div className="max-w-4xl mx-auto space-y-5 px-6 pt-6 pb-10">
+      <div className="max-w-4xl mx-auto space-y-5 px-4 sm:px-6 pt-6 pb-10">
 
         {/* Score Card */}
         <div className={`bg-canvas border rounded-lg overflow-hidden ${passed ? "border-correct" : "border-wrong"}`}>
@@ -195,7 +195,7 @@ export default function ResultsPage() {
                   </button>
 
                   {expanded === idx && (
-                    <div className="mt-3 ml-9 space-y-2" dir={isRtl ? "rtl" : "ltr"}>
+                    <div className="mt-3 ml-0 sm:ml-9 space-y-2" dir={isRtl ? "rtl" : "ltr"}>
                       {(["A", "B", "C", "D"] as const).map((key) => {
                         const textMap: Record<string, string> = {
                           A: isRtl ? r.optionAAr : r.optionAEn,

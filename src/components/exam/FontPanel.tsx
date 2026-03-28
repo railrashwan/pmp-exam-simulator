@@ -83,7 +83,7 @@ export function FontPanel() {
       {/* Slide-out panel */}
       <div
         className={`fixed top-0 left-0 h-full z-50 bg-canvas shadow-xl flex flex-col transition-transform duration-300 border-r border-edge ${open ? "translate-x-0" : "-translate-x-full"}`}
-        style={{ width: "400px" }}
+        style={{ width: "min(400px, calc(100vw - 1rem))" }}
       >
         {/* Header */}
         <div className="bg-surface border-b border-edge px-5 py-4 flex items-center justify-between shrink-0">

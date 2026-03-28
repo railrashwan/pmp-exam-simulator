@@ -92,7 +92,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-surface">
       {/* Header */}
-      <div className="bg-primary border-b border-primary px-6 py-4 flex items-center justify-between">
+      <div className="bg-primary border-b border-primary px-4 sm:px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
         <h1 className="text-md-type font-bold text-inverse">My Profile</h1>
         <div className="flex items-center gap-2">
           <button
@@ -111,7 +111,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-6 space-y-5">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-5">
 
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

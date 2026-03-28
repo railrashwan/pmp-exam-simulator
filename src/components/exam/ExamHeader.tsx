@@ -29,17 +29,17 @@ export function ExamHeader() {
   const isLow = timeRemaining < 300 && !isPaused;
 
   return (
-    <div className="bg-canvas border-b border-edge px-6 py-3 flex items-center justify-between">
-      <div>
-        <div className="text-sm-type font-semibold text-content leading-tight">{L.examTitle}</div>
-        <div className="text-xs-type text-muted mt-0.5">
+    <div className="bg-canvas border-b border-edge px-4 sm:px-6 py-3 flex items-center justify-between gap-3 min-w-0">
+      <div className="min-w-0">
+        <div className="text-sm-type font-semibold text-content leading-tight truncate">{L.examTitle}</div>
+        <div className="text-xs-type text-muted mt-0.5 tabular-nums">
           {L.questionOf(currentIndex + 1, questions.length)}
         </div>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         <button
           onClick={isPaused ? resumeExam : pauseExam}
-          className={`px-4 py-1.5 text-xs-type font-semibold rounded border transition-colors ${
+          className={`px-3 sm:px-4 py-1.5 text-xs-type font-semibold rounded border transition-colors ${
             isPaused
               ? "bg-correct text-inverse border-correct hover:opacity-90"
               : "bg-canvas text-content border-edge hover:bg-surface"
@@ -54,7 +54,9 @@ export function ExamHeader() {
           aria-live="polite"
           aria-atomic="true"
         >
-          {L.timeRemaining} {formatTime(timeRemaining)}
+          {/* Hide "Time:" label on very small screens — the clock format is self-explanatory */}
+          <span className="hidden sm:inline">{L.timeRemaining} </span>
+          {formatTime(timeRemaining)}
         </div>
       </div>
     </div>
