@@ -10,7 +10,7 @@ import { ExamNavigation } from "@/components/exam/ExamNavigation";
 import { FontPanel } from "@/components/exam/FontPanel";
 
 export default function ExamPage() {
-  const { questions, isFinished, isPaused, resumeExam, language } = useExamStore();
+  const { questions, isFinished, isPaused, resumeExam, endExam, language } = useExamStore();
   const router = useRouter();
   const [isReviewOpen, setIsReviewOpen] = useState(false);
 
@@ -40,14 +40,20 @@ export default function ExamPage() {
 
         {/* Pause overlay */}
         {isPaused && (
-          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-5 z-10">
-            <div className="text-inverse text-xl-type font-bold">{pauseLabel}</div>
-            <div className="text-inverse/70 text-sm-type">{pauseMsg}</div>
+          <div className="absolute inset-0 bg-gray-900/80 flex flex-col items-center justify-center gap-5 z-10">
+            <div className="text-white text-3xl font-bold">{pauseLabel}</div>
+            <div className="text-gray-300 text-xl">{pauseMsg}</div>
             <button
               onClick={resumeExam}
-              className="mt-1 px-8 py-2.5 bg-interact text-inverse text-sm-type font-semibold rounded hover:bg-interact-h transition-colors"
+              className="mt-2 px-10 py-3 bg-green-500 text-white text-xl font-bold rounded-xl hover:bg-green-600 transition-colors shadow-lg"
             >
               {resumeLabel}
+            </button>
+            <button
+              onClick={() => { endExam(); router.push("/exam/results"); }}
+              className="text-gray-400 hover:text-gray-200 text-sm underline transition-colors"
+            >
+              {language === "ar" ? "إنهاء الاختبار" : "End Exam & See Results"}
             </button>
           </div>
         )}

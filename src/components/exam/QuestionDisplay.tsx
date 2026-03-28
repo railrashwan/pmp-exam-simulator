@@ -21,12 +21,12 @@ function getOptionText(q: ExamQuestion, key: string, lang: "en" | "ar"): string 
 export function QuestionDisplay() {
   const { questions, currentIndex, answers, language, selectAnswer } = useExamStore();
 
-  // Scroll the question area back to the top on every question change
+  // Scroll back to top on every question change
   useEffect(() => {
     document.getElementById("question-area")?.scrollTo(0, 0);
   }, [currentIndex]);
-  const question = questions[currentIndex];
 
+  const question = questions[currentIndex];
   if (!question) return null;
 
   const qText = language === "en" ? question.questionTextEn : question.questionTextAr;
@@ -34,7 +34,7 @@ export function QuestionDisplay() {
   const isRtl = language === "ar";
 
   return (
-    <div className="flex-1 p-5 flex flex-col gap-4">
+    <div className="flex-1 p-4 flex flex-col gap-3">
       {/* Language toggle */}
       <div className="flex justify-center">
         <LanguageToggle />
@@ -43,10 +43,11 @@ export function QuestionDisplay() {
       {/* Question card */}
       <div
         dir={isRtl ? "rtl" : "ltr"}
-        className="border border-edge rounded-md p-4 bg-canvas"
+        className="border border-edge rounded-lg p-4 bg-canvas shadow-sm"
       >
         <p
-          className={`text-md-type font-semibold text-content ${isRtl ? "text-right" : ""}`}
+          className={`font-bold text-content ${isRtl ? "text-right" : ""}`}
+          style={{ fontSize: "1.5rem", lineHeight: isRtl ? "1.85" : "1.6" }}
         >
           {qText}
         </p>
@@ -61,9 +62,9 @@ export function QuestionDisplay() {
           return (
             <label
               key={key}
-              className={`flex items-start gap-3 px-4 py-3 border rounded-md cursor-pointer transition-colors ${
+              className={`flex items-start gap-3 px-3 py-2.5 border rounded-lg cursor-pointer transition-all ${
                 isSelected
-                  ? "border-selected bg-selected"
+                  ? "border-selected bg-selected shadow-sm"
                   : "border-edge bg-canvas hover:bg-surface hover:border-edge-2"
               }`}
             >
@@ -73,10 +74,11 @@ export function QuestionDisplay() {
                 value={key}
                 checked={isSelected}
                 onChange={() => selectAnswer(question.id, key)}
-                className="mt-0.5 shrink-0 w-4 h-4 accent-[var(--color-primary)]"
+                className="mt-1 shrink-0 w-4 h-4 accent-[var(--color-interact)]"
               />
               <span
-                className={`text-sm-type text-content ${isRtl ? "text-right" : ""}`}
+                className={`text-content ${isRtl ? "text-right" : ""}`}
+                style={{ fontSize: "1.25rem", lineHeight: isRtl ? "1.85" : "1.6" }}
               >
                 <span className="font-semibold">{label}. </span>
                 {optionText}

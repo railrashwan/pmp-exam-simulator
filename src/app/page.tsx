@@ -14,7 +14,7 @@ const YASSINE_COUNT = 180;
 export default function HomePage() {
   const [pmpCount, setPmpCount] = useState(40);
   const [loading, setLoading] = useState<"pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | null>(null);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<{ set: string; msg: string } | null>(null);
   const [mistakeCount, setMistakeCount] = useState<number | null>(null);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function HomePage() {
 
   async function handleStart(examSet: "pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes") {
     setLoading(examSet);
-    setError("");
+    setError(null);
     try {
       let count: number;
       let url: string;
@@ -59,7 +59,7 @@ export default function HomePage() {
       startExam(questions, durationSec, examSet);
       router.push("/exam");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Error starting exam");
+      setError({ set: examSet, msg: e instanceof Error ? e.message : "Error starting exam" });
     } finally {
       setLoading(null);
     }
@@ -95,83 +95,82 @@ export default function HomePage() {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
-        {/* Exam cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-          {/* PMP Classic */}
-          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col">
-            <div className="bg-primary px-5 py-4">
-              <h2 className="text-md-type font-bold text-inverse">PMP Exam</h2>
-              <p className="text-xs-type text-inverse/70 mt-0.5">Classic Question Bank</p>
-            </div>
-            <div className="p-5 space-y-4 flex flex-col grow">
-              <div>
-                <label className="block text-label-caps text-muted mb-2">
-                  Number of Questions
-                </label>
-                <div className="grid grid-cols-4 gap-1.5">
-                  {PMP_COUNTS.map((n) => (
-                    <button
-                      key={n}
-                      onClick={() => setPmpCount(n)}
-                      className={`py-2 rounded border text-sm-type font-semibold transition-colors ${
-                        pmpCount === n
-                          ? "bg-primary text-inverse border-primary"
-                          : "bg-canvas text-content border-edge hover:border-edge-2"
-                      }`}
-                    >
-                      {n}
-                    </button>
-                  ))}
-                </div>
+        {/* ── PRIMARY: PMP Classic ─────────────────────────────────────── */}
+        <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm">
+          <div className="bg-primary px-6 py-5">
+            <h2 className="text-xl-type font-bold text-inverse">PMP Exam</h2>
+            <p className="text-xs-type text-inverse/70 mt-1">
+              The core question bank. Choose your question count, set your session length, and practice at your own pace.
+            </p>
+          </div>
+          <div className="p-5 sm:p-6 space-y-4">
+            <div>
+              <label className="block text-label-caps text-muted mb-2">Number of Questions</label>
+              <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
+                {PMP_COUNTS.map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => setPmpCount(n)}
+                    className={`py-2.5 rounded border text-sm-type font-semibold transition-colors ${
+                      pmpCount === n
+                        ? "bg-primary text-inverse border-primary"
+                        : "bg-canvas text-content border-edge hover:border-edge-2"
+                    }`}
+                  >
+                    {n}
+                  </button>
+                ))}
               </div>
-              <div className="bg-surface rounded-md p-3 text-xs-type text-content space-y-1.5 border border-edge">
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div className="bg-surface rounded-md p-3 text-xs-type border border-edge space-y-1.5 sm:flex-1">
                 <div className="flex justify-between">
                   <span className="text-muted">Questions</span>
                   <span className="font-semibold tabular-nums">{pmpCount}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Duration</span>
-                  <span className="font-semibold">{pmpDurationMin} min</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Passing Score</span>
-                  <span className="font-semibold">65%</span>
+                  <span className="font-semibold tabular-nums">{pmpDurationMin} min</span>
                 </div>
               </div>
-              <button
-                onClick={() => handleStart("pmp")}
-                disabled={loading !== null}
-                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm-type transition-colors"
-              >
-                {loading === "pmp" ? "Loading..." : "Start Exam"}
-              </button>
+              <div className="sm:w-44 shrink-0">
+                <button
+                  onClick={() => handleStart("pmp")}
+                  disabled={loading !== null}
+                  className="w-full py-3 bg-interact text-inverse rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-bold text-sm-type transition-colors"
+                >
+                  {loading === "pmp" ? "Loading..." : "Start Exam →"}
+                </button>
+                {error?.set === "pmp" && (
+                  <p className="mt-1.5 text-wrong text-xs-type">{error.msg}</p>
+                )}
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* ── SECONDARY: Specialty exam sets ──────────────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
           {/* UNDRAW */}
-          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col">
-            <div className="bg-primary px-5 py-4">
-              <h2 className="text-md-type font-bold text-inverse">UNDRAW Exam</h2>
-              <p className="text-xs-type text-inverse/70 mt-0.5">PMP Mindset Practice</p>
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-interact)" }}>
+            <div className="px-4 py-4 border-b border-edge bg-surface">
+              <h2 className="text-sm-type font-bold text-content">UNDRAW Exam</h2>
+              <p className="text-xs-type text-muted mt-0.5">PMP Mindset Practice</p>
             </div>
-            <div className="p-5 space-y-4 flex flex-col grow">
-              <div className="bg-surface rounded-md p-3 text-xs-type text-content space-y-1.5 border border-edge">
+            <div className="p-4 space-y-3 flex flex-col grow">
+              <div className="space-y-1.5 text-xs-type border border-edge rounded-md p-3 bg-surface">
                 <div className="flex justify-between">
                   <span className="text-muted">Questions</span>
-                  <span className="font-semibold">{UNDRAW_COUNT} (fixed set)</span>
+                  <span className="font-semibold">{UNDRAW_COUNT} (fixed)</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Duration</span>
-                  <span className="font-semibold">{undrawDurationMin} min</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Passing Score</span>
-                  <span className="font-semibold">65%</span>
+                  <span className="font-semibold tabular-nums">{undrawDurationMin} min</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Explanations</span>
-                  <span className="font-semibold text-correct">Per option</span>
+                  <span className="font-semibold text-interact">Per option</span>
                 </div>
               </div>
               <p className="text-xs-type text-muted leading-relaxed">
@@ -180,36 +179,35 @@ export default function HomePage() {
               <button
                 onClick={() => handleStart("undraw")}
                 disabled={loading !== null}
-                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm-type transition-colors"
+                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
               >
                 {loading === "undraw" ? "Loading..." : "Start Exam"}
               </button>
+              {error?.set === "undraw" && (
+                <p className="text-wrong text-xs-type">{error.msg}</p>
+              )}
             </div>
           </div>
 
           {/* Andrew 200 */}
-          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col">
-            <div className="bg-primary px-5 py-4">
-              <h2 className="text-md-type font-bold text-inverse">Andrew 200</h2>
-              <p className="text-xs-type text-inverse/70 mt-0.5">Ultra Hard Questions</p>
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-warn)" }}>
+            <div className="px-4 py-4 border-b border-edge bg-surface">
+              <h2 className="text-sm-type font-bold text-content">Andrew 200</h2>
+              <p className="text-xs-type text-muted mt-0.5">Ultra Hard Questions</p>
             </div>
-            <div className="p-5 space-y-4 flex flex-col grow">
-              <div className="bg-surface rounded-md p-3 text-xs-type text-content space-y-1.5 border border-edge">
+            <div className="p-4 space-y-3 flex flex-col grow">
+              <div className="space-y-1.5 text-xs-type border border-edge rounded-md p-3 bg-surface">
                 <div className="flex justify-between">
                   <span className="text-muted">Questions</span>
-                  <span className="font-semibold">{ANDREW_COUNT} (fixed set)</span>
+                  <span className="font-semibold">{ANDREW_COUNT} (fixed)</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Duration</span>
-                  <span className="font-semibold">{andrewDurationMin} min</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Passing Score</span>
-                  <span className="font-semibold">65%</span>
+                  <span className="font-semibold tabular-nums">{andrewDurationMin} min</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Explanations</span>
-                  <span className="font-semibold text-correct">Per option</span>
+                  <span className="font-semibold text-interact">Per option</span>
                 </div>
               </div>
               <p className="text-xs-type text-muted leading-relaxed">
@@ -218,36 +216,35 @@ export default function HomePage() {
               <button
                 onClick={() => handleStart("andrew-ultra")}
                 disabled={loading !== null}
-                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm-type transition-colors"
+                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
               >
                 {loading === "andrew-ultra" ? "Loading..." : "Start Exam"}
               </button>
+              {error?.set === "andrew-ultra" && (
+                <p className="text-wrong text-xs-type">{error.msg}</p>
+              )}
             </div>
           </div>
 
           {/* Yassine */}
-          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col">
-            <div className="bg-primary px-5 py-4">
-              <h2 className="text-md-type font-bold text-inverse">Yassine Exam Set</h2>
-              <p className="text-xs-type text-inverse/70 mt-0.5">Full Real Exam Simulation</p>
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-primary)" }}>
+            <div className="px-4 py-4 border-b border-edge bg-surface">
+              <h2 className="text-sm-type font-bold text-content">Yassine Exam Set</h2>
+              <p className="text-xs-type text-muted mt-0.5">Full Real Exam Simulation</p>
             </div>
-            <div className="p-5 space-y-4 flex flex-col grow">
-              <div className="bg-surface rounded-md p-3 text-xs-type text-content space-y-1.5 border border-edge">
+            <div className="p-4 space-y-3 flex flex-col grow">
+              <div className="space-y-1.5 text-xs-type border border-edge rounded-md p-3 bg-surface">
                 <div className="flex justify-between">
                   <span className="text-muted">Questions</span>
-                  <span className="font-semibold">{YASSINE_COUNT} (fixed set)</span>
+                  <span className="font-semibold">{YASSINE_COUNT} (fixed)</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Duration</span>
-                  <span className="font-semibold">{yassineDurationMin} min</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted">Passing Score</span>
-                  <span className="font-semibold">65%</span>
+                  <span className="font-semibold tabular-nums">{yassineDurationMin} min</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted">Format</span>
-                  <span className="font-semibold text-correct">Real exam replica</span>
+                  <span className="font-semibold text-interact">Real exam replica</span>
                 </div>
               </div>
               <p className="text-xs-type text-muted leading-relaxed">
@@ -256,15 +253,18 @@ export default function HomePage() {
               <button
                 onClick={() => handleStart("yassine")}
                 disabled={loading !== null}
-                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm-type transition-colors"
+                className="w-full mt-auto py-2.5 bg-interact text-inverse rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
               >
                 {loading === "yassine" ? "Loading..." : "Start Exam"}
               </button>
+              {error?.set === "yassine" && (
+                <p className="text-wrong text-xs-type">{error.msg}</p>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Kill Mistakes */}
+        {/* ── Kill Mistakes ──────────────────────────────────────────── */}
         <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm">
           <div className="px-5 py-4 border-b border-edge flex items-center justify-between bg-surface">
             <div>
@@ -283,19 +283,24 @@ export default function HomePage() {
                 ? "No wrong answers yet. Complete an exam to start tracking your mistakes."
                 : `${mistakeCount} unique question${mistakeCount !== 1 ? "s" : ""} answered incorrectly — time to fix them.`}
             </p>
-            <button
-              onClick={() => handleStart("kill-mistakes")}
-              disabled={!mistakeCount || loading !== null}
-              className="shrink-0 px-6 py-2.5 bg-err text-inverse text-xs-type font-semibold rounded hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
-            >
-              {loading === "kill-mistakes" ? "Loading..." : "Start"}
-            </button>
+            <div className="shrink-0 flex flex-col items-end gap-1.5">
+              <button
+                onClick={() => handleStart("kill-mistakes")}
+                disabled={!mistakeCount || loading !== null}
+                className="px-6 py-2.5 bg-err text-inverse text-xs-type font-semibold rounded-lg hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
+              >
+                {loading === "kill-mistakes" ? "Loading..." : "Start"}
+              </button>
+              {error?.set === "kill-mistakes" && (
+                <p className="text-wrong text-xs-type">{error.msg}</p>
+              )}
+            </div>
           </div>
         </div>
 
-        {error && (
-          <p className="text-wrong text-xs-type text-center">{error}</p>
-        )}
+        <p className="text-center text-xs-type text-muted pb-2">
+          All exams require 65% to pass.
+        </p>
 
       </main>
     </div>

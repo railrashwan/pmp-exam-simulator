@@ -15,7 +15,7 @@ export function QuestionReviewGrid({ isOpen, onClose }: Props) {
 
   return (
     <>
-      {/* Mobile/tablet backdrop — click to close */}
+      {/* Mobile/tablet backdrop */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/40 z-20 lg:hidden"
@@ -24,31 +24,26 @@ export function QuestionReviewGrid({ isOpen, onClose }: Props) {
         />
       )}
 
-      {/*
-        Mobile (<lg): absolute drawer from the right, toggled by isOpen.
-        Desktop (lg+): static sidebar, always visible, ignores isOpen.
-      */}
+      {/* Panel: drawer on mobile, static sidebar on desktop */}
       <div
         className={[
-          // Base — shared across all sizes
           "border-l border-edge bg-surface flex flex-col shrink-0",
-          // Mobile/tablet: fixed drawer
           "fixed top-0 right-0 h-full z-30 w-72 transition-transform duration-300 ease-in-out",
           isOpen ? "translate-x-0" : "translate-x-full",
-          // Desktop: static sidebar, always visible, reset drawer positioning
-          "lg:relative lg:translate-x-0 lg:z-auto lg:h-auto",
+          "lg:relative lg:translate-x-0 lg:z-auto lg:h-auto lg:w-80",
         ].join(" ")}
       >
         {/* Header */}
-        <div className="bg-surface-2 px-3 py-2.5 text-label-caps text-muted text-center border-b border-edge flex items-center justify-between">
-          <span className="flex-1 text-center">{L.questionReviewList}</span>
-          {/* Close button — only meaningful on mobile drawer */}
+        <div className="bg-surface-2 px-3 py-3 border-b border-edge flex items-center justify-between">
+          <span className="flex-1 text-center text-lg font-bold text-content tracking-wide uppercase">
+            {L.questionReviewList}
+          </span>
           <button
             onClick={onClose}
             aria-label="Close review panel"
             className="lg:hidden text-muted hover:text-content text-xl leading-none px-1 -mr-1 transition-colors"
           >
-            ×
+            ✕
           </button>
         </div>
 
@@ -60,9 +55,9 @@ export function QuestionReviewGrid({ isOpen, onClose }: Props) {
               const isCurrent = idx === currentIndex;
               const isMarked = markedForReview.includes(q.id);
 
-              let cellCls = "bg-canvas border-edge text-muted";
-              if (isCurrent) cellCls = "bg-primary border-primary text-inverse font-bold";
-              else if (isAnswered) cellCls = "bg-correct border-correct text-correct";
+              let cellCls = "bg-canvas border border-edge text-content";
+              if (isCurrent) cellCls = "bg-teal-500 border-teal-600 text-white font-bold";
+              else if (isAnswered) cellCls = "bg-green-100 border-green-500 text-green-700";
 
               return (
                 <button
@@ -70,18 +65,16 @@ export function QuestionReviewGrid({ isOpen, onClose }: Props) {
                   onClick={() => { goToQuestion(idx); onClose(); }}
                   aria-label={`Question ${idx + 1}${isCurrent ? ", current" : isAnswered ? ", answered" : ""}${isMarked ? ", marked for review" : ""}`}
                   aria-current={isCurrent ? "true" : undefined}
-                  className={`relative border rounded text-xs-type font-medium h-11 flex items-center justify-center transition-colors hover:opacity-80 ${cellCls}`}
+                  className={`relative border rounded text-2xl font-medium h-14 flex items-center justify-center transition-all hover:opacity-80 ${cellCls}`}
                 >
                   {isAnswered && !isCurrent ? (
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                      <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                    <span className="text-green-600 font-bold text-2xl" aria-hidden="true">✓</span>
                   ) : (
                     <span aria-hidden="true">{idx + 1}</span>
                   )}
                   {isMarked && (
                     <span
-                      className="absolute top-0 right-0 w-2.5 h-2.5 bg-wrong rounded-bl"
+                      className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-bl"
                       aria-hidden="true"
                     />
                   )}
@@ -93,21 +86,22 @@ export function QuestionReviewGrid({ isOpen, onClose }: Props) {
 
         {/* Legend */}
         <div className="border-t border-edge p-3 space-y-2 bg-canvas">
-          <div className="flex items-center gap-2 text-xs-type text-content">
-            <span className="w-6 h-6 bg-correct border border-correct rounded flex items-center justify-center text-correct shrink-0" aria-hidden="true">
-              <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+          <div className="flex items-center gap-2 text-xl text-content">
+            <span
+              className="w-7 h-7 bg-green-100 border border-green-500 rounded flex items-center justify-center text-green-600 font-bold shrink-0"
+              aria-hidden="true"
+            >
+              ✓
             </span>
             {L.answered}
           </div>
-          <div className="flex items-center gap-2 text-xs-type text-content">
-            <span className="w-6 h-6 bg-primary border border-primary rounded shrink-0" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-xl text-content">
+            <span className="w-7 h-7 bg-teal-500 border border-teal-600 rounded shrink-0" aria-hidden="true" />
             {L.current}
           </div>
-          <div className="flex items-center gap-2 text-xs-type text-content">
-            <span className="w-6 h-6 relative bg-canvas border border-edge rounded shrink-0" aria-hidden="true">
-              <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-wrong rounded-bl" />
+          <div className="flex items-center gap-2 text-xl text-content">
+            <span className="w-7 h-7 relative bg-canvas border border-edge rounded shrink-0" aria-hidden="true">
+              <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-bl" />
             </span>
             {L.markedForReview}
           </div>
