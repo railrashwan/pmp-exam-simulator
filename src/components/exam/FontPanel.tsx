@@ -19,11 +19,11 @@ const ENGLISH_FONTS = [
 ];
 
 const FONT_SIZES: { label: string; value: number }[] = [
-  { label: "Small",  value: 1.125 },  // 18px
-  { label: "Medium", value: 1.25  },  // 20px
-  { label: "Large",  value: 1.5   },  // 24px — default
-  { label: "X-Large",value: 1.75  },  // 28px
-  { label: "XX-Large",value: 2.0  },  // 32px
+  { label: "22px", value: 1.375  },
+  { label: "23px", value: 1.4375 },
+  { label: "24px", value: 1.5    },  // default
+  { label: "25px", value: 1.5625 },
+  { label: "26px", value: 1.625  },
 ];
 
 const ARABIC_SAMPLE = "ما هي الخطوة الأولى التي يجب عليك اتخاذها؟";
