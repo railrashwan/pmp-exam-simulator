@@ -79,17 +79,39 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(fisherYatesShuffle(questions) as ExamQuestion[]);
     }
 
-    // PMP: shuffle + count (includes globalBank questions from other sets)
+    // Classic exam: domain-stratified selection from the three question banks
+    // Distribution: 20% Business Environment, 40% People, 40% Process
     const rawCount = parseInt(searchParams.get("count") ?? "40", 10);
     const count = isNaN(rawCount) ? 40 : Math.min(Math.max(rawCount, 1), 180);
 
-    const allQuestions = await prisma.question.findMany({
-      where: { OR: [{ examSet: "pmp" }, { globalBank: true }] },
-      select: SELECT_FIELDS,
-    });
+    const EXAM_SETS = ["andrew-ultra", "yassine", "undraw"];
 
-    const shuffled = fisherYatesShuffle(allQuestions).slice(0, count);
-    return NextResponse.json(shuffled as ExamQuestion[]);
+    const businessCount = Math.round(count * 0.2);
+    const peopleCount = Math.round(count * 0.4);
+    const processCount = count - businessCount - peopleCount;
+
+    const [businessQs, peopleQs, processQs] = await Promise.all([
+      prisma.question.findMany({
+        where: { examSet: { in: EXAM_SETS }, domain: "Business Environment" },
+        select: SELECT_FIELDS,
+      }),
+      prisma.question.findMany({
+        where: { examSet: { in: EXAM_SETS }, domain: "People" },
+        select: SELECT_FIELDS,
+      }),
+      prisma.question.findMany({
+        where: { examSet: { in: EXAM_SETS }, domain: "Process" },
+        select: SELECT_FIELDS,
+      }),
+    ]);
+
+    const selected = [
+      ...fisherYatesShuffle(businessQs).slice(0, businessCount),
+      ...fisherYatesShuffle(peopleQs).slice(0, peopleCount),
+      ...fisherYatesShuffle(processQs).slice(0, processCount),
+    ];
+
+    return NextResponse.json(fisherYatesShuffle(selected) as ExamQuestion[]);
   } catch (e) {
     console.error("exam/start error:", e);
     return NextResponse.json({ error: "Failed to load questions" }, { status: 500 });
