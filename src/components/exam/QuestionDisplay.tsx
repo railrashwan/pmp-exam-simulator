@@ -78,7 +78,7 @@ export function QuestionDisplay() {
               />
               <span
                 className={`text-content ${isRtl ? "text-right" : ""}`}
-                style={{ fontSize: "1.25rem", lineHeight: isRtl ? "1.85" : "1.6" }}
+                style={{ fontSize: "1.5rem", lineHeight: isRtl ? "1.85" : "1.6" }}
               >
                 <span className="font-semibold">{label}. </span>
                 {optionText}
