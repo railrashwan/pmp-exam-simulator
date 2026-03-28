@@ -56,7 +56,7 @@ export function Calculator({ onClose }: Props) {
   function handleClear() { setDisplay("0"); setPrev(""); setOperator(""); setWaitingForOperand(false); }
   function handleBackspace() { if (display.length > 1) setDisplay(display.slice(0, -1)); else setDisplay("0"); }
 
-  const base = "flex items-center justify-center text-[14px] font-medium rounded border h-11 cursor-pointer select-none active:scale-95 transition-transform";
+  const base = "flex items-center justify-center text-xs-type font-medium rounded border h-11 cursor-pointer select-none active:scale-95 transition-transform";
 
   return (
     <div
@@ -67,7 +67,7 @@ export function Calculator({ onClose }: Props) {
     >
       <div className="bg-canvas border border-edge rounded-lg shadow-xl w-72 overflow-hidden">
         <div className="bg-surface border-b border-edge px-4 py-3 flex items-center justify-between">
-          <span id="calc-title" className="text-[14px] font-semibold text-content">Calculator</span>
+          <span id="calc-title" className="text-xs-type font-semibold text-content">Calculator</span>
           <button
             ref={closeRef}
             onClick={onClose}
@@ -80,8 +80,8 @@ export function Calculator({ onClose }: Props) {
 
         {/* Display */}
         <div className="bg-surface-2 px-4 py-3 text-right border-b border-edge">
-          <div className="text-[12px] text-muted h-5">{prev} {operator}</div>
-          <div className="text-[20px] font-bold truncate text-content font-mono">{display}</div>
+          <div className="text-xs-type text-muted h-5">{prev} {operator}</div>
+          <div className="text-xl font-bold truncate text-content font-mono tabular-nums">{display}</div>
         </div>
 
         {/* Buttons */}

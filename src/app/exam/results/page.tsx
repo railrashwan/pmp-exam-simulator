@@ -76,7 +76,7 @@ export default function ResultsPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-canvas">
-        <div className="text-muted text-[15px]">Calculating results...</div>
+        <div className="text-muted text-sm-type">Calculating results...</div>
       </div>
     );
   }
@@ -85,8 +85,8 @@ export default function ResultsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-canvas">
         <div className="text-center space-y-4">
-          <p className="text-wrong text-[15px]">{error}</p>
-          <button onClick={handleRetake} className="px-6 py-2.5 bg-interact text-inverse rounded hover:bg-interact-h text-[14px] font-medium transition-colors">
+          <p className="text-wrong text-sm-type">{error}</p>
+          <button onClick={handleRetake} className="px-6 py-2.5 bg-interact text-inverse rounded hover:bg-interact-h text-xs-type font-medium transition-colors">
             Return Home
           </button>
         </div>
@@ -104,7 +104,7 @@ export default function ResultsPage() {
       <div className="sticky top-0 z-20 bg-canvas border-b border-edge px-6 py-3 flex items-center justify-between">
         <a
           href="/"
-          className="text-[13px] font-medium text-content border border-edge rounded px-3 py-1.5 hover:bg-surface transition-colors"
+          className="text-xs-type font-medium text-content border border-edge rounded px-3 py-1.5 hover:bg-surface transition-colors"
         >
           {language === "ar" ? "← الرئيسية" : "← Home"}
         </a>
@@ -115,11 +115,11 @@ export default function ResultsPage() {
 
         {/* Score Card */}
         <div className={`bg-canvas border rounded-lg overflow-hidden ${passed ? "border-correct" : "border-wrong"}`}>
-          <div className={`px-6 py-3 text-[13px] font-semibold ${passed ? "bg-correct text-inverse" : "bg-wrong text-inverse"}`}>
+          <div className={`px-6 py-3 text-xs-type font-semibold ${passed ? "bg-correct text-inverse" : "bg-wrong text-inverse"}`}>
             {language === "ar" ? "نتيجة الاختبار" : "Exam Results"}
           </div>
           <div className="p-6 text-center">
-            <div className={`text-6xl font-bold my-4 ${passed ? "text-correct" : "text-wrong"}`}>
+            <div className={`text-6xl font-bold my-4 tabular-nums ${passed ? "text-correct" : "text-wrong"}`}>
               {score}%
             </div>
             <div className={`text-xl font-bold mb-2 ${passed ? "text-correct" : "text-wrong"}`}>
@@ -127,12 +127,12 @@ export default function ResultsPage() {
                 ? language === "ar" ? "ناجح" : "PASSED"
                 : language === "ar" ? "راسب" : "FAILED"}
             </div>
-            <p className="text-content text-[15px]">
+            <p className="text-content text-sm-type">
               {language === "ar"
                 ? `${correctAnswers} إجابة صحيحة من ${totalQuestions}`
                 : `${correctAnswers} correct out of ${totalQuestions} questions`}
             </p>
-            <p className="text-muted text-[13px] mt-1">
+            <p className="text-muted text-xs-type mt-1">
               {language === "ar" ? "درجة النجاح: 65%" : "Passing score: 65%"}
             </p>
           </div>
@@ -140,7 +140,7 @@ export default function ResultsPage() {
 
         {/* Domain Breakdown */}
         <div className="bg-canvas border border-edge rounded-lg p-5">
-          <h2 className="font-bold text-content text-[15px] mb-4">
+          <h2 className="font-bold text-content text-sm-type mb-4">
             {language === "ar" ? "الأداء حسب المجال" : "Performance by Domain"}
           </h2>
           <div className="space-y-4">
@@ -148,7 +148,7 @@ export default function ResultsPage() {
               const pct = Math.round((correct / total) * 100);
               return (
                 <div key={domain}>
-                  <div className="flex justify-between text-[14px] mb-1.5">
+                  <div className="flex justify-between text-xs-type mb-1.5">
                     <span className="text-content">{domain}</span>
                     <span className="font-semibold text-content">{correct}/{total} ({pct}%)</span>
                   </div>
@@ -166,7 +166,7 @@ export default function ResultsPage() {
 
         {/* Question Review */}
         <div className="bg-canvas border border-edge rounded-lg overflow-hidden">
-          <div className="font-bold text-content text-[15px] px-5 py-4 border-b border-edge">
+          <div className="font-bold text-content text-sm-type px-5 py-4 border-b border-edge">
             {language === "ar" ? "مراجعة الأسئلة" : "Question Review"}
           </div>
           <div className="divide-y divide-edge">
@@ -181,17 +181,17 @@ export default function ResultsPage() {
                     className="w-full text-left flex items-start gap-3"
                     onClick={() => setExpanded(expanded === idx ? null : idx)}
                   >
-                    <span className={`mt-0.5 shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-[12px] font-bold text-inverse ${
+                    <span className={`mt-0.5 shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs-type font-bold text-inverse ${
                       r.isCorrect ? "bg-correct" : r.selectedAnswer ? "bg-wrong" : "bg-edge-2"
                     }`}
                     style={{ backgroundColor: r.isCorrect ? "var(--color-ok)" : r.selectedAnswer ? "var(--color-err)" : "var(--color-border-2)" }}
                     >
                       {r.isCorrect ? "✓" : r.selectedAnswer ? "✗" : "—"}
                     </span>
-                    <span className="text-[15px] text-content flex-1 leading-relaxed" dir={isRtl ? "rtl" : "ltr"}>
+                    <span className="text-sm-type text-content flex-1" dir={isRtl ? "rtl" : "ltr"}>
                       {idx + 1}. {isRtl ? r.questionTextAr : r.questionTextEn}
                     </span>
-                    <span className="text-muted text-[12px] shrink-0 mt-1">{expanded === idx ? "▲" : "▼"}</span>
+                    <span className="text-muted text-xs-type shrink-0 mt-1">{expanded === idx ? "▲" : "▼"}</span>
                   </button>
 
                   {expanded === idx && (
@@ -209,7 +209,7 @@ export default function ResultsPage() {
 
                         return (
                           <div key={key}>
-                            <div className={`px-3 py-2.5 rounded border text-[14px] ${
+                            <div className={`px-3 py-2.5 rounded border text-xs-type ${
                               isCorrectOption
                                 ? "bg-correct border-correct text-correct"
                                 : isSelected
@@ -233,14 +233,14 @@ export default function ResultsPage() {
                               )}
                             </div>
                             {isCorrectOption && (
-                              <div className="mt-1 px-3 py-2 text-[13px] rounded-r border-l-2 bg-surface"
+                              <div className="mt-1 px-3 py-2 text-xs-type rounded-r border-l-2 bg-surface"
                                 style={{ borderLeftColor: "var(--color-ok)", color: "var(--color-ok)" }}>
                                 <span className="font-semibold">{isRtl ? "لماذا صحيح: " : "Why correct: "}</span>
                                 <span className="text-content">{isRtl ? r.explanationAr : r.explanationEn}</span>
                               </div>
                             )}
                             {!isCorrectOption && wrongExpl && (
-                              <div className={`mt-1 px-3 py-2 text-[13px] rounded-r border-l-2 bg-surface`}
+                              <div className={`mt-1 px-3 py-2 text-xs-type rounded-r border-l-2 bg-surface`}
                                 style={{ borderLeftColor: isSelected ? "var(--color-err)" : "var(--color-border)", color: isSelected ? "var(--color-err)" : "var(--color-text-2)" }}>
                                 <span className="font-semibold">{isRtl ? "لماذا خطأ: " : "Why wrong: "}</span>
                                 <span className="text-content">{wrongExpl}</span>
@@ -261,7 +261,7 @@ export default function ResultsPage() {
         <div className="flex justify-center pb-2">
           <button
             onClick={handleRetake}
-            className="px-8 py-2.5 bg-interact text-inverse rounded hover:bg-interact-h font-semibold text-[15px] transition-colors"
+            className="px-8 py-2.5 bg-interact text-inverse rounded hover:bg-interact-h font-semibold text-sm-type transition-colors"
           >
             {language === "ar" ? "بدء اختبار جديد" : "Start New Exam"}
           </button>

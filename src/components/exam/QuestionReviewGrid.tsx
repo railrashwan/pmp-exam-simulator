@@ -11,7 +11,7 @@ export function QuestionReviewGrid() {
   return (
     <div className="w-72 border-l border-edge bg-surface flex flex-col shrink-0">
       {/* Header */}
-      <div className="bg-surface-2 px-3 py-2.5 text-[11px] font-bold text-muted text-center border-b border-edge tracking-widest uppercase">
+      <div className="bg-surface-2 px-3 py-2.5 text-label-caps text-muted text-center border-b border-edge">
         {L.questionReviewList}
       </div>
 
@@ -33,7 +33,7 @@ export function QuestionReviewGrid() {
                 onClick={() => goToQuestion(idx)}
                 aria-label={`Question ${idx + 1}${isCurrent ? ", current" : isAnswered ? ", answered" : ""}${isMarked ? ", marked for review" : ""}`}
                 aria-current={isCurrent ? "true" : undefined}
-                className={`relative border rounded text-[13px] font-medium h-11 flex items-center justify-center transition-colors hover:opacity-80 ${cellCls}`}
+                className={`relative border rounded text-xs-type font-medium h-11 flex items-center justify-center transition-colors hover:opacity-80 ${cellCls}`}
               >
                 {isAnswered && !isCurrent ? (
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
@@ -56,7 +56,7 @@ export function QuestionReviewGrid() {
 
       {/* Legend */}
       <div className="border-t border-edge p-3 space-y-2 bg-canvas">
-        <div className="flex items-center gap-2 text-[12px] text-content">
+        <div className="flex items-center gap-2 text-xs-type text-content">
           <span className="w-6 h-6 bg-correct border border-correct rounded flex items-center justify-center text-correct shrink-0" aria-hidden="true">
             <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
               <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -64,11 +64,11 @@ export function QuestionReviewGrid() {
           </span>
           {L.answered}
         </div>
-        <div className="flex items-center gap-2 text-[12px] text-content">
+        <div className="flex items-center gap-2 text-xs-type text-content">
           <span className="w-6 h-6 bg-primary border border-primary rounded shrink-0" aria-hidden="true" />
           {L.current}
         </div>
-        <div className="flex items-center gap-2 text-[12px] text-content">
+        <div className="flex items-center gap-2 text-xs-type text-content">
           <span className="w-6 h-6 relative bg-canvas border border-edge rounded shrink-0" aria-hidden="true">
             <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-wrong rounded-bl" />
           </span>

@@ -56,8 +56,55 @@
   --color-warn-bg:     #1c1200;
 }
 
+/* ── Type Scale ───────────────────────────────────────────────────────────── */
+/*
+ * Fixed rem-based scale for a dense exam UI.
+ * rem respects browser zoom; px would break accessibility zoom.
+ *
+ *  --ts-xs   0.8125rem / 13px  labels, meta, captions
+ *  --ts-sm   0.9375rem / 15px  options, body text, secondary headings
+ *  --ts-md   1.0625rem / 17px  question text (primary reading surface)
+ *  --ts-lg   1.125rem  / 18px  card headings
+ *  --ts-xl   1.25rem   / 20px  page headings
+ *  --ts-stat 1.375rem  / 22px  stat numbers, scores
+ */
+:root {
+  --ts-xs:   0.8125rem;
+  --ts-sm:   0.9375rem;
+  --ts-md:   1.0625rem;
+  --ts-lg:   1.125rem;
+  --ts-xl:   1.25rem;
+  --ts-stat: 1.375rem;
+
+  --lh-tight:   1.25;   /* headings */
+  --lh-snug:    1.4;    /* labels, compact items */
+  --lh-normal:  1.55;   /* options, body */
+  --lh-relaxed: 1.65;   /* question text */
+  --lh-arabic:  1.85;   /* Arabic text — larger ascenders/descenders need room */
+}
+
 /* ── Semantic Utilities ───────────────────────────────────────────────────── */
 @layer utilities {
+  /* Type scale */
+  .text-xs-type { font-size: var(--ts-xs);   line-height: var(--lh-snug); }
+  .text-sm-type { font-size: var(--ts-sm);   line-height: var(--lh-normal); }
+  .text-md-type { font-size: var(--ts-md);   line-height: var(--lh-relaxed); }
+  .text-lg-type { font-size: var(--ts-lg);   line-height: var(--lh-tight); }
+  .text-xl-type { font-size: var(--ts-xl);   line-height: var(--lh-tight); }
+  .text-stat    { font-size: var(--ts-stat); line-height: var(--lh-tight); font-variant-numeric: tabular-nums; }
+
+  /* Uppercase label style (section headers, table headers) */
+  .text-label-caps {
+    font-size: var(--ts-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: var(--lh-snug);
+  }
+
+  /* Tabular-nums utility for timers, scores, counts */
+  .tabular-nums { font-variant-numeric: tabular-nums; }
+
   /* backgrounds */
   .bg-canvas      { background-color: var(--color-bg); }
   .bg-surface     { background-color: var(--color-surface); }
@@ -104,6 +151,11 @@ body {
 [dir="rtl"] {
   font-family: 'Noto Sans Arabic', Arial, sans-serif;
 }
+
+/* Arabic text needs more vertical breathing room */
+[dir="rtl"] .text-md-type  { line-height: var(--lh-arabic); }
+[dir="rtl"] .text-sm-type  { line-height: calc(var(--lh-arabic) - 0.1); }
+[dir="rtl"] p, [dir="rtl"] span { line-height: var(--lh-arabic); }
 
 *:focus-visible {
   outline: 2px solid var(--color-interact);

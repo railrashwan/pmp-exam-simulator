@@ -11,7 +11,7 @@ export function LanguageToggle() {
     <div className="inline-flex rounded border border-edge overflow-hidden">
       <button
         onClick={() => language === "ar" && toggleLanguage()}
-        className={`px-4 py-1.5 text-[13px] font-medium transition-colors ${
+        className={`px-4 py-1.5 text-xs-type font-medium transition-colors ${
           language === "en"
             ? "bg-primary text-inverse"
             : "bg-canvas text-muted hover:bg-surface"
@@ -21,7 +21,7 @@ export function LanguageToggle() {
       </button>
       <button
         onClick={() => language === "en" && toggleLanguage()}
-        className={`px-4 py-1.5 text-[13px] font-medium transition-colors border-l border-edge ${
+        className={`px-4 py-1.5 text-xs-type font-medium transition-colors border-l border-edge ${
           language === "ar"
             ? "bg-primary text-inverse"
             : "bg-canvas text-muted hover:bg-surface"

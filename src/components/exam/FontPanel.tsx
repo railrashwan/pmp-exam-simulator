@@ -69,7 +69,7 @@ export function FontPanel() {
       {/* Trigger button */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-4 left-4 z-40 bg-canvas border border-edge text-muted font-medium shadow-sm hover:bg-surface hover:text-content transition-colors rounded px-4 py-1.5 text-[13px]"
+        className="fixed bottom-4 left-4 z-40 bg-canvas border border-edge text-muted font-medium shadow-sm hover:bg-surface hover:text-content transition-colors rounded px-4 py-1.5 text-xs-type"
         aria-label="Open font selector"
       >
         Aa
@@ -88,8 +88,8 @@ export function FontPanel() {
         {/* Header */}
         <div className="bg-surface border-b border-edge px-5 py-4 flex items-center justify-between shrink-0">
           <div>
-            <div className="text-[15px] font-bold text-content">Font Settings</div>
-            <div className="text-[13px] text-muted mt-0.5">
+            <div className="text-sm-type font-bold text-content">Font Settings</div>
+            <div className="text-xs-type text-muted mt-0.5">
               {isAr ? "Choose your Arabic font" : "Choose your English font"}
             </div>
           </div>
@@ -105,10 +105,10 @@ export function FontPanel() {
         {/* Active font bar */}
         {questionFont && (
           <div className="bg-surface-2 border-b border-edge px-5 py-2.5 flex items-center justify-between shrink-0">
-            <span className="text-interact text-[13px] font-semibold">Active: {questionFont}</span>
+            <span className="text-interact text-xs-type font-semibold">Active: {questionFont}</span>
             <button
               onClick={() => setQuestionFont("")}
-              className="text-muted hover:text-content text-[12px] underline transition-colors"
+              className="text-muted hover:text-content text-xs-type underline transition-colors"
             >
               Reset
             </button>
@@ -127,7 +127,7 @@ export function FontPanel() {
                   isActive ? "bg-selected border-l-2 border-primary" : "hover:bg-surface"
                 }`}
               >
-                <div className="text-[12px] font-semibold text-muted mb-1.5" style={{ fontFamily: "system-ui" }}>
+                <div className="text-xs-type font-semibold text-muted mb-1.5" style={{ fontFamily: "system-ui" }}>
                   {isActive && "✓ "}{font}
                 </div>
                 <div
@@ -147,7 +147,7 @@ export function FontPanel() {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-edge px-5 py-3 bg-surface text-muted text-[12px] shrink-0">
+        <div className="border-t border-edge px-5 py-3 bg-surface text-muted text-xs-type shrink-0">
           Your font choice is saved automatically.
         </div>
       </div>

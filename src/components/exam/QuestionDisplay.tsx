@@ -40,8 +40,7 @@ export function QuestionDisplay() {
         className="border border-edge rounded-md p-4 bg-canvas"
       >
         <p
-          className={`font-semibold text-content leading-relaxed ${isRtl ? "text-right" : ""}`}
-          style={{ fontSize: "17px" }}
+          className={`text-md-type font-semibold text-content ${isRtl ? "text-right" : ""}`}
         >
           {qText}
         </p>
@@ -71,8 +70,7 @@ export function QuestionDisplay() {
                 className="mt-0.5 shrink-0 w-4 h-4 accent-[var(--color-primary)]"
               />
               <span
-                className={`text-content ${isRtl ? "text-right" : ""}`}
-                style={{ fontSize: "15px", lineHeight: "1.5" }}
+                className={`text-sm-type text-content ${isRtl ? "text-right" : ""}`}
               >
                 <span className="font-semibold">{label}. </span>
                 {optionText}

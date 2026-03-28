@@ -41,10 +41,10 @@ export default function ExamPage() {
         {isPaused && (
           <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-5 z-10">
             <div className="text-inverse text-2xl font-bold">{pauseLabel}</div>
-            <div className="text-inverse/70 text-[15px]">{pauseMsg}</div>
+            <div className="text-inverse/70 text-sm-type">{pauseMsg}</div>
             <button
               onClick={resumeExam}
-              className="mt-1 px-8 py-2.5 bg-interact text-inverse text-[15px] font-semibold rounded hover:bg-interact-h transition-colors"
+              className="mt-1 px-8 py-2.5 bg-interact text-inverse text-sm-type font-semibold rounded hover:bg-interact-h transition-colors"
             >
               {resumeLabel}
             </button>

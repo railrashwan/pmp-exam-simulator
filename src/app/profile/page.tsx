@@ -93,18 +93,18 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-surface">
       {/* Header */}
       <div className="bg-primary border-b border-primary px-6 py-4 flex items-center justify-between">
-        <h1 className="text-[17px] font-bold text-inverse">My Profile</h1>
+        <h1 className="text-md-type font-bold text-inverse">My Profile</h1>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowResetConfirm(true)}
             disabled={resetting || totalExams === 0}
-            className="px-4 py-1.5 text-[13px] font-medium text-inverse/70 border border-white/20 rounded hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-1.5 text-xs-type font-medium text-inverse/70 border border-white/20 rounded hover:bg-white/10 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             Reset History
           </button>
           <button
             onClick={() => router.push("/")}
-            className="px-4 py-1.5 text-[13px] font-medium text-inverse border border-white/30 rounded hover:bg-white/10 transition-colors"
+            className="px-4 py-1.5 text-xs-type font-medium text-inverse border border-white/30 rounded hover:bg-white/10 transition-colors"
           >
             ← Home
           </button>
@@ -122,8 +122,8 @@ export default function ProfilePage() {
             { label: "Questions Answered", value: totalAnswered.toLocaleString() },
           ].map(({ label, value }) => (
             <div key={label} className="bg-canvas border border-edge rounded-lg p-4">
-              <div className="text-[22px] font-bold text-content">{value}</div>
-              <div className="text-[12px] text-muted mt-0.5">{label}</div>
+              <div className="text-stat font-bold text-content tabular-nums">{value}</div>
+              <div className="text-xs-type text-muted mt-0.5">{label}</div>
             </div>
           ))}
         </div>
@@ -132,13 +132,13 @@ export default function ProfilePage() {
         <div className="bg-canvas border border-edge rounded-lg overflow-hidden">
           <div className="border-b border-edge px-5 py-3 flex items-center justify-between bg-surface">
             <div>
-              <h2 className="text-[15px] font-bold text-content">Kill Mistakes Exam</h2>
-              <p className="text-[13px] text-muted mt-0.5">Practice every question you got wrong</p>
+              <h2 className="text-sm-type font-bold text-content">Kill Mistakes Exam</h2>
+              <p className="text-xs-type text-muted mt-0.5">Practice every question you got wrong</p>
             </div>
-            <div className="text-3xl font-black text-content/70">{mistakeCount}</div>
+            <div className="text-stat font-black text-content/70 tabular-nums">{mistakeCount}</div>
           </div>
           <div className="px-5 py-4 flex items-center justify-between gap-4">
-            <p className="text-[14px] text-muted">
+            <p className="text-xs-type text-muted">
               {mistakeCount === 0
                 ? "No wrong answers recorded yet. Complete an exam to start tracking."
                 : `${mistakeCount} unique question${mistakeCount !== 1 ? "s" : ""} answered incorrectly across all exams.`}
@@ -146,28 +146,28 @@ export default function ProfilePage() {
             <button
               onClick={handleStartKillMistakes}
               disabled={mistakeCount === 0 || startingKill}
-              className="shrink-0 px-5 py-2 bg-err text-inverse text-[14px] font-semibold rounded hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
+              className="shrink-0 px-5 py-2 bg-err text-inverse text-xs-type font-semibold rounded hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
               style={{ backgroundColor: "var(--color-err)" }}
             >
               {startingKill ? "Loading..." : "Start"}
             </button>
           </div>
-          {killError && <p className="px-5 pb-4 text-wrong text-[13px]">{killError}</p>}
+          {killError && <p className="px-5 pb-4 text-wrong text-xs-type">{killError}</p>}
         </div>
 
         {/* History table */}
         <div className="bg-canvas border border-edge rounded-lg overflow-hidden">
           <div className="px-5 py-4 border-b border-edge flex items-center justify-between">
-            <h2 className="text-[15px] font-bold text-content">Exam History</h2>
+            <h2 className="text-sm-type font-bold text-content">Exam History</h2>
             {totalExams > 0 && (
-              <span className="text-[13px] text-muted">{passCount}/{totalExams} passed</span>
+              <span className="text-xs-type text-muted tabular-nums">{passCount}/{totalExams} passed</span>
             )}
           </div>
 
           {loadingHistory ? (
-            <div className="p-8 text-center text-muted text-[14px]">Loading...</div>
+            <div className="p-8 text-center text-muted text-xs-type">Loading...</div>
           ) : history.length === 0 ? (
-            <div className="p-8 text-center text-muted text-[14px]">
+            <div className="p-8 text-center text-muted text-xs-type">
               No exams taken yet. Go take one!
             </div>
           ) : (
@@ -176,7 +176,7 @@ export default function ProfilePage() {
                 <thead className="bg-surface border-b border-edge">
                   <tr>
                     {["Date", "Exam", "Score", "Result", "Correct"].map((h) => (
-                      <th key={h} className="px-4 py-3 text-left text-[12px] font-semibold text-muted uppercase tracking-wide">
+                      <th key={h} className="px-4 py-3 text-left text-label-caps text-muted">
                         {h}
                       </th>
                     ))}
@@ -185,11 +185,11 @@ export default function ProfilePage() {
                 <tbody className="divide-y divide-edge">
                   {history.map((a) => (
                     <tr key={a.id} className="hover:bg-surface transition-colors">
-                      <td className="px-4 py-3 text-[13px] text-muted whitespace-nowrap">{formatDate(a.takenAt)}</td>
-                      <td className="px-4 py-3 text-[13px] font-medium text-content">{examName(a.examSet)}</td>
+                      <td className="px-4 py-3 text-xs-type text-muted whitespace-nowrap tabular-nums">{formatDate(a.takenAt)}</td>
+                      <td className="px-4 py-3 text-xs-type font-medium text-content">{examName(a.examSet)}</td>
                       <td className="px-4 py-3">
                         <span
-                          className="text-[15px] font-bold"
+                          className="text-sm-type font-bold tabular-nums"
                           style={{ color: a.score >= 65 ? "var(--color-ok)" : "var(--color-err)" }}
                         >
                           {a.score}%
@@ -197,7 +197,7 @@ export default function ProfilePage() {
                       </td>
                       <td className="px-4 py-3">
                         <span
-                          className="inline-block px-2 py-0.5 rounded text-[12px] font-semibold"
+                          className="inline-block px-2 py-0.5 rounded text-xs-type font-semibold"
                           style={
                             a.passed
                               ? { backgroundColor: "var(--color-ok-bg)", color: "var(--color-ok)" }
@@ -207,7 +207,7 @@ export default function ProfilePage() {
                           {a.passed ? "Pass" : "Fail"}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-[13px] text-muted">
+                      <td className="px-4 py-3 text-xs-type text-muted tabular-nums">
                         {a.correctAnswers}/{a.totalQuestions}
                       </td>
                     </tr>
@@ -224,24 +224,24 @@ export default function ProfilePage() {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="reset-title">
           <div className="bg-canvas border border-edge rounded-lg shadow-xl w-[400px] overflow-hidden">
             <div className="bg-surface border-b border-edge px-5 py-4">
-              <h2 id="reset-title" className="font-semibold text-content text-[15px]">Reset History?</h2>
+              <h2 id="reset-title" className="font-semibold text-content text-sm-type">Reset History?</h2>
             </div>
             <div className="p-5">
-              <p className="text-[14px] text-content leading-relaxed">
+              <p className="text-xs-type text-content leading-relaxed">
                 This will permanently delete all exam history and Kill Mistakes data. This cannot be undone.
               </p>
             </div>
             <div className="flex gap-2 px-5 pb-5 justify-end">
               <button
                 onClick={() => setShowResetConfirm(false)}
-                className="px-5 py-2 text-[14px] border border-edge rounded text-content hover:bg-surface font-medium transition-colors"
+                className="px-5 py-2 text-xs-type border border-edge rounded text-content hover:bg-surface font-medium transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleReset}
                 disabled={resetting}
-                className="px-5 py-2 text-[14px] text-inverse rounded hover:opacity-90 font-medium disabled:opacity-50 transition-opacity"
+                className="px-5 py-2 text-xs-type text-inverse rounded hover:opacity-90 font-medium disabled:opacity-50 transition-opacity"
                 style={{ backgroundColor: "var(--color-err)" }}
               >
                 {resetting ? "Resetting..." : "Reset"}

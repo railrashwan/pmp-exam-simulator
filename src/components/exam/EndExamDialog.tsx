@@ -26,24 +26,24 @@ export function EndExamDialog({ unanswered, onConfirm, onCancel }: Props) {
     >
       <div className="bg-canvas border border-edge rounded-lg shadow-xl w-[440px] overflow-hidden">
         <div className="bg-surface border-b border-edge px-5 py-4">
-          <h2 id="end-exam-title" className="font-semibold text-content text-[15px]">
+          <h2 id="end-exam-title" className="font-semibold text-content text-sm-type">
             {L.endExamConfirm}
           </h2>
         </div>
         <div className="p-5">
-          <p className="text-[14px] text-content leading-relaxed">{L.endExamMessage(unanswered)}</p>
+          <p className="text-xs-type text-content leading-relaxed">{L.endExamMessage(unanswered)}</p>
         </div>
         <div className="flex gap-2 px-5 pb-5 justify-end">
           <button
             ref={cancelRef}
             onClick={onCancel}
-            className="px-5 py-2 text-[14px] border border-edge rounded text-content hover:bg-surface font-medium transition-colors"
+            className="px-5 py-2 text-xs-type border border-edge rounded text-content hover:bg-surface font-medium transition-colors"
           >
             {L.cancel}
           </button>
           <button
             onClick={onConfirm}
-            className="px-5 py-2 text-[14px] bg-err text-inverse rounded hover:opacity-90 font-medium transition-opacity"
+            className="px-5 py-2 text-xs-type bg-err text-inverse rounded hover:opacity-90 font-medium transition-opacity"
           >
             {L.confirm}
           </button>

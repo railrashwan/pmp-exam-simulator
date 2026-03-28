@@ -31,15 +31,15 @@ export function ExamHeader() {
   return (
     <div className="bg-canvas border-b border-edge px-6 py-3 flex items-center justify-between">
       <div>
-        <div className="font-semibold text-content text-[15px] leading-tight">{L.examTitle}</div>
-        <div className="text-muted text-[13px] mt-0.5">
+        <div className="text-sm-type font-semibold text-content leading-tight">{L.examTitle}</div>
+        <div className="text-xs-type text-muted mt-0.5">
           {L.questionOf(currentIndex + 1, questions.length)}
         </div>
       </div>
       <div className="flex items-center gap-3">
         <button
           onClick={isPaused ? resumeExam : pauseExam}
-          className={`px-4 py-1.5 text-[13px] font-semibold rounded border transition-colors ${
+          className={`px-4 py-1.5 text-xs-type font-semibold rounded border transition-colors ${
             isPaused
               ? "bg-correct text-inverse border-correct hover:opacity-90"
               : "bg-canvas text-content border-edge hover:bg-surface"
@@ -48,7 +48,7 @@ export function ExamHeader() {
           {isPaused ? L.resume : L.pause}
         </button>
         <div
-          className={`font-mono font-bold text-[15px] tracking-wider ${
+          className={`font-mono font-bold text-sm-type tracking-wider tabular-nums ${
             isLow ? "text-caution animate-pulse" : isPaused ? "text-muted" : "text-content"
           }`}
           aria-live="polite"

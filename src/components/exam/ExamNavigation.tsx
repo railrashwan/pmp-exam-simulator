@@ -34,14 +34,14 @@ export function ExamNavigation() {
         <button
           onClick={prevQuestion}
           disabled={currentIndex === 0}
-          className="px-6 py-2 text-[14px] font-semibold bg-canvas text-content border border-edge rounded hover:bg-surface disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-6 py-2 text-xs-type font-semibold bg-canvas text-content border border-edge rounded hover:bg-surface disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {L.previous}
         </button>
 
         <button
           onClick={() => currentQuestion && toggleMarkForReview(currentQuestion.id)}
-          className={`px-5 py-2 text-[14px] font-semibold rounded border flex items-center gap-2 transition-colors ${
+          className={`px-5 py-2 text-xs-type font-semibold rounded border flex items-center gap-2 transition-colors ${
             isMarked
               ? "bg-wrong-bg border-wrong text-wrong hover:opacity-90"
               : "bg-canvas border-edge text-muted hover:bg-surface"
@@ -56,7 +56,7 @@ export function ExamNavigation() {
         <button
           onClick={nextQuestion}
           disabled={currentIndex === questions.length - 1}
-          className="px-6 py-2 text-[14px] font-semibold bg-primary text-inverse border border-primary rounded hover:bg-primary-h disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-6 py-2 text-xs-type font-semibold bg-primary text-inverse border border-primary rounded hover:bg-primary-h disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {L.next}
         </button>
@@ -66,13 +66,13 @@ export function ExamNavigation() {
       <div className="border-t border-edge bg-surface px-6 py-2 flex items-center justify-end gap-3">
         <button
           onClick={() => setShowCalc(true)}
-          className="px-4 py-1.5 text-[13px] font-medium bg-canvas text-content border border-edge rounded hover:bg-surface-2 transition-colors"
+          className="px-4 py-1.5 text-xs-type font-medium bg-canvas text-content border border-edge rounded hover:bg-surface-2 transition-colors"
         >
           {L.calculator}
         </button>
         <button
           onClick={() => setShowEndDialog(true)}
-          className="px-4 py-1.5 text-[13px] font-medium bg-canvas text-wrong border border-wrong rounded hover:bg-wrong-bg transition-colors"
+          className="px-4 py-1.5 text-xs-type font-medium bg-canvas text-wrong border border-wrong rounded hover:bg-wrong-bg transition-colors"
         >
           {L.endExam}
         </button>
