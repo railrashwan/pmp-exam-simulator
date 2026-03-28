@@ -59,7 +59,8 @@ export default function HomePage() {
       const questions: ExamQuestion[] = await res.json();
       if (questions.length === 0) throw new Error("No questions available");
 
-      const durationSec = count * 77;
+      // 180 questions = 230 minutes (230 * 60 seconds)
+      const durationSec = Math.round(count * ((230 * 60) / 180));
       startExam(questions, durationSec, examSet);
       router.push("/exam");
     } catch (e) {
@@ -69,11 +70,13 @@ export default function HomePage() {
     }
   }
 
-  const pmpDurationMin = Math.round((pmpCount * 77) / 60);
-  const undrawDurationMin = Math.round((UNDRAW_COUNT * 77) / 60);
-  const andrewDurationMin = Math.round((ANDREW_COUNT * 77) / 60);
-  const yassineDurationMin = Math.round((YASSINE_COUNT * 77) / 60);
-  const helenaDurationMin = Math.round((HELENA_COUNT * 77) / 60);
+  // Reference: 180 questions = 230 minutes
+  const calcMin = (c: number) => Math.round(c * (230 / 180));
+  const pmpDurationMin = calcMin(pmpCount);
+  const undrawDurationMin = calcMin(UNDRAW_COUNT);
+  const andrewDurationMin = calcMin(ANDREW_COUNT);
+  const yassineDurationMin = calcMin(YASSINE_COUNT);
+  const helenaDurationMin = calcMin(HELENA_COUNT);
 
   return (
     <div className="min-h-screen bg-canvas" dir="ltr">
