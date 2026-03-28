@@ -178,8 +178,7 @@ export default function ResultsPage() {
               return (
                 <div key={r.questionId} className="p-4">
                   <button
-                    className={`w-full flex items-start gap-3 ${isRtl ? "text-right" : "text-left"}`}
-                    dir={isRtl ? "rtl" : "ltr"}
+                    className="w-full text-left flex items-start gap-3"
                     onClick={() => setExpanded(expanded === idx ? null : idx)}
                   >
                     <span className={`mt-0.5 shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs-type font-bold text-inverse ${
@@ -189,14 +188,14 @@ export default function ResultsPage() {
                     >
                       {r.isCorrect ? "✓" : r.selectedAnswer ? "✗" : "—"}
                     </span>
-                    <span className="text-sm-type text-content flex-1">
+                    <span className="text-sm-type text-content flex-1" dir={isRtl ? "rtl" : "ltr"}>
                       {idx + 1}. {isRtl ? r.questionTextAr : r.questionTextEn}
                     </span>
                     <span className="text-muted text-xs-type shrink-0 mt-1">{expanded === idx ? "▲" : "▼"}</span>
                   </button>
 
                   {expanded === idx && (
-                    <div className={`mt-3 space-y-2 ${isRtl ? "mr-0 sm:mr-9 text-right" : "ml-0 sm:ml-9 text-left"}`} dir={isRtl ? "rtl" : "ltr"}>
+                    <div className="mt-3 ml-0 sm:ml-9 space-y-2" dir={isRtl ? "rtl" : "ltr"}>
                       {(["A", "B", "C", "D"] as const).map((key) => {
                         const textMap: Record<string, string> = {
                           A: isRtl ? r.optionAAr : r.optionAEn,
@@ -234,15 +233,15 @@ export default function ResultsPage() {
                               )}
                             </div>
                             {isCorrectOption && (
-                              <div className={`mt-1 px-3 py-2 text-xs-type bg-surface ${isRtl ? "rounded-l border-r-2" : "rounded-r border-l-2"}`}
-                                style={{ [isRtl ? "borderRightColor" : "borderLeftColor"]: "var(--color-ok)", color: "var(--color-ok)" }}>
+                              <div className="mt-1 px-3 py-2 text-xs-type rounded-r border-l-2 bg-surface"
+                                style={{ borderLeftColor: "var(--color-ok)", color: "var(--color-ok)" }}>
                                 <span className="font-semibold">{isRtl ? "لماذا صحيح: " : "Why correct: "}</span>
                                 <span className="text-content">{isRtl ? r.explanationAr : r.explanationEn}</span>
                               </div>
                             )}
                             {!isCorrectOption && wrongExpl && (
-                              <div className={`mt-1 px-3 py-2 text-xs-type bg-surface ${isRtl ? "rounded-l border-r-2" : "rounded-r border-l-2"}`}
-                                style={{ [isRtl ? "borderRightColor" : "borderLeftColor"]: isSelected ? "var(--color-err)" : "var(--color-border)", color: isSelected ? "var(--color-err)" : "var(--color-text-2)" }}>
+                              <div className={`mt-1 px-3 py-2 text-xs-type rounded-r border-l-2 bg-surface`}
+                                style={{ borderLeftColor: isSelected ? "var(--color-err)" : "var(--color-border)", color: isSelected ? "var(--color-err)" : "var(--color-text-2)" }}>
                                 <span className="font-semibold">{isRtl ? "لماذا خطأ: " : "Why wrong: "}</span>
                                 <span className="text-content">{wrongExpl}</span>
                               </div>
