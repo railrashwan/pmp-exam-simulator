@@ -44,11 +44,10 @@ export function QuestionDisplay() {
 
       {/* Question card */}
       <div
-        dir={isRtl ? "rtl" : "ltr"}
         className="border border-edge rounded-lg p-4 bg-canvas shadow-sm"
       >
         <p
-          className={`font-bold text-content ${isRtl ? "text-right" : ""}`}
+          className="font-bold text-content"
           style={{ fontSize: `${fontSize}rem`, lineHeight: isRtl ? "1.85" : "1.6" }}
         >
           {qText}
@@ -56,7 +55,7 @@ export function QuestionDisplay() {
       </div>
 
       {/* Options */}
-      <div dir={isRtl ? "rtl" : "ltr"} className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         {OPTION_KEYS.map((key) => {
           const optionText = getOptionText(question, key, language);
           const isSelected = selectedAnswer === key;
@@ -79,7 +78,7 @@ export function QuestionDisplay() {
                 className="shrink-0 w-4 h-4 accent-[var(--color-interact)]"
               />
               <span
-                className={`text-content ${isRtl ? "text-right" : ""}`}
+                className="text-content"
                 style={{ fontSize: `${fontSize}rem`, lineHeight: isRtl ? "1.85" : "1.6" }}
               >
                 <span className="font-semibold">{label}. </span>
