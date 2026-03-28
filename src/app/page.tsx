@@ -71,7 +71,7 @@ export default function HomePage() {
   const yassineDurationMin = Math.round((YASSINE_COUNT * 77) / 60);
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <div className="min-h-screen bg-canvas" dir="ltr">
 
       {/* Page header */}
       <header className="bg-primary border-b border-primary">
