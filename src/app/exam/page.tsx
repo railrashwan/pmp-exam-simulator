@@ -29,7 +29,7 @@ export default function ExamPage() {
   const resumeLabel = language === "ar" ? "استئناف" : "Resume Exam";
 
   return (
-    <div className="h-screen flex flex-col bg-canvas overflow-hidden">
+    <div className="h-screen flex flex-col bg-canvas overflow-hidden" dir="ltr">
       <ExamHeader />
 
       <div className="relative flex flex-1 overflow-hidden">

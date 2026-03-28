@@ -29,7 +29,7 @@ export function ExamHeader() {
   const isLow = timeRemaining < 300 && !isPaused;
 
   return (
-    <div className="bg-primary border-b border-primary px-4 sm:px-6 py-5 flex items-center justify-between gap-3 shadow-sm">
+    <div className="bg-primary border-b border-primary px-4 sm:px-6 py-5 flex items-center justify-between gap-3 shadow-sm" dir={language === "ar" ? "rtl" : "ltr"}>
       <div className="min-w-0">
         <div className="font-bold text-white text-2xl tracking-wide drop-shadow-sm truncate">{L.examTitle}</div>
         <div className="text-white/90 text-sm mt-0.5 tabular-nums">
