@@ -11,10 +11,11 @@ const UNDRAW_COUNT = 49;
 const ANDREW_COUNT = 200;
 const YASSINE_COUNT = 180;
 const HELENA_COUNT = 180;
+const EDUHUB_COUNT = 180;
 
 export default function HomePage() {
   const [pmpCount, setPmpCount] = useState(40);
-  const [loading, setLoading] = useState<"pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | "helena" | null>(null);
+  const [loading, setLoading] = useState<"pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | "helena" | "eduhub" | null>(null);
   const [error, setError] = useState<{ set: string; msg: string } | null>(null);
   const [mistakeCount, setMistakeCount] = useState<number | null>(null);
 
@@ -28,7 +29,7 @@ export default function HomePage() {
   const startExam = useExamStore((s) => s.startExam);
   const router = useRouter();
 
-  async function handleStart(examSet: "pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | "helena") {
+  async function handleStart(examSet: "pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | "helena" | "eduhub") {
     setLoading(examSet);
     setError(null);
     try {
@@ -46,6 +47,9 @@ export default function HomePage() {
       } else if (examSet === "helena") {
         count = HELENA_COUNT;
         url = `/api/exam/start?examSet=helena`;
+      } else if (examSet === "eduhub") {
+        count = EDUHUB_COUNT;
+        url = `/api/exam/start?examSet=eduhub`;
       } else if (examSet === "kill-mistakes") {
         count = mistakeCount ?? 0;
         url = `/api/exam/start?examSet=kill-mistakes`;
@@ -77,6 +81,7 @@ export default function HomePage() {
   const andrewDurationMin = calcMin(ANDREW_COUNT);
   const yassineDurationMin = calcMin(YASSINE_COUNT);
   const helenaDurationMin = calcMin(HELENA_COUNT);
+  const eduhubDurationMin = calcMin(EDUHUB_COUNT);
 
   return (
     <div className="min-h-screen bg-canvas" dir="ltr">
@@ -291,6 +296,43 @@ export default function HomePage() {
                 {loading === "helena" ? "Loading..." : "Start Exam"}
               </button>
               {error?.set === "helena" && (
+                <p className="text-wrong text-xs-type">{error.msg}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Eduhub */}
+          <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-interact)" }}>
+            <div className="px-4 py-4 border-b border-edge bg-surface">
+              <h2 className="text-sm-type font-bold text-content">Eduhub Exam Set</h2>
+              <p className="text-xs-type text-muted mt-0.5">Eduhub Practice Set</p>
+            </div>
+            <div className="p-4 space-y-3 flex flex-col grow">
+              <div className="space-y-1.5 text-xs-type border border-edge rounded-md p-3 bg-surface">
+                <div className="flex justify-between">
+                  <span className="text-muted">Questions</span>
+                  <span className="font-semibold">{EDUHUB_COUNT} (fixed)</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted">Duration</span>
+                  <span className="font-semibold tabular-nums">{eduhubDurationMin} min</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted">Format</span>
+                  <span className="font-semibold text-interact">Full simulation</span>
+                </div>
+              </div>
+              <p className="text-xs-type text-muted leading-relaxed">
+                180 scenario questions from the Eduhub training set to refine your PMP readiness.
+              </p>
+              <button
+                onClick={() => handleStart("eduhub")}
+                disabled={loading !== null}
+                className="w-full mt-auto py-2.5 bg-interact text-white rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-xs-type transition-colors"
+              >
+                {loading === "eduhub" ? "Loading..." : "Start Exam"}
+              </button>
+              {error?.set === "eduhub" && (
                 <p className="text-wrong text-xs-type">{error.msg}</p>
               )}
             </div>
