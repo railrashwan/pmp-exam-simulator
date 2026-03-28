@@ -59,6 +59,24 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(questions as ExamQuestion[]);
     }
 
+    if (examSet === "helena") {
+      const questions = await prisma.question.findMany({
+        where: { examSet: "helena" },
+        select: SELECT_FIELDS,
+        orderBy: { id: "asc" },
+      });
+      return NextResponse.json(questions as ExamQuestion[]);
+    }
+
+    if (examSet === "eduhub") {
+      const questions = await prisma.question.findMany({
+        where: { examSet: "eduhub" },
+        select: SELECT_FIELDS,
+        orderBy: { id: "asc" },
+      });
+      return NextResponse.json(questions as ExamQuestion[]);
+    }
+
     if (examSet === "kill-mistakes") {
       const all = await prisma.attemptResult.findMany({
         select: { questionId: true, isCorrect: true },
@@ -79,15 +97,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(fisherYatesShuffle(questions) as ExamQuestion[]);
     }
 
-    // Classic exam: domain-stratified selection from the three question banks
-    // Distribution: 20% Business Environment, 40% People, 40% Process
+    // Classic exam: domain-stratified selection from all question banks
+    // Distribution per PMP ECO: 8% Business Environment, 42% People, 50% Process
     const rawCount = parseInt(searchParams.get("count") ?? "40", 10);
     const count = isNaN(rawCount) ? 40 : Math.min(Math.max(rawCount, 1), 180);
 
-    const EXAM_SETS = ["andrew-ultra", "yassine", "undraw"];
+    const EXAM_SETS = ["andrew-ultra", "yassine", "undraw", "helena", "eduhub"];
 
-    const businessCount = Math.round(count * 0.2);
-    const peopleCount = Math.round(count * 0.4);
+    const businessCount = Math.round(count * 0.08);
+    const peopleCount = Math.round(count * 0.42);
     const processCount = count - businessCount - peopleCount;
 
     const [businessQs, peopleQs, processQs] = await Promise.all([
