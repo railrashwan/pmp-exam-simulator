@@ -11,7 +11,7 @@ export function LanguageToggle() {
     <div className="flex items-center gap-2">
       <button
         onClick={() => language === "ar" && toggleLanguage()}
-        className={`px-3 py-1.5 rounded-full text-xs-type font-bold transition-all border ${
+        className={`w-20 py-1.5 rounded-full text-xs-type font-bold transition-all border text-center ${
           language === "en"
             ? "bg-interact text-white border-interact shadow-sm"
             : "bg-transparent text-muted border-edge hover:bg-surface-2 hover:text-content"
@@ -19,10 +19,10 @@ export function LanguageToggle() {
       >
         {L.english}
       </button>
-      <span className="text-muted text-sm select-none">⇌</span>
+      <span className="text-muted text-sm select-none shrink-0">⇌</span>
       <button
         onClick={() => language === "en" && toggleLanguage()}
-        className={`px-3 py-1.5 rounded-full text-xs-type font-bold transition-all border ${
+        className={`w-20 py-1.5 rounded-full text-xs-type font-bold transition-all border text-center ${
           language === "ar"
             ? "bg-interact text-white border-interact shadow-sm"
             : "bg-transparent text-muted border-edge hover:bg-surface-2 hover:text-content"
