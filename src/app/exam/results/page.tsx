@@ -106,7 +106,7 @@ export default function ResultsPage() {
           href="/"
           className="text-sm-type font-semibold text-content border border-edge rounded-lg px-4 py-2 hover:bg-surface-2 transition-colors shadow-sm"
         >
-          {language === "ar" ? "← الرئيسية" : "← Home"}
+          {language === "ar" ? "الرئيسية" : "Home"}
         </a>
         <LanguageToggle />
       </div>
