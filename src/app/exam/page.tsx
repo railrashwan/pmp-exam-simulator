@@ -50,10 +50,16 @@ export default function ExamPage() {
               {resumeLabel}
             </button>
             <button
-              onClick={() => { endExam(); router.push("/exam/results"); }}
-              className="text-gray-400 hover:text-gray-200 text-sm underline transition-colors"
+              onClick={() => { router.push("/"); }}
+              className="mt-3 text-gray-300 hover:text-white text-md underline transition-colors"
             >
-              {language === "ar" ? "إنهاء الاختبار" : "End Exam & See Results"}
+              {language === "ar" ? "حفظ والخروج إلى لوحة التحكم" : "Save & Exit to Dashboard"}
+            </button>
+            <button
+              onClick={() => { endExam(); router.push("/exam/results"); }}
+              className="mt-6 text-gray-500 hover:text-gray-300 text-xs underline transition-colors"
+            >
+              {language === "ar" ? "إنهاء الاختبار بشكل دائم" : "Permanently End & Submit"}
             </button>
           </div>
         )}

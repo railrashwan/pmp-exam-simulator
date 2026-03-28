@@ -27,6 +27,12 @@ export default function HomePage() {
   }, []);
 
   const startExam = useExamStore((s) => s.startExam);
+  const questions = useExamStore((s) => s.questions);
+  const isFinished = useExamStore((s) => s.isFinished);
+  const timeRemaining = useExamStore((s) => s.timeRemaining);
+  const savedSet = useExamStore((s) => s.examSet);
+  const hasSavedExam = questions.length > 0 && !isFinished && timeRemaining > 0;
+
   const router = useRouter();
 
   async function handleStart(examSet: "pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | "helena" | "eduhub") {
@@ -107,6 +113,29 @@ export default function HomePage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+
+        {/* Saved Exam Banner */}
+        {hasSavedExam && (
+          <div className="bg-canvas border border-edge rounded-lg shadow-sm flex flex-col sm:flex-row sm:items-center justify-between p-5" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-ok)" }}>
+            <div>
+              <h2 className="text-sm-type font-bold text-content flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-ok animate-pulse"></span>
+                Saved Exam In Progress
+              </h2>
+              <p className="text-xs-type text-muted mt-1">
+                You have an active <span className="font-semibold text-content">{savedSet?.toUpperCase()}</span> session saved with {Math.round(timeRemaining / 60)} minutes remaining.
+              </p>
+            </div>
+            <div className="mt-4 sm:mt-0">
+              <button
+                onClick={() => router.push("/exam")}
+                className="w-full sm:w-auto py-2 px-6 bg-ok text-white font-semibold text-sm-type rounded-lg hover:opacity-90 transition-opacity"
+              >
+                Resume Saved Exam
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ── PRIMARY: PMP Classic ─────────────────────────────────────── */}
         <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-interact)" }}>

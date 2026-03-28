@@ -131,8 +131,8 @@ export const useExamStore = create<ExamState & ExamActions>()(
         set((s) => ({ language: s.language === "en" ? "ar" : "en" }));
       },
 
-      pauseExam: () => set({ isPaused: true }),
-      resumeExam: () => set({ isPaused: false }),
+      pauseExam: () => set({ isPaused: true, startTime: null }),
+      resumeExam: () => set((s) => ({ isPaused: false, startTime: Date.now(), examDurationSeconds: s.timeRemaining })),
       setSavedAttemptId: (id) => set({ savedAttemptId: id }),
     }),
     {
@@ -152,8 +152,8 @@ export const useExamStore = create<ExamState & ExamActions>()(
         savedAttemptId: s.savedAttemptId,
       }),
       onRehydrateStorage: () => (state) => {
-        // Recalculate remaining time based on actual elapsed time since exam started
-        if (state && state.startTime && !state.isFinished) {
+        // Recalculate remaining time only if it is actually running
+        if (state && state.startTime && !state.isFinished && !state.isPaused) {
           const elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
           const remaining = state.examDurationSeconds - elapsedSeconds;
           if (remaining <= 0) {
