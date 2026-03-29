@@ -114,8 +114,6 @@ export default function HomePage() {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
-        <h2 className="text-5xl font-black text-center text-primary">Hello Rashwan</h2>
-
         {/* Saved Exam Banner */}
         {hasSavedExam && (
           <div className="bg-canvas border border-edge rounded-lg shadow-sm flex flex-col sm:flex-row sm:items-center justify-between p-5" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-ok)" }}>
