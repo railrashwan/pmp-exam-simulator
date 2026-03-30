@@ -21,17 +21,15 @@ export interface Question {
   updatedAt: string;
 }
 
-// Question without correct answer, explanation, and wrong explanations (sent to client during exam)
-export type ExamQuestion = Omit<
-  Question,
-  | "correctAnswer"
-  | "explanationEn"
-  | "explanationAr"
-  | "wrongExplanationEn"
-  | "wrongExplanationAr"
-  | "createdAt"
-  | "updatedAt"
->;
+// Question sent to client during exam. In normal mode, answer/explanation fields are absent.
+// In practice mode, they are included so feedback can be shown immediately after selection.
+export type ExamQuestion = Omit<Question, "createdAt" | "updatedAt"> & {
+  correctAnswer?: string;
+  explanationEn?: string;
+  explanationAr?: string;
+  wrongExplanationEn?: string | null;
+  wrongExplanationAr?: string | null;
+};
 
 export type Language = "en" | "ar";
 

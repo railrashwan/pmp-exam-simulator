@@ -18,6 +18,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState<"pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | "helena" | "eduhub" | null>(null);
   const [error, setError] = useState<{ set: string; msg: string } | null>(null);
   const [mistakeCount, setMistakeCount] = useState<number | null>(null);
+  const [practiceMode, setPracticeMode] = useState(false);
 
   useEffect(() => {
     fetch("/api/profile/mistakes")
@@ -41,27 +42,28 @@ export default function HomePage() {
     try {
       let count: number;
       let url: string;
+      const modeParam = practiceMode ? "&mode=practice" : "";
       if (examSet === "undraw") {
         count = UNDRAW_COUNT;
-        url = `/api/exam/start?examSet=undraw`;
+        url = `/api/exam/start?examSet=undraw${modeParam}`;
       } else if (examSet === "andrew-ultra") {
         count = ANDREW_COUNT;
-        url = `/api/exam/start?examSet=andrew-ultra`;
+        url = `/api/exam/start?examSet=andrew-ultra${modeParam}`;
       } else if (examSet === "yassine") {
         count = YASSINE_COUNT;
-        url = `/api/exam/start?examSet=yassine`;
+        url = `/api/exam/start?examSet=yassine${modeParam}`;
       } else if (examSet === "helena") {
         count = HELENA_COUNT;
-        url = `/api/exam/start?examSet=helena`;
+        url = `/api/exam/start?examSet=helena${modeParam}`;
       } else if (examSet === "eduhub") {
         count = EDUHUB_COUNT;
-        url = `/api/exam/start?examSet=eduhub`;
+        url = `/api/exam/start?examSet=eduhub${modeParam}`;
       } else if (examSet === "kill-mistakes") {
         count = mistakeCount ?? 0;
-        url = `/api/exam/start?examSet=kill-mistakes`;
+        url = `/api/exam/start?examSet=kill-mistakes${modeParam}`;
       } else {
         count = pmpCount;
-        url = `/api/exam/start?count=${pmpCount}&examSet=pmp`;
+        url = `/api/exam/start?count=${pmpCount}&examSet=pmp${modeParam}`;
       }
 
       const res = await fetch(url);
@@ -71,7 +73,7 @@ export default function HomePage() {
 
       // 180 questions = 230 minutes (230 * 60 seconds)
       const durationSec = Math.round(count * ((230 * 60) / 180));
-      startExam(questions, durationSec, examSet);
+      startExam(questions, durationSec, examSet, practiceMode);
       router.push("/exam");
     } catch (e) {
       setError({ set: examSet, msg: e instanceof Error ? e.message : "Error starting exam" });
@@ -399,6 +401,34 @@ export default function HomePage() {
                 <p className="mt-2 text-wrong text-xs-type text-center">{error.msg}</p>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Practice Mode toggle */}
+        <div
+          className={`bg-canvas border rounded-lg p-4 flex items-center justify-between gap-4 cursor-pointer transition-colors ${
+            practiceMode ? "border-warn" : "border-edge hover:border-edge-2"
+          }`}
+          onClick={() => setPracticeMode((v) => !v)}
+        >
+          <div>
+            <div className="text-sm-type font-bold text-content">
+              {practiceMode ? "✓ Practice Mode On" : "Practice Mode"}
+            </div>
+            <div className="text-xs-type text-muted mt-0.5">
+              See the correct answer and explanation immediately after each selection — no time pressure.
+            </div>
+          </div>
+          <div
+            className={`shrink-0 w-11 h-6 rounded-full transition-colors flex items-center px-0.5 ${
+              practiceMode ? "bg-warn" : "bg-edge-2"
+            }`}
+          >
+            <div
+              className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${
+                practiceMode ? "translate-x-5" : "translate-x-0"
+              }`}
+            />
           </div>
         </div>
 
