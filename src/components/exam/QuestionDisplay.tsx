@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useExamStore } from "@/store/examStore";
 import { usePreferencesStore } from "@/store/preferencesStore";
-import { LanguageToggle } from "./LanguageToggle";
 import type { ExamQuestion } from "@/lib/types";
 
 const OPTION_KEYS = ["A", "B", "C", "D"] as const;
@@ -35,14 +34,30 @@ function parseWrongExplanations(text: string | null | undefined): Record<string,
   return result;
 }
 
-export function QuestionDisplay() {
-  const { questions, currentIndex, answers, language, selectAnswer, practiceMode } = useExamStore();
-  const fontSize = usePreferencesStore((s) => s.fontSize);
+interface QuestionDisplayProps {
+  strikethroughMode: boolean;
+  highlightMode: boolean;
+  onShowTranslation?: () => void;
+}
+
+export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTranslation }: QuestionDisplayProps) {
+  const {
+    questions, currentIndex, answers, language, selectAnswer, practiceMode,
+    strikethroughs, toggleStrikethrough, markVisited,
+  } = useExamStore();
+  const { fontSize, colorScheme } = usePreferencesStore();
+  const questionRef = useRef<HTMLParagraphElement>(null);
 
   // Scroll back to top on every question change
   useEffect(() => {
     document.getElementById("question-area")?.scrollTo(0, 0);
   }, [currentIndex]);
+
+  // Mark question visited when displayed
+  useEffect(() => {
+    const question = questions[currentIndex];
+    if (question) markVisited(question.id);
+  }, [currentIndex, questions, markVisited]);
 
   const question = questions[currentIndex];
   if (!question) return null;
@@ -59,77 +74,114 @@ export function QuestionDisplay() {
     language === "en" ? question.wrongExplanationEn : question.wrongExplanationAr
   );
 
-  return (
-    <div className="flex-1 p-4 flex flex-col gap-3">
-      {/* Language toggle */}
-      <div className="flex justify-center">
-        <LanguageToggle />
-      </div>
+  const questionStrikethroughs = strikethroughs[question.id] ?? [];
 
-      {/* Question card */}
-      <div
-        dir={isRtl ? "rtl" : "ltr"}
-        className="border border-edge rounded-lg p-4 bg-canvas shadow-sm"
-      >
+  // Handle text selection for highlight mode
+  function handleMouseUp() {
+    if (!highlightMode) return;
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed) return;
+    const range = sel.getRangeAt(0);
+    const mark = document.createElement("mark");
+    mark.style.backgroundColor = "#facc15";
+    mark.style.color = "inherit";
+    try {
+      range.surroundContents(mark);
+    } catch {
+      // Selection spans multiple elements — skip
+    }
+    sel.removeAllRanges();
+  }
+
+  return (
+    <div className="flex-1 p-5 flex flex-col gap-4" data-scheme={colorScheme}>
+      {/* Question text */}
+      <div dir={isRtl ? "rtl" : "ltr"} onMouseUp={handleMouseUp}>
+        {/* Translate button for Arabic mode */}
+        {isRtl && onShowTranslation && (
+          <button
+            onClick={onShowTranslation}
+            className="mb-3 px-3 py-1 text-sm font-medium rounded border"
+            style={{ backgroundColor: "#4a6fa5", color: "white", borderColor: "#3a5f95" }}
+          >
+            ترجمة
+          </button>
+        )}
         <p
-          className={`font-bold text-content ${isRtl ? "text-right" : ""}`}
-          style={{ fontSize: `${fontSize}rem`, lineHeight: isRtl ? "1.85" : "1.6" }}
+          ref={questionRef}
+          className={`cs-text font-medium ${isRtl ? "text-right" : ""}`}
+          style={{
+            fontSize: `${fontSize}rem`,
+            lineHeight: isRtl ? "1.85" : "1.6",
+            color: "var(--cs-text, var(--color-text-1))",
+          }}
         >
           {qText}
         </p>
       </div>
 
       {/* Options */}
-      <div dir={isRtl ? "rtl" : "ltr"} className="flex flex-col gap-2">
+      <div dir={isRtl ? "rtl" : "ltr"} className="flex flex-col gap-1">
         {OPTION_KEYS.map((key) => {
           const optionText = getOptionText(question, key, language);
           const isSelected = selectedAnswer === key;
           const label = isRtl ? ARABIC_LABELS[key] : key;
+          const isStruck = questionStrikethroughs.includes(key);
 
-          // Coloring logic for practice mode after reveal
+          // Practice mode coloring
           const isCorrectOption = isRevealed && correctAnswer === key;
           const isWrongSelected = isRevealed && isSelected && correctAnswer !== key;
 
-          let borderBg: string;
+          function handleOptionClick() {
+            if (strikethroughMode && !isRevealed) {
+              toggleStrikethrough(question.id, key);
+              return;
+            }
+            if (!isRevealed) selectAnswer(question.id, key);
+          }
+
+          // Row styling — Pearson VUE style: minimal, no box on normal state
+          let rowStyle = "flex items-start gap-3 px-3 py-2 rounded";
           if (isCorrectOption) {
-            borderBg = "border-green-500 bg-green-50 shadow-sm";
+            rowStyle += " bg-green-50 border border-green-400";
           } else if (isWrongSelected) {
-            borderBg = "border-red-500 bg-red-50 shadow-sm";
-          } else if (!isRevealed && isSelected) {
-            borderBg = "border-blue-500 bg-blue-50 shadow-sm";
+            rowStyle += " bg-red-50 border border-red-400";
+          } else if (isSelected && !isRevealed) {
+            rowStyle += " bg-blue-50 border border-blue-400";
           } else {
-            borderBg = "border-gray-300 bg-white" + (isRevealed ? "" : " hover:bg-gray-50 hover:border-gray-400");
+            rowStyle += " hover:bg-gray-50 border border-transparent";
           }
 
           return (
             <div key={key} className="flex flex-col">
               <label
-                className={`flex items-center gap-3 px-3 py-2.5 border rounded-lg transition-all ${
-                  isCorrectOption
-                    ? "border-green-500 bg-green-50 shadow-sm"
-                    : isWrongSelected
-                    ? "border-red-500 bg-red-50 shadow-sm"
-                    : isSelected && !isRevealed
-                    ? "border-selected bg-selected shadow-sm"
-                    : isRevealed
-                    ? "border-edge bg-canvas"
-                    : "border-edge bg-canvas hover:bg-surface hover:border-edge-2"
-                } ${isRevealed ? "cursor-default" : "cursor-pointer"}`}
+                className={`${rowStyle} ${isRevealed ? "cursor-default" : strikethroughMode ? "cursor-crosshair" : "cursor-pointer"}`}
+                onClick={strikethroughMode ? (e) => { e.preventDefault(); handleOptionClick(); } : undefined}
               >
                 <input
                   type="radio"
                   name={`question-${question.id}`}
                   value={key}
                   checked={isSelected}
-                  onChange={() => { if (!isRevealed) selectAnswer(question.id, key); }}
+                  onChange={() => {
+                    if (!strikethroughMode && !isRevealed) selectAnswer(question.id, key);
+                  }}
                   disabled={isRevealed}
-                  className="shrink-0 w-4 h-4 accent-[var(--color-interact)]"
+                  className="shrink-0 mt-0.5 w-4 h-4 accent-blue-700"
                 />
                 <span
-                  className={`${
-                    isCorrectOption ? "text-green-900" : isWrongSelected ? "text-red-900" : "text-content"
-                  } ${isRtl ? "text-right" : ""}`}
-                  style={{ fontSize: `${fontSize}rem`, lineHeight: isRtl ? "1.85" : "1.6" }}
+                  className={`cs-text ${isRtl ? "text-right" : ""} ${isStruck ? "line-through opacity-50" : ""} ${
+                    isCorrectOption ? "text-green-900" : isWrongSelected ? "text-red-900" : ""
+                  }`}
+                  style={{
+                    fontSize: `${fontSize}rem`,
+                    lineHeight: isRtl ? "1.85" : "1.6",
+                    color: isCorrectOption
+                      ? undefined
+                      : isWrongSelected
+                      ? undefined
+                      : "var(--cs-text, var(--color-text-1))",
+                  }}
                 >
                   <span className="font-semibold">{label}. </span>
                   {optionText}
@@ -149,7 +201,7 @@ export function QuestionDisplay() {
                 <div className={`mt-1 px-4 py-2 rounded-r-lg text-sm ${
                   isWrongSelected
                     ? "bg-red-50 border-l-4 border-red-400 text-red-800"
-                    : "bg-surface border-l-4 border-edge text-muted"
+                    : "bg-gray-50 border-l-4 border-gray-300 text-gray-600"
                 }`}>
                   <span className="font-semibold">{isRtl ? "لماذا خطأ: " : "Why wrong: "}</span>
                   {wrongMap[key]}

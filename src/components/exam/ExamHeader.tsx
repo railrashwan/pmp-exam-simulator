@@ -12,7 +12,7 @@ function formatTime(seconds: number): string {
 }
 
 export function ExamHeader() {
-  const { questions, currentIndex, timeRemaining, language, tick, isFinished, isPaused, pauseExam, resumeExam, practiceMode } =
+  const { questions, currentIndex, timeRemaining, language, tick, isFinished, isPaused, practiceMode } =
     useExamStore();
   const L = labels[language];
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -29,42 +29,37 @@ export function ExamHeader() {
   const isLow = timeRemaining < 300 && !isPaused && !practiceMode;
 
   return (
-    <div className="bg-primary border-b border-primary px-4 sm:px-6 py-5 flex items-center justify-between gap-3 shadow-sm" dir={language === "ar" ? "rtl" : "ltr"}>
-      <div className="min-w-0">
-        <div className="font-bold text-white text-2xl tracking-wide drop-shadow-sm truncate">{L.examTitle}</div>
-        <div className="text-white/90 text-sm mt-0.5 tabular-nums">
-          {L.questionOf(currentIndex + 1, questions.length)}
-        </div>
+    <div
+      className="flex items-center justify-between px-4 sm:px-6 py-3 shadow-md shrink-0"
+      style={{ backgroundColor: "#1e3a8a" }}
+      dir={language === "ar" ? "rtl" : "ltr"}
+    >
+      {/* Left: title */}
+      <div className="font-bold text-white text-base sm:text-lg tracking-wide truncate">
+        {L.examTitle}
       </div>
-      <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+
+      {/* Right: timer + counter (or practice badge) */}
+      <div className="flex items-center gap-4 shrink-0">
         {practiceMode ? (
-          <span className="px-3 py-1.5 bg-white/20 text-white border border-white/30 rounded-lg text-sm font-semibold">
+          <span className="px-3 py-1 bg-white/20 text-white border border-white/30 rounded text-sm font-semibold">
             {language === "ar" ? "وضع التدريب" : "Practice Mode"}
           </span>
         ) : (
-          <>
-            <button
-              onClick={isPaused ? resumeExam : pauseExam}
-              className={`px-4 sm:px-5 py-2 text-sm font-semibold rounded-lg border transition-colors ${
-                isPaused
-                  ? "bg-ok text-white border-ok hover:opacity-90"
-                  : "bg-white/10 text-white border-white/20 hover:bg-white/20"
-              }`}
-            >
-              {isPaused ? L.resume : L.pause}
-            </button>
-            <div
-              className={`font-mono font-bold text-xl tracking-wide tabular-nums ${
-                isLow ? "text-red-400 animate-pulse" : isPaused ? "text-white/60" : "text-white/95"
-              }`}
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              <span className="hidden sm:inline opacity-80">{L.timeRemaining} </span>
-              {formatTime(timeRemaining)}
-            </div>
-          </>
+          <div
+            className={`font-mono font-bold text-lg tabular-nums ${
+              isLow ? "text-red-400 animate-pulse" : isPaused ? "text-white/60" : "text-white"
+            }`}
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            <span className="text-white/70 font-normal text-sm mr-1">{L.timeRemaining}</span>
+            {formatTime(timeRemaining)}
+          </div>
         )}
+        <div className="text-white/80 text-sm tabular-nums">
+          ≡ {L.questionOf(currentIndex + 1, questions.length)}
+        </div>
       </div>
     </div>
   );

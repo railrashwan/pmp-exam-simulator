@@ -30,6 +30,42 @@ export const labels = {
     resume: "Resume",
     examPaused: "Exam Paused",
     examPausedMessage: "Your exam is paused. Your timer is frozen.",
+    // Toolbar
+    comment: "Comment",
+    highlight: "Highlight",
+    strikethrough: "Strikethrough",
+    flagForReview: "Flag for Review",
+    colorScheme: "Color Scheme",
+    navigator: "Navigator",
+    help: "Help",
+    translate: "Translation",
+    // Navigator modal
+    unseen: "Unseen",
+    incomplete: "Incomplete",
+    flagged: "Flagged",
+    comments: "Comments",
+    navigatorTitle: "Navigator – select a question to go to it",
+    closeNavigator: "Close",
+    // Color scheme names
+    colorSchemes: {
+      "black-on-white": "Black on White",
+      "black-on-yellow": "Black on Yellow",
+      "black-on-lt-yellow": "Black on Light Yellow",
+      "black-on-salmon": "Black on Salmon",
+      "blue-on-white": "Blue on White",
+      "blue-on-yellow": "Blue on Yellow",
+      "lt-yellow-on-black": "Light Yellow on Black",
+      "white-on-black": "White on Black",
+      "white-on-blue": "White on Blue",
+    },
+    // Help modal
+    helpTitle: "Exam Help",
+    helpText: "Use Previous and Next to navigate between questions. Flag questions for review using the Flag button. Use the Navigator to jump to any question. You can add comments to questions and use strikethrough to eliminate answer choices.",
+    // Comment modal
+    commentTitle: "Comment",
+    commentPlaceholder: "Type your note here...",
+    commentSave: "Save",
+    commentDelete: "Delete",
   },
   ar: {
     examTitle: "اختبار PMP",
@@ -62,6 +98,42 @@ export const labels = {
     resume: "استئناف",
     examPaused: "الاختبار متوقف",
     examPausedMessage: "اختبارك متوقف. الوقت مجمّد.",
+    // Toolbar
+    comment: "تعليق",
+    highlight: "تمييز",
+    strikethrough: "شطب",
+    flagForReview: "وضع علامة للمراجعة",
+    colorScheme: "نظام الألوان",
+    navigator: "متصفح الأسئلة",
+    help: "مساعدة",
+    translate: "ترجمة",
+    // Navigator modal
+    unseen: "لم يُشاهَد",
+    incomplete: "غير مكتمل",
+    flagged: "مُعلَّم",
+    comments: "تعليقات",
+    navigatorTitle: "متصفح الأسئلة – اختر سؤالاً للانتقال إليه",
+    closeNavigator: "إغلاق",
+    // Color scheme names
+    colorSchemes: {
+      "black-on-white": "أسود على أبيض",
+      "black-on-yellow": "أسود على أصفر",
+      "black-on-lt-yellow": "أسود على أصفر فاتح",
+      "black-on-salmon": "أسود على سلموني",
+      "blue-on-white": "أزرق على أبيض",
+      "blue-on-yellow": "أزرق على أصفر",
+      "lt-yellow-on-black": "أصفر فاتح على أسود",
+      "white-on-black": "أبيض على أسود",
+      "white-on-blue": "أبيض على أزرق",
+    },
+    // Help modal
+    helpTitle: "مساعدة الاختبار",
+    helpText: "استخدم السابق والتالي للتنقل بين الأسئلة. ضع علامة على الأسئلة للمراجعة باستخدام زر العلامة. استخدم المتصفح للانتقال إلى أي سؤال. يمكنك إضافة تعليقات على الأسئلة واستخدام الشطب لاستبعاد خيارات الإجابة.",
+    // Comment modal
+    commentTitle: "تعليق",
+    commentPlaceholder: "اكتب ملاحظتك هنا...",
+    commentSave: "حفظ",
+    commentDelete: "حذف",
   },
 };
 

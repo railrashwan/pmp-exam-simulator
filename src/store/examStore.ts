@@ -18,6 +18,10 @@ interface ExamState {
   examSet: string;
   savedAttemptId: number | null;
   practiceMode: boolean;
+  strikethroughs: Record<number, string[]>;
+  comments: Record<number, string>;
+  visitedQuestions: number[];
+  highlights: Record<number, string>;
 }
 
 interface ExamActions {
@@ -34,6 +38,10 @@ interface ExamActions {
   pauseExam: () => void;
   resumeExam: () => void;
   setSavedAttemptId: (id: number) => void;
+  toggleStrikethrough: (questionId: number, key: string) => void;
+  setComment: (questionId: number, text: string) => void;
+  markVisited: (questionId: number) => void;
+  setHighlight: (questionId: number, data: string) => void;
 }
 
 const DEFAULT_DURATION = 230 * 60; // 3h 50min (PMP standard)
@@ -52,6 +60,10 @@ const initialState: ExamState = {
   examSet: "pmp",
   savedAttemptId: null,
   practiceMode: false,
+  strikethroughs: {},
+  comments: {},
+  visitedQuestions: [],
+  highlights: {},
 };
 
 export const useExamStore = create<ExamState & ExamActions>()(
@@ -73,6 +85,10 @@ export const useExamStore = create<ExamState & ExamActions>()(
           examSet,
           savedAttemptId: null,
           practiceMode,
+          strikethroughs: {},
+          comments: {},
+          visitedQuestions: [],
+          highlights: {},
         });
       },
 
@@ -137,6 +153,39 @@ export const useExamStore = create<ExamState & ExamActions>()(
       pauseExam: () => set({ isPaused: true, startTime: null }),
       resumeExam: () => set((s) => ({ isPaused: false, startTime: Date.now(), examDurationSeconds: s.timeRemaining })),
       setSavedAttemptId: (id) => set({ savedAttemptId: id }),
+
+      toggleStrikethrough: (questionId, key) => {
+        set((s) => {
+          const current = s.strikethroughs[questionId] ?? [];
+          const next = current.includes(key)
+            ? current.filter((k) => k !== key)
+            : [...current, key];
+          return { strikethroughs: { ...s.strikethroughs, [questionId]: next } };
+        });
+      },
+
+      setComment: (questionId, text) => {
+        set((s) => {
+          const next = { ...s.comments };
+          if (text.trim()) {
+            next[questionId] = text;
+          } else {
+            delete next[questionId];
+          }
+          return { comments: next };
+        });
+      },
+
+      markVisited: (questionId) => {
+        set((s) => {
+          if (s.visitedQuestions.includes(questionId)) return s;
+          return { visitedQuestions: [...s.visitedQuestions, questionId] };
+        });
+      },
+
+      setHighlight: (questionId, data) => {
+        set((s) => ({ highlights: { ...s.highlights, [questionId]: data } }));
+      },
     }),
     {
       name: "pmp-exam-state",
@@ -154,6 +203,10 @@ export const useExamStore = create<ExamState & ExamActions>()(
         examSet: s.examSet,
         savedAttemptId: s.savedAttemptId,
         practiceMode: s.practiceMode,
+        strikethroughs: s.strikethroughs,
+        comments: s.comments,
+        visitedQuestions: s.visitedQuestions,
+        highlights: s.highlights,
       }),
       onRehydrateStorage: () => (state) => {
         // Recalculate remaining time only if it is actually running

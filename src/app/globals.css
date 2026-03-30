@@ -185,3 +185,27 @@ p, li, td, th, label, span, button, h1, h2, h3, h4 {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Pearson VUE Color Schemes ────────────────────────────────────────────── */
+/* Applied via data-scheme on #question-area */
+[data-scheme="black-on-white"]     { --cs-bg: #ffffff; --cs-text: #000000; }
+[data-scheme="black-on-yellow"]    { --cs-bg: #ffff00; --cs-text: #000000; }
+[data-scheme="black-on-lt-yellow"] { --cs-bg: #ffffcc; --cs-text: #000000; }
+[data-scheme="black-on-salmon"]    { --cs-bg: #ffb6a0; --cs-text: #000000; }
+[data-scheme="blue-on-white"]      { --cs-bg: #ffffff; --cs-text: #00008b; }
+[data-scheme="blue-on-yellow"]     { --cs-bg: #ffff00; --cs-text: #00008b; }
+[data-scheme="lt-yellow-on-black"] { --cs-bg: #000000; --cs-text: #ffffcc; }
+[data-scheme="white-on-black"]     { --cs-bg: #000000; --cs-text: #ffffff; }
+[data-scheme="white-on-blue"]      { --cs-bg: #00008b; --cs-text: #ffffff; }
+
+[data-scheme] {
+  background-color: var(--cs-bg);
+  color: var(--cs-text);
+}
+
+[data-scheme] p,
+[data-scheme] span,
+[data-scheme] label,
+[data-scheme] .cs-text {
+  color: var(--cs-text);
+}
