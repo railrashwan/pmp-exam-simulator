@@ -17,7 +17,6 @@ export function ExamNavigation({ onToggleNavigator }: Props) {
   const L = labels[language];
   const router = useRouter();
   const [showEndDialog, setShowEndDialog] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
   const isRtl = language === "ar";
 
   const unanswered = questions.filter((q) => answers[q.id] === undefined).length;
@@ -28,82 +27,46 @@ export function ExamNavigation({ onToggleNavigator }: Props) {
   }
 
   const btnBase =
-    "flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white/90 rounded hover:bg-white/20 border border-transparent transition-colors";
+    "flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-white/90 hover:bg-white/15 rounded transition-colors border border-transparent select-none";
+
+  const btnNavBase =
+    "flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white/90 hover:bg-white/15 rounded transition-colors border border-white/20 select-none";
 
   return (
     <>
       <div
-        className="flex items-center justify-between px-4 sm:px-6 py-2.5 shrink-0 shadow-[0_-2px_8px_rgba(0,0,0,0.3)]"
+        className="flex items-center justify-end px-4 py-2 shrink-0"
         style={{ backgroundColor: "#1e3a8a" }}
         dir={isRtl ? "rtl" : "ltr"}
       >
-        {/* Left: Help + End Exam */}
-        <div className="flex items-center gap-2">
-          <button onClick={() => setShowHelp(true)} className={btnBase}>
-            <span className="font-bold">?</span>
-            <span>{L.help}</span>
-          </button>
-          <button
-            onClick={() => setShowEndDialog(true)}
-            className="flex items-center gap-1 px-3 py-2 text-sm font-semibold text-red-300 hover:text-red-100 rounded hover:bg-white/10 transition-colors"
-          >
-            {L.endExam}
-          </button>
-        </div>
+        {/* ← Previous */}
+        <button
+          onClick={prevQuestion}
+          disabled={currentIndex === 0}
+          className={`${btnBase} disabled:opacity-40 disabled:cursor-not-allowed`}
+        >
+          {isRtl ? "→" : "←"} {L.previous}
+        </button>
 
-        {/* Right: Prev | Navigator | Next */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={prevQuestion}
-            disabled={currentIndex === 0}
-            className={`${btnBase} disabled:opacity-40 disabled:cursor-not-allowed`}
-          >
-            {isRtl ? "→" : "←"} {L.previous}
-          </button>
+        {/* ⚙ Navigator */}
+        <button onClick={onToggleNavigator} className={btnNavBase}>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4">
+            <circle cx="8" cy="8" r="6.5"/>
+            <circle cx="8" cy="8" r="1.8" fill="currentColor" stroke="none"/>
+            <path d="M8 1.5V4M8 12v2.5M1.5 8H4M12 8h2.5" strokeLinecap="round"/>
+          </svg>
+          {L.navigator}
+        </button>
 
-          <button
-            onClick={onToggleNavigator}
-            className={`${btnBase} border-white/30 bg-white/10`}
-          >
-            ⚙ {L.navigator}
-          </button>
-
-          <button
-            onClick={nextQuestion}
-            disabled={currentIndex === questions.length - 1}
-            className={`${btnBase} disabled:opacity-40 disabled:cursor-not-allowed`}
-          >
-            {L.next} {isRtl ? "←" : "→"}
-          </button>
-        </div>
+        {/* Next → */}
+        <button
+          onClick={nextQuestion}
+          disabled={currentIndex === questions.length - 1}
+          className={`${btnBase} disabled:opacity-40 disabled:cursor-not-allowed`}
+        >
+          {L.next} {isRtl ? "←" : "→"}
+        </button>
       </div>
-
-      {/* Help modal */}
-      {showHelp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4" dir={isRtl ? "rtl" : "ltr"}>
-            <div
-              className="px-5 py-3 flex items-center justify-between rounded-t-lg"
-              style={{ backgroundColor: "#1e3a8a" }}
-            >
-              <h2 className="text-white font-semibold">{L.helpTitle}</h2>
-              <button onClick={() => setShowHelp(false)} className="text-white/70 hover:text-white text-xl leading-none">✕</button>
-            </div>
-            <div className="p-5 text-gray-700 text-sm leading-relaxed">
-              {L.helpText}
-            </div>
-            <div className="px-5 pb-5 flex justify-end">
-              <button
-                onClick={() => setShowHelp(false)}
-                className="px-4 py-2 text-sm font-medium rounded text-white"
-                style={{ backgroundColor: "#1e3a8a" }}
-              >
-                {L.cancel}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showEndDialog && (
         <EndExamDialog

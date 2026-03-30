@@ -1,7 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useExamStore } from "@/store/examStore";
 import { labels } from "@/lib/labels";
+import { EndExamDialog } from "./EndExamDialog";
 
 interface NavigatorModalProps {
   onClose: () => void;
@@ -10,8 +13,10 @@ interface NavigatorModalProps {
 export function NavigatorModal({ onClose }: NavigatorModalProps) {
   const {
     questions, currentIndex, answers, markedForReview,
-    visitedQuestions, comments, language, goToQuestion,
+    visitedQuestions, comments, language, goToQuestion, endExam,
   } = useExamStore();
+  const router = useRouter();
+  const [showEndDialog, setShowEndDialog] = useState(false);
   const L = labels[language];
   const isRtl = language === "ar";
 
@@ -110,15 +115,23 @@ export function NavigatorModal({ onClose }: NavigatorModalProps) {
           className="px-5 py-3 flex items-center justify-between border-t border-gray-200 shrink-0 bg-gray-50 rounded-b-lg"
           dir={isRtl ? "rtl" : "ltr"}
         >
-          <span className="text-sm text-gray-600">
-            {unseenOrIncomplete > 0
-              ? isRtl
-                ? `${unseenOrIncomplete} سؤال غير مكتمل`
-                : `${unseenOrIncomplete} unanswered / incomplete`
-              : isRtl
-              ? "جميع الأسئلة مكتملة"
-              : "All questions answered"}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-600">
+              {unseenOrIncomplete > 0
+                ? isRtl
+                  ? `${unseenOrIncomplete} سؤال غير مكتمل`
+                  : `${unseenOrIncomplete} unanswered`
+                : isRtl
+                ? "جميع الأسئلة مكتملة"
+                : "All questions answered"}
+            </span>
+            <button
+              onClick={() => setShowEndDialog(true)}
+              className="px-3 py-1.5 text-sm font-medium rounded border border-red-300 text-red-700 hover:bg-red-50 transition-colors"
+            >
+              {L.endExam}
+            </button>
+          </div>
           <button
             onClick={onClose}
             className="px-4 py-2 text-sm font-medium rounded text-white transition-colors"
@@ -127,6 +140,14 @@ export function NavigatorModal({ onClose }: NavigatorModalProps) {
             {L.closeNavigator}
           </button>
         </div>
+
+        {showEndDialog && (
+          <EndExamDialog
+            unanswered={answers ? questions.filter((q) => !answers[q.id]).length : 0}
+            onConfirm={() => { endExam(); router.push("/exam/results"); }}
+            onCancel={() => setShowEndDialog(false)}
+          />
+        )}
       </div>
     </div>
   );

@@ -94,34 +94,35 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
   }
 
   return (
-    <div className="flex-1 p-5 flex flex-col gap-4" data-scheme={colorScheme}>
+    <div className="flex-1 px-6 py-5 flex flex-col gap-0" data-scheme={colorScheme}>
       {/* Question text */}
-      <div dir={isRtl ? "rtl" : "ltr"} onMouseUp={handleMouseUp}>
+      <div dir={isRtl ? "rtl" : "ltr"} onMouseUp={handleMouseUp} className="mb-6">
         {/* Translate button for Arabic mode */}
         {isRtl && onShowTranslation && (
           <button
             onClick={onShowTranslation}
             className="mb-3 px-3 py-1 text-sm font-medium rounded border"
-            style={{ backgroundColor: "#4a6fa5", color: "white", borderColor: "#3a5f95" }}
+            style={{ backgroundColor: "#4a72b0", color: "white", borderColor: "#3a62a0" }}
           >
             ترجمة
           </button>
         )}
         <p
           ref={questionRef}
-          className={`cs-text font-medium ${isRtl ? "text-right" : ""}`}
+          className={`cs-text ${isRtl ? "text-right" : ""}`}
           style={{
             fontSize: `${fontSize}rem`,
             lineHeight: isRtl ? "1.85" : "1.6",
             color: "var(--cs-text, var(--color-text-1))",
+            fontWeight: "normal",
           }}
         >
           {qText}
         </p>
       </div>
 
-      {/* Options */}
-      <div dir={isRtl ? "rtl" : "ltr"} className="flex flex-col gap-1">
+      {/* Options — tabular layout matching Pearson VUE: ○  A.    text */}
+      <div dir={isRtl ? "rtl" : "ltr"} className="flex flex-col">
         {OPTION_KEYS.map((key) => {
           const optionText = getOptionText(question, key, language);
           const isSelected = selectedAnswer === key;
@@ -140,53 +141,61 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
             if (!isRevealed) selectAnswer(question.id, key);
           }
 
-          // Row styling — Pearson VUE style: minimal, no box on normal state
-          let rowStyle = "flex items-start gap-3 px-3 py-2 rounded";
-          if (isCorrectOption) {
-            rowStyle += " bg-green-50 border border-green-400";
-          } else if (isWrongSelected) {
-            rowStyle += " bg-red-50 border border-red-400";
-          } else if (isSelected && !isRevealed) {
-            rowStyle += " bg-blue-50 border border-blue-400";
-          } else {
-            rowStyle += " hover:bg-gray-50 border border-transparent";
-          }
+          // Row background — Pearson VUE: no border, subtle bg on selected only
+          let rowBg = "";
+          if (isCorrectOption) rowBg = "bg-green-50";
+          else if (isWrongSelected) rowBg = "bg-red-50";
+          else if (isSelected && !isRevealed) rowBg = "bg-blue-50";
 
           return (
             <div key={key} className="flex flex-col">
               <label
-                className={`${rowStyle} ${isRevealed ? "cursor-default" : strikethroughMode ? "cursor-crosshair" : "cursor-pointer"}`}
+                className={`flex items-start py-3 px-2 rounded ${rowBg} ${
+                  isRevealed ? "cursor-default" : strikethroughMode ? "cursor-crosshair" : "cursor-pointer hover:bg-gray-50"
+                }`}
                 onClick={strikethroughMode ? (e) => { e.preventDefault(); handleOptionClick(); } : undefined}
               >
-                <input
-                  type="radio"
-                  name={`question-${question.id}`}
-                  value={key}
-                  checked={isSelected}
-                  onChange={() => {
-                    if (!strikethroughMode && !isRevealed) selectAnswer(question.id, key);
-                  }}
-                  disabled={isRevealed}
-                  className="shrink-0 mt-0.5 w-4 h-4 accent-blue-700"
-                />
+                {/* Radio */}
+                <span className="shrink-0 flex items-center" style={{ width: "1.5rem", paddingTop: "0.15rem" }}>
+                  <input
+                    type="radio"
+                    name={`question-${question.id}`}
+                    value={key}
+                    checked={isSelected}
+                    onChange={() => {
+                      if (!strikethroughMode && !isRevealed) selectAnswer(question.id, key);
+                    }}
+                    disabled={isRevealed}
+                    className="w-3.5 h-3.5"
+                    style={{ accentColor: "#364395" }}
+                  />
+                </span>
+                {/* Letter label — fixed width column */}
                 <span
-                  className={`cs-text ${isRtl ? "text-right" : ""} ${isStruck ? "line-through opacity-50" : ""} ${
+                  className={`shrink-0 font-normal ${isCorrectOption ? "text-green-900" : isWrongSelected ? "text-red-900" : ""}`}
+                  style={{
+                    width: "2.5rem",
+                    fontSize: `${fontSize}rem`,
+                    lineHeight: isRtl ? "1.85" : "1.6",
+                    color: isCorrectOption || isWrongSelected ? undefined : "var(--cs-text, var(--color-text-1))",
+                  }}
+                >
+                  {label}.
+                </span>
+                {/* Option text */}
+                <span
+                  className={`cs-text flex-1 ${isRtl ? "text-right" : ""} ${isStruck ? "line-through opacity-40" : ""} ${
                     isCorrectOption ? "text-green-900" : isWrongSelected ? "text-red-900" : ""
                   }`}
                   style={{
                     fontSize: `${fontSize}rem`,
                     lineHeight: isRtl ? "1.85" : "1.6",
-                    color: isCorrectOption
-                      ? undefined
-                      : isWrongSelected
-                      ? undefined
-                      : "var(--cs-text, var(--color-text-1))",
+                    color: isCorrectOption || isWrongSelected ? undefined : "var(--cs-text, var(--color-text-1))",
                   }}
                 >
-                  <span className="font-semibold">{label}. </span>
                   {optionText}
-                  {isCorrectOption && <span className="ml-2 font-bold text-green-700">✓</span>}
-                  {isWrongSelected && <span className="ml-2 font-bold text-red-700">✗</span>}
+                  {isCorrectOption && <span className="ml-2 text-green-700 font-bold">✓</span>}
+                  {isWrongSelected && <span className="ml-2 text-red-700 font-bold">✗</span>}
                 </span>
               </label>
 
