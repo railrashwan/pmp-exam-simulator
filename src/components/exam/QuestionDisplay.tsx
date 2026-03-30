@@ -134,10 +134,10 @@ export function QuestionDisplay() {
               </label>
 
               {/* Per-option explanation in practice mode */}
-              {isRevealed && isCorrectOption && explanation && (
+              {isRevealed && isCorrectOption && (explanation || wrongMap[key]) && (
                 <div className="mt-1 px-4 py-2 bg-green-50 border-l-4 border-green-400 text-green-800 rounded-r-lg text-sm">
                   <span className="font-semibold">{isRtl ? "لماذا صحيح: " : "Why correct: "}</span>
-                  {explanation}
+                  {explanation || wrongMap[key]}
                 </div>
               )}
               {isRevealed && !isCorrectOption && wrongMap[key] && (
