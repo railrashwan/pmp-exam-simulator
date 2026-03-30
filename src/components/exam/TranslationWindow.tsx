@@ -8,8 +8,8 @@ import type { ExamQuestion } from "@/lib/types";
 const OPTION_KEYS = ["A", "B", "C", "D"] as const;
 const MIN_W = 380;
 const MIN_H = 200;
-const DEFAULT_W = 580;
-const DEFAULT_H = 300;
+const DEFAULT_W = 700;
+const DEFAULT_H = 360;
 
 function getOptionEn(q: ExamQuestion, key: string): string {
   const map: Record<string, keyof ExamQuestion> = {
@@ -27,8 +27,8 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
   const { fontSize } = usePreferencesStore();
   const question = questions[currentIndex];
 
-  // Position
-  const [pos, setPos] = useState({ x: 40, y: 80 });
+  // Position — bottom-left by default, calculated after mount
+  const [pos, setPos] = useState({ x: 20, y: 9999 }); // 9999 = unset, replaced on mount
   // Size — wide landscape by default
   const [size, setSize] = useState({ w: DEFAULT_W, h: DEFAULT_H });
   const [minimized, setMinimized] = useState(false);
@@ -54,6 +54,11 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
     e.preventDefault();
     e.stopPropagation();
   }
+
+  // Set bottom-left position once we know the viewport height
+  useEffect(() => {
+    setPos({ x: 20, y: Math.max(60, window.innerHeight - DEFAULT_H - 50) });
+  }, []);
 
   useEffect(() => {
     function onMouseMove(e: MouseEvent) {
@@ -100,19 +105,20 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
         boxShadow: "2px 4px 14px rgba(0,0,0,0.2)",
       }}
     >
-      {/* Title bar — light gray, OS-style, draggable */}
+      {/* Title bar — light gray, OS-style, draggable, controls on LEFT */}
       <div
-        className="flex items-center justify-end px-2 py-1 cursor-move shrink-0"
+        className="flex items-center px-2 py-1 cursor-move shrink-0"
         style={{ backgroundColor: "#e8e8e8", borderBottom: "1px solid #c0c0c0" }}
         onMouseDown={onTitleMouseDown}
       >
+        {/* Controls: ✕ □ ─  (left-aligned, like macOS-style) */}
         <div className="flex items-center gap-0.5">
           <button
-            onClick={() => setMinimized((m) => !m)}
-            className="w-5 h-5 flex items-center justify-center text-gray-600 hover:bg-gray-300 rounded text-xs leading-none"
-            title={minimized ? "Restore" : "Minimize"}
+            onClick={onClose}
+            className="w-5 h-5 flex items-center justify-center text-gray-600 hover:bg-red-400 hover:text-white rounded text-xs leading-none"
+            title="Close"
           >
-            ─
+            ✕
           </button>
           <button
             className="w-5 h-5 flex items-center justify-center text-gray-400 rounded text-xs leading-none cursor-default"
@@ -122,13 +128,15 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
             □
           </button>
           <button
-            onClick={onClose}
-            className="w-5 h-5 flex items-center justify-center text-gray-600 hover:bg-red-400 hover:text-white rounded text-xs leading-none"
-            title="Close"
+            onClick={() => setMinimized((m) => !m)}
+            className="w-5 h-5 flex items-center justify-center text-gray-600 hover:bg-gray-300 rounded text-xs leading-none"
+            title={minimized ? "Restore" : "Minimize"}
           >
-            ✕
+            ─
           </button>
         </div>
+        {/* Drag affordance fills the rest */}
+        <div className="flex-1" />
       </div>
 
       {/* Content — scrollable */}
