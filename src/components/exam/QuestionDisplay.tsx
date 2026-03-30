@@ -196,21 +196,21 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
                 </span>
               </label>
 
-              {/* Per-option explanation in practice mode */}
-              {isRevealed && isCorrectOption && (explanation || wrongMap[key]) && (
+              {/* Per-option explanation in practice mode — always shown for all 4 options */}
+              {isRevealed && isCorrectOption && (
                 <div className="mt-1 px-4 py-2 bg-green-50 border-l-4 border-green-400 text-green-800 rounded-r-lg text-sm">
                   <span className="font-semibold">{isRtl ? "لماذا صحيح: " : "Why correct: "}</span>
-                  {explanation || wrongMap[key]}
+                  {wrongMap[key] || explanation || "—"}
                 </div>
               )}
-              {isRevealed && !isCorrectOption && wrongMap[key] && (
+              {isRevealed && !isCorrectOption && (
                 <div className={`mt-1 px-4 py-2 rounded-r-lg text-sm ${
                   isWrongSelected
                     ? "bg-red-50 border-l-4 border-red-400 text-red-800"
                     : "bg-gray-50 border-l-4 border-gray-300 text-gray-600"
                 }`}>
                   <span className="font-semibold">{isRtl ? "لماذا خطأ: " : "Why wrong: "}</span>
-                  {wrongMap[key]}
+                  {wrongMap[key] || (isRtl ? "راجع شرح الإجابة الصحيحة أعلاه." : "See the correct answer explanation above.")}
                 </div>
               )}
             </div>

@@ -8,7 +8,7 @@ import type { ExamQuestion } from "@/lib/types";
 const OPTION_KEYS = ["A", "B", "C", "D"] as const;
 const MIN_W = 380;
 const MIN_H = 200;
-const DEFAULT_W = 700;
+const DEFAULT_W = 780;
 const DEFAULT_H = 360;
 
 function getOptionEn(q: ExamQuestion, key: string): string {
@@ -57,7 +57,7 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
 
   // Set bottom-left position once we know the viewport height
   useEffect(() => {
-    setPos({ x: 20, y: Math.max(60, window.innerHeight - DEFAULT_H - 50) });
+    setPos({ x: 20, y: Math.max(60, window.innerHeight - DEFAULT_H - 130) });
   }, []);
 
   useEffect(() => {
