@@ -150,13 +150,13 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
           return (
             <div key={key} className="flex flex-col">
               <label
-                className={`flex items-start py-3 px-2 rounded ${rowBg} ${
-                  isRevealed ? "cursor-default" : strikethroughMode ? "cursor-crosshair" : "cursor-pointer hover:bg-gray-50"
+                className={`flex items-center py-3 px-2 rounded ${rowBg} ${
+                  isRevealed ? "cursor-default" : strikethroughMode ? "cursor-crosshair" : "cursor-pointer"
                 }`}
                 onClick={strikethroughMode ? (e) => { e.preventDefault(); handleOptionClick(); } : undefined}
               >
                 {/* Radio */}
-                <span className="shrink-0 flex items-center" style={{ width: "1.5rem", paddingTop: "0.15rem" }}>
+                <span className="shrink-0 flex items-center" style={{ width: "1.5rem" }}>
                   <input
                     type="radio"
                     name={`question-${question.id}`}
@@ -172,7 +172,7 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
                 </span>
                 {/* Letter label — fixed width column */}
                 <span
-                  className={`shrink-0 font-normal ${isCorrectOption ? "text-green-900" : isWrongSelected ? "text-red-900" : ""}`}
+                  className={`shrink-0 font-normal leading-none ${isCorrectOption ? "text-green-900" : isWrongSelected ? "text-red-900" : ""}`}
                   style={{
                     width: "2.5rem",
                     fontSize: `${fontSize}rem`,
