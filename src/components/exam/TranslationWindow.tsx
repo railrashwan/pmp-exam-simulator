@@ -23,8 +23,7 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
   const { fontSize } = usePreferencesStore();
   const question = questions[currentIndex];
 
-  // Position state for dragging
-  const [pos, setPos] = useState({ x: 40, y: 100 });
+  const [pos, setPos] = useState({ x: 40, y: 80 });
   const [minimized, setMinimized] = useState(false);
   const dragging = useRef(false);
   const dragStart = useRef({ mouseX: 0, mouseY: 0, winX: 0, winY: 0 });
@@ -55,30 +54,47 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
 
   if (!question) return null;
 
+  const textSize = Math.max(fontSize * 0.9, 0.9);
+
   return (
     <div
       ref={windowRef}
-      className="fixed z-50 w-96 max-w-[90vw] bg-white border border-gray-300 rounded shadow-xl flex flex-col"
-      style={{ left: pos.x, top: pos.y, userSelect: "none" }}
+      className="fixed z-50 bg-white flex flex-col"
+      style={{
+        left: pos.x,
+        top: pos.y,
+        width: 400,
+        maxWidth: "90vw",
+        userSelect: "none",
+        border: "1px solid #b0b0b0",
+        boxShadow: "2px 4px 12px rgba(0,0,0,0.18)",
+      }}
     >
-      {/* Title bar */}
+      {/* Title bar — light gray, OS-style */}
       <div
-        className="flex items-center justify-between px-3 py-2 cursor-move rounded-t select-none"
-        style={{ backgroundColor: "#1e3a8a" }}
+        className="flex items-center justify-end px-2 py-1 cursor-move shrink-0"
+        style={{ backgroundColor: "#e8e8e8", borderBottom: "1px solid #c0c0c0" }}
         onMouseDown={onMouseDown}
       >
-        <span className="text-white text-sm font-semibold">English Translation</span>
-        <div className="flex items-center gap-1">
+        {/* Window controls: minimize, maximize (disabled), close */}
+        <div className="flex items-center gap-0.5">
           <button
             onClick={() => setMinimized((m) => !m)}
-            className="text-white/70 hover:text-white px-1.5 py-0.5 text-xs leading-none rounded hover:bg-white/20"
-            title={minimized ? "Restore" : "Minimize"}
+            className="w-5 h-5 flex items-center justify-center text-gray-600 hover:bg-gray-300 rounded text-xs leading-none"
+            title="Minimize"
           >
-            {minimized ? "□" : "─"}
+            ─
+          </button>
+          <button
+            className="w-5 h-5 flex items-center justify-center text-gray-400 rounded text-xs leading-none cursor-default"
+            title="Maximize"
+            disabled
+          >
+            □
           </button>
           <button
             onClick={onClose}
-            className="text-white/70 hover:text-white px-1.5 py-0.5 text-xs leading-none rounded hover:bg-white/20"
+            className="w-5 h-5 flex items-center justify-center text-gray-600 hover:bg-red-400 hover:text-white rounded text-xs leading-none"
             title="Close"
           >
             ✕
@@ -88,16 +104,29 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
 
       {/* Content */}
       {!minimized && (
-        <div className="p-4 flex flex-col gap-3 max-h-96 overflow-y-auto bg-white rounded-b">
-          <p className="text-gray-900 font-medium" style={{ fontSize: `${fontSize}rem`, lineHeight: "1.6" }}>
+        <div
+          className="p-4 flex flex-col gap-3 overflow-y-auto bg-white"
+          style={{ maxHeight: "60vh" }}
+          dir="ltr"
+        >
+          {/* English question text */}
+          <p
+            className="text-gray-900"
+            style={{ fontSize: `${textSize}rem`, lineHeight: 1.55, fontWeight: "normal" }}
+          >
             {question.questionTextEn}
           </p>
-          <div className="flex flex-col gap-1 mt-1">
+
+          {/* Options — plain text, no letter labels */}
+          <div className="flex flex-col gap-2 mt-1">
             {OPTION_KEYS.map((key) => (
-              <div key={key} className="flex items-start gap-2 text-gray-800" style={{ fontSize: `${fontSize * 0.9}rem` }}>
-                <span className="font-semibold shrink-0">{key}.</span>
-                <span>{getOptionEn(question, key)}</span>
-              </div>
+              <p
+                key={key}
+                className="text-gray-800"
+                style={{ fontSize: `${textSize * 0.93}rem`, lineHeight: 1.5 }}
+              >
+                {getOptionEn(question, key)}
+              </p>
             ))}
           </div>
         </div>

@@ -94,12 +94,12 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
     <div className="flex-1 px-6 py-5 flex flex-col gap-0" data-scheme={colorScheme}>
       {/* Question text */}
       <div dir={isRtl ? "rtl" : "ltr"} onMouseUp={handleMouseUp} className="mb-6">
-        {/* Translate button for Arabic mode */}
+        {/* Translate button — large, prominent, blue */}
         {isRtl && onShowTranslation && (
           <button
             onClick={onShowTranslation}
-            className="mb-3 px-3 py-1 text-sm font-medium rounded border"
-            style={{ backgroundColor: "#4a72b0", color: "white", borderColor: "#3a62a0" }}
+            className="mb-4 px-8 py-3 text-lg font-bold rounded"
+            style={{ backgroundColor: "#4a72b0", color: "white", minWidth: "140px" }}
           >
             ترجمة
           </button>
