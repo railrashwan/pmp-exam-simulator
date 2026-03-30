@@ -381,7 +381,7 @@ export default function HomePage() {
               {mistakeCount === null ? "—" : mistakeCount}
             </div>
           </div>
-          <div className="px-5 py-4 flex items-center justify-between gap-4">
+          <div className="px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <p className="text-xs-type text-muted">
               {mistakeCount === null
                 ? "Loading..."
@@ -389,7 +389,7 @@ export default function HomePage() {
                 ? "No wrong answers yet. Complete an exam to start tracking your mistakes."
                 : `${mistakeCount} unique question${mistakeCount !== 1 ? "s" : ""} answered incorrectly — time to fix them.`}
             </p>
-            <div className="w-full sm:w-44 shrink-0">
+            <div className="w-full sm:w-44 sm:shrink-0">
               <button
                 onClick={() => handleStart("kill-mistakes")}
                 disabled={!mistakeCount || loading !== null}
