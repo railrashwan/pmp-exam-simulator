@@ -24,7 +24,7 @@ function parseWrongExplanations(text: string | null | undefined): Record<string,
   if (!text) return {};
   const result: Record<string, string> = {};
   // Match keys like "A:", "C & D:", "A, B:" — then capture content until next key or end
-  const matches = text.matchAll(/\b([A-D](?:\s*[&,]\s*[A-D])*)\s*:\s*(.*?)(?=\s+[A-D](?:\s*[&,]\s*[A-D])*\s*:|$)/gs);
+  const matches = text.matchAll(/\b([A-D](?:\s*[&,]\s*[A-D])*)\s*:\s*(.*?)(?=\s+[A-D](?:\s*[&,]\s*[A-D])*\s*:|$)/g);
   for (const m of matches) {
     const explanation = m[2].trim().replace(/\.$/, "");
     const letters = m[1].match(/[A-D]/g) ?? [];
