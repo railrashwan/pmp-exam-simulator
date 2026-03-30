@@ -19,13 +19,18 @@ function getOptionText(q: ExamQuestion, key: string, lang: "en" | "ar"): string 
   return q[map[key]] as string;
 }
 
-// Parses "A: Wrong; reason. B: Wrong; reason." → { A: "reason", B: "reason" }
+// Parses "A: reason. B: reason. C & D: reason." → { A: "reason", B: "reason", C: "reason", D: "reason" }
 function parseWrongExplanations(text: string | null | undefined): Record<string, string> {
   if (!text) return {};
   const result: Record<string, string> = {};
-  const matches = text.matchAll(/\b([A-D]):\s*(.*?)(?=\s+[A-D]:|$)/g);
+  // Match keys like "A:", "C & D:", "A, B:" — then capture content until next key or end
+  const matches = text.matchAll(/\b([A-D](?:\s*[&,]\s*[A-D])*)\s*:\s*(.*?)(?=\s+[A-D](?:\s*[&,]\s*[A-D])*\s*:|$)/gs);
   for (const m of matches) {
-    result[m[1]] = m[2].trim().replace(/\.$/, "");
+    const explanation = m[2].trim().replace(/\.$/, "");
+    const letters = m[1].match(/[A-D]/g) ?? [];
+    for (const letter of letters) {
+      result[letter] = explanation;
+    }
   }
   return result;
 }
