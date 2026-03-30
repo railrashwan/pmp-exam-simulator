@@ -15,6 +15,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState<"pmp" | "undraw" | "andrew-ultra" | "yassine" | "kill-mistakes" | null>(null);
   const [error, setError] = useState("");
   const [mistakeCount, setMistakeCount] = useState<number | null>(null);
+  const [practiceMode, setPracticeMode] = useState(false);
 
   useEffect(() => {
     fetch("/api/profile/mistakes")
@@ -31,21 +32,22 @@ export default function HomePage() {
     try {
       let count: number;
       let url: string;
+      const modeParam = practiceMode ? "&mode=practice" : "";
       if (examSet === "undraw") {
         count = UNDRAW_COUNT;
-        url = `/api/exam/start?examSet=undraw`;
+        url = `/api/exam/start?examSet=undraw${modeParam}`;
       } else if (examSet === "andrew-ultra") {
         count = ANDREW_COUNT;
-        url = `/api/exam/start?examSet=andrew-ultra`;
+        url = `/api/exam/start?examSet=andrew-ultra${modeParam}`;
       } else if (examSet === "yassine") {
         count = YASSINE_COUNT;
-        url = `/api/exam/start?examSet=yassine`;
+        url = `/api/exam/start?examSet=yassine${modeParam}`;
       } else if (examSet === "kill-mistakes") {
         count = mistakeCount ?? 0;
-        url = `/api/exam/start?examSet=kill-mistakes`;
+        url = `/api/exam/start?examSet=kill-mistakes${modeParam}`;
       } else {
         count = pmpCount;
-        url = `/api/exam/start?count=${pmpCount}&examSet=pmp`;
+        url = `/api/exam/start?count=${pmpCount}&examSet=pmp${modeParam}`;
       }
 
       const res = await fetch(url);
@@ -54,7 +56,7 @@ export default function HomePage() {
       if (questions.length === 0) throw new Error("No questions available");
 
       const durationSec = count * 77;
-      startExam(questions, durationSec, examSet);
+      startExam(questions, durationSec, examSet, practiceMode);
       router.push("/exam");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error starting exam");
@@ -272,6 +274,36 @@ export default function HomePage() {
             >
               {loading === "kill-mistakes" ? "Loading..." : "Start →"}
             </button>
+          </div>
+        </div>
+
+        {/* Practice Mode toggle */}
+        <div
+          className={`rounded-2xl border-2 p-5 flex items-center justify-between gap-4 transition-all cursor-pointer ${
+            practiceMode
+              ? "bg-amber-50 border-amber-400"
+              : "bg-white border-gray-200 hover:border-amber-300"
+          }`}
+          onClick={() => setPracticeMode((v) => !v)}
+        >
+          <div>
+            <div className="text-2xl font-bold text-gray-800">
+              {practiceMode ? "✓ Practice Mode On" : "Practice Mode"}
+            </div>
+            <div className="text-xl text-gray-500 mt-0.5">
+              See the correct answer and explanation immediately after each selection — no time pressure.
+            </div>
+          </div>
+          <div
+            className={`shrink-0 w-14 h-8 rounded-full transition-all flex items-center px-1 ${
+              practiceMode ? "bg-amber-400" : "bg-gray-300"
+            }`}
+          >
+            <div
+              className={`w-6 h-6 bg-white rounded-full shadow transition-transform ${
+                practiceMode ? "translate-x-6" : "translate-x-0"
+              }`}
+            />
           </div>
         </div>
 

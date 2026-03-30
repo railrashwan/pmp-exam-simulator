@@ -17,10 +17,11 @@ interface ExamState {
   language: Language;
   examSet: string;
   savedAttemptId: number | null;
+  practiceMode: boolean;
 }
 
 interface ExamActions {
-  startExam: (questions: ExamQuestion[], durationSeconds?: number, examSet?: string) => void;
+  startExam: (questions: ExamQuestion[], durationSeconds?: number, examSet?: string, practiceMode?: boolean) => void;
   selectAnswer: (questionId: number, answer: string) => void;
   goToQuestion: (index: number) => void;
   nextQuestion: () => void;
@@ -50,6 +51,7 @@ const initialState: ExamState = {
   language: "en",
   examSet: "pmp",
   savedAttemptId: null,
+  practiceMode: false,
 };
 
 export const useExamStore = create<ExamState & ExamActions>()(
@@ -57,7 +59,7 @@ export const useExamStore = create<ExamState & ExamActions>()(
     (set, get) => ({
       ...initialState,
 
-      startExam: (questions, durationSeconds = DEFAULT_DURATION, examSet = "pmp") => {
+      startExam: (questions, durationSeconds = DEFAULT_DURATION, examSet = "pmp", practiceMode = false) => {
         set({
           questions,
           currentIndex: 0,
@@ -70,6 +72,7 @@ export const useExamStore = create<ExamState & ExamActions>()(
           isPaused: false,
           examSet,
           savedAttemptId: null,
+          practiceMode,
         });
       },
 
@@ -110,12 +113,12 @@ export const useExamStore = create<ExamState & ExamActions>()(
       },
 
       tick: () => {
-        const { timeRemaining, isFinished, isPaused } = get();
+        const { timeRemaining, isFinished, isPaused, practiceMode } = get();
         if (isFinished || isPaused) return;
-        if (timeRemaining <= 1) {
+        if (!practiceMode && timeRemaining <= 1) {
           set({ timeRemaining: 0, isFinished: true });
         } else {
-          set({ timeRemaining: timeRemaining - 1 });
+          set({ timeRemaining: Math.max(0, timeRemaining - 1) });
         }
       },
 
@@ -150,6 +153,7 @@ export const useExamStore = create<ExamState & ExamActions>()(
         language: s.language,
         examSet: s.examSet,
         savedAttemptId: s.savedAttemptId,
+        practiceMode: s.practiceMode,
       }),
       onRehydrateStorage: () => (state) => {
         // Recalculate remaining time based on actual elapsed time since exam started

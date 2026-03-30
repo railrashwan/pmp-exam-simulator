@@ -27,15 +27,26 @@ const SELECT_FIELDS = {
   optionDAr: true,
 } as const;
 
+const PRACTICE_SELECT_FIELDS = {
+  ...SELECT_FIELDS,
+  correctAnswer: true,
+  explanationEn: true,
+  explanationAr: true,
+  wrongExplanationEn: true,
+  wrongExplanationAr: true,
+} as const;
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const examSet = searchParams.get("examSet") ?? "pmp";
+    const isPractice = searchParams.get("mode") === "practice";
+    const fields = isPractice ? PRACTICE_SELECT_FIELDS : SELECT_FIELDS;
 
     if (examSet === "undraw") {
       const questions = await prisma.question.findMany({
         where: { examSet: "undraw" },
-        select: SELECT_FIELDS,
+        select: fields,
         orderBy: { id: "asc" },
       });
       return NextResponse.json(questions as ExamQuestion[]);
@@ -44,7 +55,7 @@ export async function GET(req: NextRequest) {
     if (examSet === "andrew-ultra") {
       const questions = await prisma.question.findMany({
         where: { examSet: "andrew-ultra" },
-        select: SELECT_FIELDS,
+        select: fields,
         orderBy: { id: "asc" },
       });
       return NextResponse.json(questions as ExamQuestion[]);
@@ -53,7 +64,7 @@ export async function GET(req: NextRequest) {
     if (examSet === "yassine") {
       const questions = await prisma.question.findMany({
         where: { examSet: "yassine" },
-        select: SELECT_FIELDS,
+        select: fields,
         orderBy: { id: "asc" },
       });
       return NextResponse.json(questions as ExamQuestion[]);
@@ -74,7 +85,7 @@ export async function GET(req: NextRequest) {
       if (ids.length === 0) return NextResponse.json([]);
       const questions = await prisma.question.findMany({
         where: { id: { in: ids } },
-        select: SELECT_FIELDS,
+        select: fields,
       });
       return NextResponse.json(fisherYatesShuffle(questions) as ExamQuestion[]);
     }
@@ -93,15 +104,15 @@ export async function GET(req: NextRequest) {
     const [businessQs, peopleQs, processQs] = await Promise.all([
       prisma.question.findMany({
         where: { examSet: { in: EXAM_SETS }, domain: "Business Environment" },
-        select: SELECT_FIELDS,
+        select: fields,
       }),
       prisma.question.findMany({
         where: { examSet: { in: EXAM_SETS }, domain: "People" },
-        select: SELECT_FIELDS,
+        select: fields,
       }),
       prisma.question.findMany({
         where: { examSet: { in: EXAM_SETS }, domain: "Process" },
-        select: SELECT_FIELDS,
+        select: fields,
       }),
     ]);
 
