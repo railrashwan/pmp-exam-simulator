@@ -9,13 +9,10 @@ const OPTION_KEYS = ["A", "B", "C", "D"] as const;
 const ARABIC_LABELS: Record<string, string> = { A: "أ", B: "ب", C: "ج", D: "د" };
 
 function getOptionText(q: ExamQuestion, key: string, lang: "en" | "ar"): string {
-  const map: Record<string, keyof ExamQuestion> = {
-    A: lang === "en" ? "optionAEn" : "optionAAr",
-    B: lang === "en" ? "optionBEn" : "optionBAr",
-    C: lang === "en" ? "optionCEn" : "optionCAr",
-    D: lang === "en" ? "optionDEn" : "optionDAr",
-  };
-  return q[map[key]] as string;
+  const arMap: Record<string, keyof ExamQuestion> = { A: "optionAAr", B: "optionBAr", C: "optionCAr", D: "optionDAr" };
+  const enMap: Record<string, keyof ExamQuestion> = { A: "optionAEn", B: "optionBEn", C: "optionCEn", D: "optionDEn" };
+  const val = lang === "en" ? q[enMap[key]] : (q[arMap[key]] || q[enMap[key]]);
+  return val as string;
 }
 
 // Parses "A: reason. B: reason. C & D: reason." → { A: "reason", B: "reason", C: "reason", D: "reason" }
@@ -62,7 +59,7 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
   const question = questions[currentIndex];
   if (!question) return null;
 
-  const qText = language === "en" ? question.questionTextEn : question.questionTextAr;
+  const qText = (language === "en" ? question.questionTextEn : question.questionTextAr) || question.questionTextEn;
   const selectedAnswer = answers[question.id];
   const isRtl = language === "ar";
 
