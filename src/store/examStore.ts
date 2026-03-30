@@ -56,7 +56,7 @@ const initialState: ExamState = {
   timeRemaining: DEFAULT_DURATION,
   isFinished: false,
   isPaused: false,
-  language: "en",
+  language: "ar",
   examSet: "pmp",
   savedAttemptId: null,
   practiceMode: false,

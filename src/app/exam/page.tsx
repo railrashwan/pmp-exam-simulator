@@ -37,7 +37,7 @@ export default function ExamPage() {
   const isRtl = language === "ar";
 
   return (
-    <div className="h-screen flex flex-col bg-canvas overflow-hidden" dir="ltr">
+    <div className="h-screen flex flex-col bg-canvas overflow-hidden" dir={language === "ar" ? "rtl" : "ltr"}>
       {/* Tier 1: Dark navy header — title + timer/counter */}
       <ExamHeader />
 
