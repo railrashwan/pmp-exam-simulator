@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 
-const EXAM_SETS = ["pmp", "drew", "helena", "andrew"];
+const EXAM_SETS = ["pmp", "undraw", "andrew-ultra", "yassine"];
 
 export default function ExplanationsPage() {
-  const [examSet, setExamSet] = useState("drew");
+  const [examSet, setExamSet] = useState("undraw");
   const [file, setFile] = useState<File | null>(null);
   const [importing, setImporting] = useState(false);
   const [result, setResult] = useState<string | null>(null);
