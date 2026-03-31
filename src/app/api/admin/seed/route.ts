@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isValidExamSet } from "@/lib/exam-sets";
 
 interface ParsedQuestion {
   examSet: string;
@@ -84,6 +85,10 @@ export async function POST(req: NextRequest) {
 
     if (!content || !examSet) {
       return NextResponse.json({ error: "Missing content or examSet" }, { status: 400 });
+    }
+
+    if (!isValidExamSet(examSet)) {
+      return NextResponse.json({ error: `Unknown examSet "${examSet}"` }, { status: 400 });
     }
 
     const questions = parseQuestions(content, examSet);

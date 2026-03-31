@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { ExamQuestion } from "@/lib/types";
+import { FULL_BROWSE_SET_SLUGS, CLASSIC_EXAM_SET_SLUGS } from "@/lib/exam-sets";
 
 function fisherYatesShuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -36,9 +37,6 @@ const PRACTICE_SELECT_FIELDS = {
   wrongExplanationAr: true,
 } as const;
 
-/** Exam sets that return all questions (no domain stratification) */
-const FULL_SETS = ["undraw", "andrew-ultra", "yassine", "helena", "eduhub"];
-
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -46,7 +44,7 @@ export async function GET(req: NextRequest) {
     const isPractice = searchParams.get("mode") === "practice";
     const fields = isPractice ? PRACTICE_SELECT_FIELDS : SELECT_FIELDS;
 
-    if (FULL_SETS.includes(examSet)) {
+    if (FULL_BROWSE_SET_SLUGS.includes(examSet)) {
       const questions = await prisma.question.findMany({
         where: { examSet },
         select: fields,
@@ -80,23 +78,21 @@ export async function GET(req: NextRequest) {
     const rawCount = parseInt(searchParams.get("count") ?? "40", 10);
     const count = isNaN(rawCount) ? 40 : Math.min(Math.max(rawCount, 1), 180);
 
-    const EXAM_SETS = FULL_SETS;
-
     const businessCount = Math.round(count * 0.08);
     const peopleCount = Math.round(count * 0.42);
     const processCount = count - businessCount - peopleCount;
 
     const [businessQs, peopleQs, processQs] = await Promise.all([
       prisma.question.findMany({
-        where: { examSet: { in: EXAM_SETS }, domain: "Business Environment" },
+        where: { examSet: { in: CLASSIC_EXAM_SET_SLUGS }, domain: "Business Environment" },
         select: fields,
       }),
       prisma.question.findMany({
-        where: { examSet: { in: EXAM_SETS }, domain: "People" },
+        where: { examSet: { in: CLASSIC_EXAM_SET_SLUGS }, domain: "People" },
         select: fields,
       }),
       prisma.question.findMany({
-        where: { examSet: { in: EXAM_SETS }, domain: "Process" },
+        where: { examSet: { in: CLASSIC_EXAM_SET_SLUGS }, domain: "Process" },
         select: fields,
       }),
     ]);
