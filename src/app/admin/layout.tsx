@@ -23,13 +23,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             ➕ Add Question
           </Link>
         </nav>
-        <div className="p-3 border-t border-edge">
+        <div className="p-3 border-t border-edge space-y-1">
           <Link
             href="/"
             className="block text-xs-type text-muted hover:text-content transition-colors"
           >
             ← Back to Exam
           </Link>
+          <button
+            onClick={async () => {
+              document.cookie = "admin_auth=; path=/; max-age=0";
+              window.location.href = "/admin/login";
+            }}
+            className="block text-xs-type text-red-400 hover:text-red-300 transition-colors"
+          >
+            ↩ Logout
+          </button>
         </div>
       </aside>
 
