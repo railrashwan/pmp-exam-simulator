@@ -36,6 +36,9 @@ const PRACTICE_SELECT_FIELDS = {
   wrongExplanationAr: true,
 } as const;
 
+/** Exam sets that return all questions (no domain stratification) */
+const FULL_SETS = ["undraw", "andrew-ultra", "yassine", "helena", "eduhub"];
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -43,46 +46,10 @@ export async function GET(req: NextRequest) {
     const isPractice = searchParams.get("mode") === "practice";
     const fields = isPractice ? PRACTICE_SELECT_FIELDS : SELECT_FIELDS;
 
-    if (examSet === "undraw") {
+    if (FULL_SETS.includes(examSet)) {
       const questions = await prisma.question.findMany({
-        where: { examSet: "undraw" },
+        where: { examSet },
         select: fields,
-        orderBy: { id: "asc" },
-      });
-      return NextResponse.json(questions as ExamQuestion[]);
-    }
-
-    if (examSet === "andrew-ultra") {
-      const questions = await prisma.question.findMany({
-        where: { examSet: "andrew-ultra" },
-        select: fields,
-        orderBy: { id: "asc" },
-      });
-      return NextResponse.json(questions as ExamQuestion[]);
-    }
-
-    if (examSet === "yassine") {
-      const questions = await prisma.question.findMany({
-        where: { examSet: "yassine" },
-        select: fields,
-        orderBy: { id: "asc" },
-      });
-      return NextResponse.json(questions as ExamQuestion[]);
-    }
-
-    if (examSet === "helena") {
-      const questions = await prisma.question.findMany({
-        where: { examSet: "helena" },
-        select: SELECT_FIELDS,
-        orderBy: { id: "asc" },
-      });
-      return NextResponse.json(questions as ExamQuestion[]);
-    }
-
-    if (examSet === "eduhub") {
-      const questions = await prisma.question.findMany({
-        where: { examSet: "eduhub" },
-        select: SELECT_FIELDS,
         orderBy: { id: "asc" },
       });
       return NextResponse.json(questions as ExamQuestion[]);
@@ -113,7 +80,7 @@ export async function GET(req: NextRequest) {
     const rawCount = parseInt(searchParams.get("count") ?? "40", 10);
     const count = isNaN(rawCount) ? 40 : Math.min(Math.max(rawCount, 1), 180);
 
-    const EXAM_SETS = ["andrew-ultra", "yassine", "undraw", "helena", "eduhub"];
+    const EXAM_SETS = FULL_SETS;
 
     const businessCount = Math.round(count * 0.08);
     const peopleCount = Math.round(count * 0.42);
