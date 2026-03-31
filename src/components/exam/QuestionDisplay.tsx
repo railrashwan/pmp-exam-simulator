@@ -42,9 +42,14 @@ export function QuestionDisplay() {
   // Practice mode: reveal state — only active once user has selected an answer
   const isRevealed = practiceMode && !!selectedAnswer;
   const correctAnswer = question.correctAnswer;
-  const explanation = language === "en" ? question.explanationEn : question.explanationAr;
+  const explanation =
+    language === "en"
+      ? question.explanationEn
+      : (question.explanationAr || question.explanationEn);
   const wrongMap = parseWrongExplanations(
-    language === "en" ? question.wrongExplanationEn : question.wrongExplanationAr
+    language === "en"
+      ? question.wrongExplanationEn
+      : (question.wrongExplanationAr || question.wrongExplanationEn)
   );
 
   return (
