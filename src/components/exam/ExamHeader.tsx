@@ -23,7 +23,17 @@ export function ExamHeader() {
       return;
     }
     intervalRef.current = setInterval(() => { tick(); }, 1000);
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+
+    // Handle tab refocus — browser throttles setInterval when hidden
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") tick();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, [isFinished, isPaused, tick]);
 
   const isLow = timeRemaining < 300 && !isPaused && !practiceMode;

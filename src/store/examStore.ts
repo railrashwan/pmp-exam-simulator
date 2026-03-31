@@ -129,12 +129,15 @@ export const useExamStore = create<ExamState & ExamActions>()(
       },
 
       tick: () => {
-        const { timeRemaining, isFinished, isPaused, practiceMode } = get();
-        if (isFinished || isPaused) return;
-        if (!practiceMode && timeRemaining <= 1) {
+        const { startTime, isFinished, isPaused, practiceMode, examDurationSeconds } = get();
+        if (isFinished || isPaused || practiceMode || !startTime) return;
+        // Compute from wall clock — immune to setInterval throttling
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const remaining = examDurationSeconds - elapsed;
+        if (remaining <= 0) {
           set({ timeRemaining: 0, isFinished: true });
         } else {
-          set({ timeRemaining: Math.max(0, timeRemaining - 1) });
+          set({ timeRemaining: remaining });
         }
       },
 
