@@ -370,6 +370,27 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* ── Learning Mode ─────────────────────────────────────────────── */}
+        <div
+          className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col"
+          style={{ borderLeftWidth: "4px", borderLeftColor: "#047b9c" }}
+        >
+          <div className="px-5 py-4 border-b border-edge bg-surface">
+            <h2 className="text-sm-type font-bold text-content">Learning Mode</h2>
+            <p className="text-xs-type text-muted mt-0.5">
+              Spaced repetition — learn by doing. Review cards scheduled by the algorithm.
+            </p>
+          </div>
+          <div className="p-5">
+            <a
+              href="/learn"
+              className="block w-full py-2.5 bg-interact text-white rounded-lg hover:bg-interact-h font-semibold text-xs-type transition-colors text-center"
+            >
+              Open Learning Mode
+            </a>
+          </div>
+        </div>
+
         {/* ── Kill Mistakes ──────────────────────────────────────────── */}
         <div className="bg-canvas border border-edge rounded-lg overflow-hidden shadow-sm flex flex-col" style={{ borderLeftWidth: "4px", borderLeftColor: "var(--color-err)" }}>
           <div className="px-5 py-4 border-b border-edge flex items-center justify-between bg-surface">
