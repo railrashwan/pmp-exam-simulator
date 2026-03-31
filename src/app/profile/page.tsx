@@ -95,6 +95,12 @@ export default function ProfilePage() {
       <div className="bg-primary border-b border-primary px-4 sm:px-6 py-4 flex items-center justify-between gap-3 flex-wrap">
         <h1 className="text-md-type font-bold text-inverse">My Profile</h1>
         <div className="flex items-center gap-2">
+          <a
+            href="/admin"
+            className="px-4 py-1.5 text-xs-type font-medium text-inverse/70 border border-white/20 rounded hover:bg-white/10 transition-colors"
+          >
+            Admin
+          </a>
           <button
             onClick={() => setShowResetConfirm(true)}
             disabled={resetting || totalExams === 0}

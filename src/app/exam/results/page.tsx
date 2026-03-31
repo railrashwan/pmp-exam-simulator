@@ -102,12 +102,20 @@ export default function ResultsPage() {
     <div className="min-h-screen bg-surface">
       {/* Sticky top bar */}
       <div className="sticky top-0 z-20 bg-canvas border-b border-edge px-4 sm:px-6 py-3 flex items-center justify-between">
-        <a
-          href="/"
-          className="text-sm-type font-semibold text-content border border-edge rounded-lg px-4 py-2 hover:bg-surface-2 transition-colors shadow-sm"
-        >
-          {language === "ar" ? "← الرئيسية" : "← Home"}
-        </a>
+        <div className="flex items-center gap-3">
+          <a
+            href="/"
+            className="text-sm-type font-semibold text-content border border-edge rounded-lg px-4 py-2 hover:bg-surface-2 transition-colors shadow-sm"
+          >
+            {language === "ar" ? "← الرئيسية" : "← Home"}
+          </a>
+          <a
+            href="/admin"
+            className="text-xs-type text-muted border border-edge rounded-lg px-3 py-2 hover:bg-surface-2 transition-colors"
+          >
+            Admin
+          </a>
+        </div>
         <LanguageToggle />
       </div>
 
