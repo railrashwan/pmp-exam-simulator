@@ -77,7 +77,7 @@ export function FontPanel() {
       {/* Trigger button */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-4 left-4 z-40 bg-canvas border border-edge text-muted font-medium shadow-sm hover:bg-surface hover:text-content transition-colors rounded px-4 py-1.5 text-xs-type"
+        className="fixed bottom-4 right-4 z-40 bg-canvas border border-edge text-muted font-medium shadow-sm hover:bg-surface hover:text-content transition-colors rounded px-4 py-1.5 text-xs-type"
         aria-label="Open font settings"
       >
         Aa
@@ -90,7 +90,7 @@ export function FontPanel() {
 
       {/* Slide-out panel */}
       <div
-        className={`fixed top-0 left-0 h-full z-50 bg-canvas shadow-xl flex flex-col transition-transform duration-300 border-r border-edge ${open ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed top-0 right-0 h-full z-50 bg-canvas shadow-xl flex flex-col transition-transform duration-300 border-l border-edge ${open ? "translate-x-0" : "translate-x-full"}`}
         style={{ width: "min(400px, calc(100vw - 1rem))" }}
       >
         {/* Header */}
