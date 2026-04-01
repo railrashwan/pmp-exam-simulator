@@ -10,28 +10,29 @@ interface ParsedEntry {
 function parseMarkdown(text: string): ParsedEntry[] {
   const entries: ParsedEntry[] = [];
 
-  // Split on --- section separators
-  const blocks = text.split(/\n---\n/);
+  // Split on blank lines between blocks (each block starts with <!-- id:N -->)
+  // We split on the id marker to get clean blocks
+  const blocks = text.split(/(?=<!-- id:\d+ -->)/);
 
   for (const block of blocks) {
-    // Extract question ID from <!-- Q:123 -->
-    const idMatch = block.match(/<!--\s*Q:(\d+)\s*-->/);
+    const idMatch = block.match(/<!-- id:(\d+) -->/);
     if (!idMatch) continue;
     const id = parseInt(idMatch[1], 10);
     if (isNaN(id)) continue;
 
-    // Extract **Explanation AR:** section — content until next ** heading or end
-    const arMatch = block.match(
-      /\*\*Explanation AR:\*\*\s*\n([\s\S]*?)(?=\n\*\*|$)/
-    );
-    const explanationAr = arMatch ? arMatch[1].trim() : "";
-    if (!explanationAr) continue; // skip if still empty
+    const lines = block.split("\n");
+    let explanationAr = "";
+    let wrongExplanationAr: string | undefined;
 
-    // Extract **Wrong Explanations AR:** section (optional)
-    const wrongArMatch = block.match(
-      /\*\*Wrong Explanations AR:\*\*\s*\n([\s\S]*?)(?=\n\*\*|$)/
-    );
-    const wrongExplanationAr = wrongArMatch ? wrongArMatch[1].trim() : undefined;
+    for (const line of lines) {
+      if (line.startsWith("Why Correct AR:")) {
+        explanationAr = line.slice("Why Correct AR:".length).trim();
+      } else if (line.startsWith("Why Wrong AR:")) {
+        wrongExplanationAr = line.slice("Why Wrong AR:".length).trim();
+      }
+    }
+
+    if (!explanationAr) continue; // skip if still empty
 
     entries.push({
       id,
@@ -53,7 +54,7 @@ export async function POST(req: NextRequest) {
     const entries = parseMarkdown(text);
     if (entries.length === 0) {
       return NextResponse.json(
-        { error: "No filled-in Arabic explanations found in the file." },
+        { error: "No filled-in Arabic explanations found. Make sure you filled in 'Why Correct AR:' lines." },
         { status: 400 }
       );
     }
@@ -74,7 +75,7 @@ export async function POST(req: NextRequest) {
         });
         saved++;
       } catch {
-        errors.push(`Q${entry.id}: not found or update failed`);
+        errors.push(`Q id=${entry.id}: not found or update failed`);
       }
     }
 
