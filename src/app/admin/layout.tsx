@@ -24,6 +24,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           >
             ➕ Add Question
           </Link>
+          <Link
+            href="/admin/arabic-translate"
+            className="block px-3 py-2 rounded-lg text-sm text-content hover:bg-surface-2 transition-colors"
+          >
+            🌐 Arabic Export
+          </Link>
         </nav>
         <div className="p-3 border-t border-edge space-y-1">
           <Link
