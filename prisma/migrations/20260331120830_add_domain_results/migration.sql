@@ -1,0 +1,33 @@
+-- CreateTable
+CREATE TABLE "DomainResult" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "attemptId" INTEGER NOT NULL,
+    "domain" TEXT NOT NULL,
+    "correct" INTEGER NOT NULL,
+    "total" INTEGER NOT NULL,
+    CONSTRAINT "DomainResult_attemptId_fkey" FOREIGN KEY ("attemptId") REFERENCES "ExamAttempt" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "SpacedRepCard" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "questionId" INTEGER NOT NULL,
+    "interval" INTEGER NOT NULL DEFAULT 1,
+    "ease" REAL NOT NULL DEFAULT 2.5,
+    "nextReview" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "reviewCount" INTEGER NOT NULL DEFAULT 0,
+    "lastRating" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "SpacedRepCard_questionId_fkey" FOREIGN KEY ("questionId") REFERENCES "Question" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "ReviewLog" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "cardId" INTEGER NOT NULL,
+    "ratedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "rating" TEXT NOT NULL,
+    "intervalAfter" INTEGER NOT NULL,
+    CONSTRAINT "ReviewLog_cardId_fkey" FOREIGN KEY ("cardId") REFERENCES "SpacedRepCard" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);

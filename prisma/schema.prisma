@@ -29,6 +29,7 @@ model Question {
   wrongExplanationAr String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
+  spacedRepCards     SpacedRepCard[]
 }
 
 model ExamAttempt {
@@ -39,8 +40,9 @@ model ExamAttempt {
   correctAnswers  Int
   score           Float
   passed          Boolean
-  domainBreakdown String          // JSON string
+  domainBreakdown String          // JSON string (legacy — kept for compat)
   results         AttemptResult[]
+  domainResults   DomainResult[]
 }
 
 model AttemptResult {
@@ -50,4 +52,36 @@ model AttemptResult {
   questionId     Int
   selectedAnswer String?
   isCorrect      Boolean
+}
+
+model DomainResult {
+  id        Int         @id @default(autoincrement())
+  attemptId Int
+  attempt   ExamAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  domain    String
+  correct   Int
+  total     Int
+}
+
+model SpacedRepCard {
+  id           Int      @id @default(autoincrement())
+  questionId   Int
+  question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  interval     Int      @default(1)       // days until next review
+  ease         Float    @default(2.5)     // ease factor (SM-2)
+  nextReview   DateTime @default(now())   // when this card is due
+  reviewCount  Int      @default(0)       // total reviews
+  lastRating   String?                    // easy/hard/forgot
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  reviewLogs   ReviewLog[]
+}
+
+model ReviewLog {
+  id              Int            @id @default(autoincrement())
+  cardId          Int
+  card            SpacedRepCard  @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  ratedAt         DateTime       @default(now())
+  rating          String         // easy/hard/forgot
+  intervalAfter   Int            // what interval was set after this review
 }

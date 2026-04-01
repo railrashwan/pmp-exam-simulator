@@ -109,6 +109,22 @@ export default function HomePage() {
             <a href="/admin" className="text-xs-type text-white/70 hover:text-white transition-colors">
               Admin
             </a>
+            <span className="text-white/40">|</span>
+            <button
+              onClick={() => setPracticeMode((v) => !v)}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs-type font-semibold border transition-colors ${
+                practiceMode
+                  ? "bg-white text-primary border-white"
+                  : "bg-white/10 text-white/90 border-white/30 hover:bg-white/20 hover:text-white"
+              }`}
+            >
+              <span
+                className={`inline-block w-3 h-3 rounded-full border-2 transition-colors ${
+                  practiceMode ? "bg-primary border-primary" : "bg-transparent border-white/60"
+                }`}
+              />
+              Practice Mode
+            </button>
             <ThemeToggle className="border-white/20 text-white/70 hover:bg-white/10 hover:text-white ml-1" />
           </div>
         </div>
@@ -401,34 +417,6 @@ export default function HomePage() {
                 <p className="mt-2 text-wrong text-xs-type text-center">{error.msg}</p>
               )}
             </div>
-          </div>
-        </div>
-
-        {/* Practice Mode toggle */}
-        <div
-          className={`bg-canvas border rounded-lg p-4 flex items-center justify-between gap-4 cursor-pointer transition-colors ${
-            practiceMode ? "border-warn" : "border-edge hover:border-edge-2"
-          }`}
-          onClick={() => setPracticeMode((v) => !v)}
-        >
-          <div>
-            <div className="text-sm-type font-bold text-content">
-              {practiceMode ? "✓ Practice Mode On" : "Practice Mode"}
-            </div>
-            <div className="text-xs-type text-muted mt-0.5">
-              See the correct answer and explanation immediately after each selection — no time pressure.
-            </div>
-          </div>
-          <div
-            className={`shrink-0 w-11 h-6 rounded-full transition-colors flex items-center px-0.5 ${
-              practiceMode ? "bg-warn" : "bg-edge-2"
-            }`}
-          >
-            <div
-              className={`w-5 h-5 bg-white rounded-full shadow transition-transform ${
-                practiceMode ? "translate-x-5" : "translate-x-0"
-              }`}
-            />
           </div>
         </div>
 

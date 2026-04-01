@@ -15,18 +15,27 @@ function getOptionText(q: ExamQuestion, key: string, lang: "en" | "ar"): string 
   return val as string;
 }
 
+const ARABIC_KEY_MAP: Record<string, string> = { 'أ': 'A', 'ب': 'B', 'ج': 'C', 'د': 'D' };
+
 // Parses "A: reason. B: reason. C & D: reason." → { A: "reason", B: "reason", C: "reason", D: "reason" }
+// Also handles Arabic letter keys: "أ: reason. ب: reason." → same output map
 function parseWrongExplanations(text: string | null | undefined): Record<string, string> {
   if (!text) return {};
   const result: Record<string, string> = {};
-  // Match keys like "A:", "C & D:", "A, B:" — then capture content until next key or end
-  const matches = text.matchAll(/\b([A-D](?:\s*[&,]\s*[A-D])*)\s*:\s*(.*?)(?=\s+[A-D](?:\s*[&,]\s*[A-D])*\s*:|$)/g);
-  for (const m of matches) {
+
+  // Try English keys first: "A:", "C & D:", "A, B:" etc.
+  const enMatches = text.matchAll(/\b([A-D](?:\s*[&,]\s*[A-D])*)\s*:\s*(.*?)(?=\s+[A-D](?:\s*[&,]\s*[A-D])*\s*:|$)/g);
+  for (const m of enMatches) {
     const explanation = m[2].trim().replace(/\.$/, "");
-    const letters = m[1].match(/[A-D]/g) ?? [];
-    for (const letter of letters) {
-      result[letter] = explanation;
-    }
+    for (const letter of (m[1].match(/[A-D]/g) ?? [])) result[letter] = explanation;
+  }
+  if (Object.keys(result).length > 0) return result;
+
+  // Fall back to Arabic letter keys: "أ:", "ب:", "ج:", "د:"
+  const arMatches = text.matchAll(/([أبجد])\s*:\s*(.*?)(?=\s+[أبجد]\s*:|$)/g);
+  for (const m of arMatches) {
+    const enKey = ARABIC_KEY_MAP[m[1]];
+    if (enKey) result[enKey] = m[2].trim().replace(/\.$/, "");
   }
   return result;
 }

@@ -22,6 +22,12 @@ export async function POST(req: NextRequest) {
     const body: SaveAttemptBody = await req.json();
     const { examSet, totalQuestions, correctAnswers, score, passed, domainBreakdown, results } = body;
 
+    const domainEntries = Object.entries(domainBreakdown).map(([domain, stats]) => ({
+      domain,
+      correct: stats.correct,
+      total: stats.total,
+    }));
+
     const attempt = await prisma.examAttempt.create({
       data: {
         examSet,
@@ -38,6 +44,9 @@ export async function POST(req: NextRequest) {
               selectedAnswer: r.selectedAnswer,
               isCorrect: r.isCorrect,
             })),
+        },
+        domainResults: {
+          create: domainEntries,
         },
       },
     });

@@ -11,14 +11,15 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:seed-undraw": "tsx prisma/seed-undraw.ts",
     "db:seed-andrew-ultra": "tsx prisma/seed-andrew-ultra.ts",
-    "db:seed-yassine": "tsx prisma/seed-yassine.ts"
+    "db:seed-yassine": "tsx prisma/seed-yassine.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
     "@libsql/client": "^0.17.2",
     "@prisma/adapter-libsql": "^7.5.0",
     "@prisma/client": "^7.5.0",
-    "dotenv": "^17.3.1",
     "next": "16.2.1",
     "prisma": "^7.5.0",
     "react": "19.2.4",
@@ -32,11 +33,13 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "better-sqlite3": "^12.8.0",
+    "dotenv": "^17.3.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.2"
   }
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import type { ExamQuestion } from "@/lib/types";
+import { FULL_BROWSE_SET_SLUGS, CLASSIC_EXAM_SET_SLUGS } from "@/lib/exam-sets";
 
 function fisherYatesShuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -43,46 +44,10 @@ export async function GET(req: NextRequest) {
     const isPractice = searchParams.get("mode") === "practice";
     const fields = isPractice ? PRACTICE_SELECT_FIELDS : SELECT_FIELDS;
 
-    if (examSet === "undraw") {
+    if (FULL_BROWSE_SET_SLUGS.includes(examSet)) {
       const questions = await prisma.question.findMany({
-        where: { examSet: "undraw" },
+        where: { examSet },
         select: fields,
-        orderBy: { id: "asc" },
-      });
-      return NextResponse.json(questions as ExamQuestion[]);
-    }
-
-    if (examSet === "andrew-ultra") {
-      const questions = await prisma.question.findMany({
-        where: { examSet: "andrew-ultra" },
-        select: fields,
-        orderBy: { id: "asc" },
-      });
-      return NextResponse.json(questions as ExamQuestion[]);
-    }
-
-    if (examSet === "yassine") {
-      const questions = await prisma.question.findMany({
-        where: { examSet: "yassine" },
-        select: fields,
-        orderBy: { id: "asc" },
-      });
-      return NextResponse.json(questions as ExamQuestion[]);
-    }
-
-    if (examSet === "helena") {
-      const questions = await prisma.question.findMany({
-        where: { examSet: "helena" },
-        select: SELECT_FIELDS,
-        orderBy: { id: "asc" },
-      });
-      return NextResponse.json(questions as ExamQuestion[]);
-    }
-
-    if (examSet === "eduhub") {
-      const questions = await prisma.question.findMany({
-        where: { examSet: "eduhub" },
-        select: SELECT_FIELDS,
         orderBy: { id: "asc" },
       });
       return NextResponse.json(questions as ExamQuestion[]);
@@ -113,23 +78,21 @@ export async function GET(req: NextRequest) {
     const rawCount = parseInt(searchParams.get("count") ?? "40", 10);
     const count = isNaN(rawCount) ? 40 : Math.min(Math.max(rawCount, 1), 180);
 
-    const EXAM_SETS = ["andrew-ultra", "yassine", "undraw", "helena", "eduhub"];
-
     const businessCount = Math.round(count * 0.08);
     const peopleCount = Math.round(count * 0.42);
     const processCount = count - businessCount - peopleCount;
 
     const [businessQs, peopleQs, processQs] = await Promise.all([
       prisma.question.findMany({
-        where: { examSet: { in: EXAM_SETS }, domain: "Business Environment" },
+        where: { examSet: { in: CLASSIC_EXAM_SET_SLUGS }, domain: "Business Environment" },
         select: fields,
       }),
       prisma.question.findMany({
-        where: { examSet: { in: EXAM_SETS }, domain: "People" },
+        where: { examSet: { in: CLASSIC_EXAM_SET_SLUGS }, domain: "People" },
         select: fields,
       }),
       prisma.question.findMany({
-        where: { examSet: { in: EXAM_SETS }, domain: "Process" },
+        where: { examSet: { in: CLASSIC_EXAM_SET_SLUGS }, domain: "Process" },
         select: fields,
       }),
     ]);
