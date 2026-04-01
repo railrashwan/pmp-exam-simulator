@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export async function DELETE() {
+  try {
+    await prisma.attemptResult.deleteMany();
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    console.error("reset mistakes error:", e);
+    return NextResponse.json({ error: "Failed to reset mistakes" }, { status: 500 });
+  }
+}
+
 export async function GET() {
   try {
     // Fetch all results oldest-first so each questionId's final map entry = most recent answer

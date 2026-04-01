@@ -43,6 +43,8 @@ export default function ProfilePage() {
   const [killError, setKillError] = useState("");
   const [resetting, setResetting] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resettingMistakes, setResettingMistakes] = useState(false);
+  const [showResetMistakesConfirm, setShowResetMistakesConfirm] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -64,6 +66,17 @@ export default function ProfilePage() {
     } finally {
       setResetting(false);
       setShowResetConfirm(false);
+    }
+  }
+
+  async function handleResetMistakes() {
+    setResettingMistakes(true);
+    try {
+      await fetch("/api/profile/mistakes", { method: "DELETE" });
+      setMistakeCount(0);
+    } finally {
+      setResettingMistakes(false);
+      setShowResetMistakesConfirm(false);
     }
   }
 
@@ -149,13 +162,22 @@ export default function ProfilePage() {
                 ? "No wrong answers recorded yet. Complete an exam to start tracking."
                 : `${mistakeCount} unique question${mistakeCount !== 1 ? "s" : ""} answered incorrectly across all exams.`}
             </p>
-            <button
-              onClick={handleStartKillMistakes}
-              disabled={mistakeCount === 0 || startingKill}
-              className="shrink-0 px-5 py-2 bg-err text-inverse text-xs-type font-semibold rounded hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
-            >
-              {startingKill ? "Loading..." : "Start"}
-            </button>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={() => setShowResetMistakesConfirm(true)}
+                disabled={mistakeCount === 0 || resettingMistakes}
+                className="px-4 py-2 text-xs-type font-medium border border-edge rounded text-muted hover:bg-surface disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                Reset
+              </button>
+              <button
+                onClick={handleStartKillMistakes}
+                disabled={mistakeCount === 0 || startingKill}
+                className="px-5 py-2 bg-err text-inverse text-xs-type font-semibold rounded hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
+              >
+                {startingKill ? "Loading..." : "Start"}
+              </button>
+            </div>
           </div>
           {killError && <p className="px-5 pb-4 text-wrong text-xs-type">{killError}</p>}
         </div>
@@ -223,6 +245,37 @@ export default function ProfilePage() {
           )}
         </div>
       </div>
+
+      {/* Reset Kill Mistakes confirmation dialog */}
+      {showResetMistakesConfirm && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="reset-mistakes-title">
+          <div className="bg-canvas border border-edge rounded-lg shadow-xl w-[400px] overflow-hidden">
+            <div className="bg-surface border-b border-edge px-5 py-4">
+              <h2 id="reset-mistakes-title" className="font-semibold text-content text-sm-type">Reset Kill Mistakes?</h2>
+            </div>
+            <div className="p-5">
+              <p className="text-xs-type text-content leading-relaxed">
+                This will clear all {mistakeCount} wrong-answer records. Your exam history scores will remain. This cannot be undone.
+              </p>
+            </div>
+            <div className="flex gap-2 px-5 pb-5 justify-end">
+              <button
+                onClick={() => setShowResetMistakesConfirm(false)}
+                className="px-5 py-2 text-xs-type border border-edge rounded text-content hover:bg-surface font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleResetMistakes}
+                disabled={resettingMistakes}
+                className="px-5 py-2 text-xs-type bg-err text-inverse rounded hover:opacity-90 font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+              >
+                {resettingMistakes ? "Resetting..." : "Reset"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Reset confirmation dialog — replaces window.confirm() */}
       {showResetConfirm && (
