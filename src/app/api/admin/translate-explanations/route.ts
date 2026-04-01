@@ -48,7 +48,7 @@ export async function GET() {
     prisma.question.count({
       where: {
         explanationEn: { not: "" },
-        OR: [{ explanationAr: null }, { explanationAr: "" }],
+        explanationAr: "",
       },
     }),
     prisma.question.count({ where: { wrongExplanationEn: { not: null } } }),
@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
     const questions = await prisma.question.findMany({
       where: {
         explanationEn: { not: "" },
-        OR: [{ explanationAr: null }, { explanationAr: "" }],
+        explanationAr: "",
       },
       select: { id: true, explanationEn: true },
       take: remaining,
@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
     prisma.question.count({
       where: {
         explanationEn: { not: "" },
-        OR: [{ explanationAr: null }, { explanationAr: "" }],
+        explanationAr: "",
       },
     }),
     prisma.question.count({
