@@ -2,10 +2,16 @@
 
 import { useState, useEffect } from "react";
 
-interface Stats {
+interface FieldStats {
   total: number;
   missing: number;
   done: number;
+}
+
+interface ApiStats {
+  explanation: FieldStats;
+  wrongExplanation: FieldStats;
+  totalMissing: number;
 }
 
 interface BatchResult {
@@ -15,8 +21,30 @@ interface BatchResult {
   message?: string;
 }
 
+function ProgressBar({ label, stats }: { label: string; stats: FieldStats }) {
+  const pct = Math.round((stats.done / Math.max(stats.total, 1)) * 100);
+  return (
+    <div className="mb-4">
+      <div className="flex justify-between text-sm mb-1">
+        <span className="text-muted">{label}</span>
+        <span className="font-semibold text-content">{stats.done} / {stats.total} ({pct}%)</span>
+      </div>
+      <div className="w-full bg-edge rounded-full h-2.5">
+        <div
+          className="bg-interact h-2.5 rounded-full transition-all"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <div className="flex justify-between text-xs text-muted mt-1">
+        <span>{stats.missing} remaining</span>
+        <span>{stats.done} translated</span>
+      </div>
+    </div>
+  );
+}
+
 export default function TranslatePage() {
-  const [stats, setStats] = useState<Stats | null>(null);
+  const [stats, setStats] = useState<ApiStats | null>(null);
   const [running, setRunning] = useState(false);
   const [log, setLog] = useState<string[]>([]);
   const [batchSize, setBatchSize] = useState(10);
@@ -24,7 +52,7 @@ export default function TranslatePage() {
 
   async function fetchStats() {
     const res = await fetch("/api/admin/translate-explanations");
-    const data: Stats = await res.json();
+    const data: ApiStats = await res.json();
     setStats(data);
     return data;
   }
@@ -47,13 +75,13 @@ export default function TranslatePage() {
     if (data.message) {
       addLog(data.message);
     } else {
-      addLog(`✓ Translated ${data.translated} questions. Remaining: ${data.remaining}`);
+      addLog(`✓ Translated ${data.translated} explanations. Remaining: ${data.remaining}`);
       if (data.errors?.length) {
         data.errors.forEach((e) => addLog(`  ⚠ ${e}`));
       }
     }
-    await fetchStats();
-    return data.remaining;
+    const updated = await fetchStats();
+    return updated.totalMissing;
   }
 
   async function handleRunBatch() {
@@ -76,7 +104,6 @@ export default function TranslatePage() {
       while (remaining > 0) {
         remaining = await runBatch();
         if (remaining > 0) {
-          // Small delay between batches to avoid rate limits
           await new Promise((r) => setTimeout(r, 1500));
         }
       }
@@ -89,32 +116,23 @@ export default function TranslatePage() {
     }
   }
 
-  const pct = stats ? Math.round((stats.done / Math.max(stats.total, 1)) * 100) : 0;
+  const allDone = stats?.totalMissing === 0;
 
   return (
     <div className="max-w-2xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold text-content mb-1">Translate Wrong-Answer Explanations</h1>
+      <h1 className="text-2xl font-bold text-content mb-1">Translate Arabic Explanations</h1>
       <p className="text-sm text-muted mb-6">
-        Translates <code>wrongExplanationEn</code> → <code>wrongExplanationAr</code> using Claude.
-        Requires <code>ANTHROPIC_API_KEY</code> in Vercel environment variables.
+        Translates missing <code>explanationAr</code> and <code>wrongExplanationAr</code> fields using Claude.
+        Requires <code>ANTHROPIC_API_KEY</code> in environment variables.
       </p>
 
       {/* Progress */}
       {stats && (
-        <div className="mb-6 p-4 bg-surface border border-edge rounded-lg">
-          <div className="flex justify-between text-sm mb-2">
-            <span className="text-muted">Progress</span>
-            <span className="font-semibold text-content">{stats.done} / {stats.total} ({pct}%)</span>
-          </div>
-          <div className="w-full bg-edge rounded-full h-2.5">
-            <div
-              className="bg-interact h-2.5 rounded-full transition-all"
-              style={{ width: `${pct}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-xs text-muted mt-2">
-            <span>{stats.missing} remaining</span>
-            <span>{stats.done} translated</span>
+        <div className="mb-6 p-4 bg-surface border border-edge rounded-lg space-y-2">
+          <ProgressBar label="Correct-answer explanation (explanationAr)" stats={stats.explanation} />
+          <ProgressBar label="Wrong-answer explanations (wrongExplanationAr)" stats={stats.wrongExplanation} />
+          <div className="pt-2 border-t border-edge text-xs text-muted text-right">
+            Total missing: <span className="font-semibold text-content">{stats.totalMissing}</span>
           </div>
         </div>
       )}
@@ -122,7 +140,7 @@ export default function TranslatePage() {
       {/* Batch size */}
       <div className="mb-5">
         <label className="block text-xs font-semibold text-muted uppercase tracking-wider mb-2">
-          Batch size (questions per API call)
+          Batch size (translations per run)
         </label>
         <div className="flex gap-2">
           {[5, 10, 20, 50].map((n) => (
@@ -145,17 +163,17 @@ export default function TranslatePage() {
       <div className="flex gap-3 mb-6">
         <button
           onClick={handleRunBatch}
-          disabled={running || stats?.missing === 0}
+          disabled={running || allDone}
           className="px-5 py-2.5 bg-surface border border-edge text-content text-sm font-semibold rounded-lg hover:bg-surface-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {running && !autoRun ? "Running…" : `Translate next ${batchSize}`}
         </button>
         <button
           onClick={handleRunAll}
-          disabled={running || stats?.missing === 0}
+          disabled={running || allDone}
           className="flex-1 py-2.5 bg-interact text-white text-sm font-bold rounded-lg hover:bg-interact-h disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {running && autoRun ? `Translating… (${stats?.missing ?? "?"} remaining)` : "Translate All →"}
+          {running && autoRun ? `Translating… (${stats?.totalMissing ?? "?"} remaining)` : "Translate All →"}
         </button>
         <button
           onClick={fetchStats}
@@ -166,9 +184,9 @@ export default function TranslatePage() {
         </button>
       </div>
 
-      {stats?.missing === 0 && (
+      {allDone && (
         <div className="mb-4 px-4 py-3 rounded-lg bg-ok/10 border border-ok/30 text-sm text-ok font-semibold">
-          ✅ All wrong-answer explanations have been translated into Arabic.
+          ✅ All Arabic explanations (correct and wrong-answer) have been translated.
         </div>
       )}
 
@@ -187,8 +205,8 @@ export default function TranslatePage() {
       )}
 
       <p className="mt-8 text-xs text-muted">
-        Note: The API skips questions that already have an Arabic wrong-answer explanation.
-        To re-translate, clear <code>wrongExplanationAr</code> in the admin question editor first.
+        Explanations are processed in order: missing <code>explanationAr</code> first, then missing{" "}
+        <code>wrongExplanationAr</code>. To re-translate, clear the field in the admin question editor first.
       </p>
     </div>
   );
