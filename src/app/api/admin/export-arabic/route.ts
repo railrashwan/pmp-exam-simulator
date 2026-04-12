@@ -25,8 +25,10 @@ export async function GET(req: NextRequest) {
         correctAnswer: true,
         explanationEn: true,
         explanationAr: true,
-        wrongExplanationEn: true,
-        wrongExplanationAr: true,
+        explanationAEn: true, explanationAAr: true,
+        explanationBEn: true, explanationBAr: true,
+        explanationCEn: true, explanationCAr: true,
+        explanationDEn: true, explanationDAr: true,
       },
     });
 
@@ -74,9 +76,14 @@ export async function GET(req: NextRequest) {
       lines.push(`Correct: ${q.correctAnswer}`);
       lines.push(`Why Correct EN: ${q.explanationEn ?? ""}`);
       lines.push(`Why Correct AR: `);
-      if (q.wrongExplanationEn) {
-        lines.push(`Why Wrong EN: ${q.wrongExplanationEn}`);
-        lines.push(`Why Wrong AR: `);
+      const optionKeys = ["A", "B", "C", "D"] as const;
+      for (const key of optionKeys) {
+        const enVal = (q as Record<string, unknown>)[`explanation${key}En`] as string | null;
+        const arVal = (q as Record<string, unknown>)[`explanation${key}Ar`] as string | null;
+        if (enVal) {
+          lines.push(`Option ${key} Explanation EN: ${enVal}`);
+          lines.push(`Option ${key} Explanation AR: ${arVal ?? ""}`);
+        }
       }
       lines.push(``);
       seq++;

@@ -10,7 +10,7 @@ interface FieldStats {
 
 interface ApiStats {
   explanation: FieldStats;
-  wrongExplanation: FieldStats;
+  optionExplanation: FieldStats;
   totalMissing: number;
 }
 
@@ -122,7 +122,7 @@ export default function TranslatePage() {
     <div className="max-w-2xl mx-auto py-10 px-4">
       <h1 className="text-2xl font-bold text-content mb-1">Translate Arabic Explanations</h1>
       <p className="text-sm text-muted mb-6">
-        Translates missing <code>explanationAr</code> and <code>wrongExplanationAr</code> fields using Claude.
+        Translates missing <code>explanationAr</code> and per-option explanation AR fields using Claude.
         Requires <code>ANTHROPIC_API_KEY</code> in environment variables.
       </p>
 
@@ -130,7 +130,7 @@ export default function TranslatePage() {
       {stats && (
         <div className="mb-6 p-4 bg-surface border border-edge rounded-lg space-y-2">
           <ProgressBar label="Correct-answer explanation (explanationAr)" stats={stats.explanation} />
-          <ProgressBar label="Wrong-answer explanations (wrongExplanationAr)" stats={stats.wrongExplanation} />
+          <ProgressBar label="Per-option explanations (A/B/C/D — Arabic)" stats={stats.optionExplanation} />
           <div className="pt-2 border-t border-edge text-xs text-muted text-right">
             Total missing: <span className="font-semibold text-content">{stats.totalMissing}</span>
           </div>
@@ -205,8 +205,8 @@ export default function TranslatePage() {
       )}
 
       <p className="mt-8 text-xs text-muted">
-        Explanations are processed in order: missing <code>explanationAr</code> first, then missing{" "}
-        <code>wrongExplanationAr</code>. To re-translate, clear the field in the admin question editor first.
+        Explanations are processed in order: missing <code>explanationAr</code> first, then missing per-option
+        Arabic explanation fields. To re-translate, clear the field in the admin question editor first.
       </p>
     </div>
   );

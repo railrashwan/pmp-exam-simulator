@@ -33,8 +33,14 @@ const PRACTICE_SELECT_FIELDS = {
   correctAnswer: true,
   explanationEn: true,
   explanationAr: true,
-  wrongExplanationEn: true,
-  wrongExplanationAr: true,
+  explanationAEn: true,
+  explanationAAr: true,
+  explanationBEn: true,
+  explanationBAr: true,
+  explanationCEn: true,
+  explanationCAr: true,
+  explanationDEn: true,
+  explanationDAr: true,
 } as const;
 
 export async function GET(req: NextRequest) {

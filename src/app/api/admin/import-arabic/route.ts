@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+const OPTION_KEYS = ["A", "B", "C", "D"] as const;
+
 interface ParsedEntry {
   id: number;
   explanationAr: string;
-  wrongExplanationAr?: string;
+  explanationAAr?: string;
+  explanationBAr?: string;
+  explanationCAr?: string;
+  explanationDAr?: string;
 }
 
 function parseMarkdown(text: string): ParsedEntry[] {
   const entries: ParsedEntry[] = [];
 
-  // Split on blank lines between blocks (each block starts with <!-- id:N -->)
-  // We split on the id marker to get clean blocks
   const blocks = text.split(/(?=<!-- id:\d+ -->)/);
 
   for (const block of blocks) {
@@ -22,22 +25,31 @@ function parseMarkdown(text: string): ParsedEntry[] {
 
     const lines = block.split("\n");
     let explanationAr = "";
-    let wrongExplanationAr: string | undefined;
+    const optionAr: Partial<Record<string, string>> = {};
 
     for (const line of lines) {
       if (line.startsWith("Why Correct AR:")) {
         explanationAr = line.slice("Why Correct AR:".length).trim();
-      } else if (line.startsWith("Why Wrong AR:")) {
-        wrongExplanationAr = line.slice("Why Wrong AR:".length).trim();
+      } else {
+        for (const key of OPTION_KEYS) {
+          const prefix = `Option ${key} Explanation AR:`;
+          if (line.startsWith(prefix)) {
+            const val = line.slice(prefix.length).trim();
+            if (val) optionAr[key] = val;
+          }
+        }
       }
     }
 
-    if (!explanationAr) continue; // skip if still empty
+    if (!explanationAr) continue;
 
     entries.push({
       id,
       explanationAr,
-      ...(wrongExplanationAr ? { wrongExplanationAr } : {}),
+      ...(optionAr.A ? { explanationAAr: optionAr.A } : {}),
+      ...(optionAr.B ? { explanationBAr: optionAr.B } : {}),
+      ...(optionAr.C ? { explanationCAr: optionAr.C } : {}),
+      ...(optionAr.D ? { explanationDAr: optionAr.D } : {}),
     });
   }
 
@@ -68,9 +80,10 @@ export async function POST(req: NextRequest) {
           where: { id: entry.id },
           data: {
             explanationAr: entry.explanationAr,
-            ...(entry.wrongExplanationAr !== undefined
-              ? { wrongExplanationAr: entry.wrongExplanationAr }
-              : {}),
+            ...(entry.explanationAAr !== undefined ? { explanationAAr: entry.explanationAAr } : {}),
+            ...(entry.explanationBAr !== undefined ? { explanationBAr: entry.explanationBAr } : {}),
+            ...(entry.explanationCAr !== undefined ? { explanationCAr: entry.explanationCAr } : {}),
+            ...(entry.explanationDAr !== undefined ? { explanationDAr: entry.explanationDAr } : {}),
           },
         });
         saved++;

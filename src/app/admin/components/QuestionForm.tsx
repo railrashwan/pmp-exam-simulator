@@ -21,6 +21,10 @@ type FormData = {
   optionDEn: string; optionDAr: string;
   correctAnswer: string;
   explanationEn: string; explanationAr: string;
+  explanationAEn: string; explanationAAr: string;
+  explanationBEn: string; explanationBAr: string;
+  explanationCEn: string; explanationCAr: string;
+  explanationDEn: string; explanationDAr: string;
 };
 
 const emptyForm: FormData = {
@@ -32,6 +36,10 @@ const emptyForm: FormData = {
   optionDEn: "", optionDAr: "",
   correctAnswer: "A",
   explanationEn: "", explanationAr: "",
+  explanationAEn: "", explanationAAr: "",
+  explanationBEn: "", explanationBAr: "",
+  explanationCEn: "", explanationCAr: "",
+  explanationDEn: "", explanationDAr: "",
 };
 
 const inputCls = "w-full border-2 border-gray-300 rounded-xl px-4 py-3 text-2xl focus:outline-none focus:border-blue-400";
@@ -126,7 +134,7 @@ export function QuestionForm({ initial, questionId }: Props) {
         </div>
       </div>
 
-      {/* Explanation */}
+      {/* General Explanation (correct answer) */}
       <div className="grid grid-cols-2 gap-6">
         <div>
           <label className={labelCls}>Explanation (English)</label>
@@ -135,6 +143,29 @@ export function QuestionForm({ initial, questionId }: Props) {
         <div>
           <label className={labelCls}>Explanation (Arabic)</label>
           <textarea value={form.explanationAr} onChange={(e) => set("explanationAr", e.target.value)} rows={3} dir="rtl" required className={`${inputCls} text-right`} />
+        </div>
+      </div>
+
+      {/* Per-option explanations */}
+      <div>
+        <h3 className={labelCls}>Per-Option Explanations (Why correct / why wrong)</h3>
+        <div className="space-y-4">
+          {OPTION_KEYS.map((key) => {
+            const enKey = `explanation${key}En` as keyof FormData;
+            const arKey = `explanation${key}Ar` as keyof FormData;
+            return (
+              <div key={key} className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className={labelCls}>Option {key} — Why? (English)</label>
+                  <textarea value={form[enKey]} onChange={(e) => set(enKey, e.target.value)} rows={2} className={inputCls} />
+                </div>
+                <div>
+                  <label className={labelCls}>Option {key} — Why? (Arabic)</label>
+                  <textarea value={form[arKey]} onChange={(e) => set(arKey, e.target.value)} rows={2} dir="rtl" className={`${inputCls} text-right`} />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

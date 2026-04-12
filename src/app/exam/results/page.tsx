@@ -6,27 +6,11 @@ import { useExamStore } from "@/store/examStore";
 import { LanguageToggle } from "@/components/exam/LanguageToggle";
 import type { ExamResultsResponse, ExamResult } from "@/lib/types";
 
-const ARABIC_KEY_MAP: Record<string, string> = { 'أ': 'A', 'ب': 'B', 'ج': 'C', 'د': 'D' };
-
-function parseWrongExplanations(text: string | null): Record<string, string> {
-  if (!text) return {};
-  const result: Record<string, string> = {};
-
-  // English keys: "A: reason. B: reason."
-  const enMatches = text.matchAll(/\b([A-D](?:\s*[&,]\s*[A-D])*)\s*:\s*(.*?)(?=\s+[A-D](?:\s*[&,]\s*[A-D])*\s*:|$)/g);
-  for (const m of enMatches) {
-    const explanation = m[2].trim().replace(/\.$/, "");
-    for (const letter of (m[1].match(/[A-D]/g) ?? [])) result[letter] = explanation;
-  }
-  if (Object.keys(result).length > 0) return result;
-
-  // Arabic letter keys: "أ: reason. ب: reason."
-  const arMatches = text.matchAll(/([أبجد])\s*:\s*(.*?)(?=\s+[أبجد]\s*:|$)/g);
-  for (const m of arMatches) {
-    const enKey = ARABIC_KEY_MAP[m[1]];
-    if (enKey) result[enKey] = m[2].trim().replace(/\.$/, "");
-  }
-  return result;
+function getOptionExplanation(r: ExamResult, key: string, isRtl: boolean): string | null {
+  const enMap: Record<string, keyof ExamResult> = { A: "explanationAEn", B: "explanationBEn", C: "explanationCEn", D: "explanationDEn" };
+  const arMap: Record<string, keyof ExamResult> = { A: "explanationAAr", B: "explanationBAr", C: "explanationCAr", D: "explanationDAr" };
+  const val = isRtl ? (r[arMap[key]] || r[enMap[key]]) : r[enMap[key]];
+  return (val as string | null | undefined) ?? null;
 }
 
 export default function ResultsPage() {
@@ -192,9 +176,6 @@ export default function ResultsPage() {
           </div>
           <div className="divide-y divide-edge">
             {qResults.map((r: ExamResult, idx: number) => {
-              const wrongMap = isRtl
-                ? parseWrongExplanations(r.wrongExplanationAr)
-                : parseWrongExplanations(r.wrongExplanationEn);
 
               return (
                 <div key={r.questionId} className="p-4">
@@ -226,7 +207,7 @@ export default function ResultsPage() {
                         };
                         const isCorrectOption = key === r.correctAnswer;
                         const isSelected = key === r.selectedAnswer;
-                        const wrongExpl = wrongMap[key];
+                        const wrongExpl = getOptionExplanation(r, key, isRtl);
 
                         return (
                           <div key={key}>

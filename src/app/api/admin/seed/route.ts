@@ -19,8 +19,6 @@ interface ParsedQuestion {
   correctAnswer: string;
   explanationEn: string;
   explanationAr: string;
-  wrongExplanationEn: string | null;
-  wrongExplanationAr: string | null;
 }
 
 function parseQuestions(markdown: string, examSet: string): ParsedQuestion[] {
@@ -48,7 +46,7 @@ function parseQuestions(markdown: string, examSet: string): ParsedQuestion[] {
         pick("D EN:") || pick("D AR:") ||
         pick("Correct:") ||
         pick("Why Correct EN:") || pick("Why Correct AR:") ||
-        pick("Why Wrong EN:") || pick("Why Wrong AR:");
+        pick("Why Wrong EN:");  // kept for backwards-compat parsing; value not used
     }
 
     if (!q["Domain:"] || !q["Question EN:"] || !q["Correct:"]) continue;
@@ -70,8 +68,6 @@ function parseQuestions(markdown: string, examSet: string): ParsedQuestion[] {
       correctAnswer: q["Correct:"],
       explanationEn: q["Why Correct EN:"] ?? "",
       explanationAr: q["Why Correct AR:"] ?? "",
-      wrongExplanationEn: q["Why Wrong EN:"] ?? null,
-      wrongExplanationAr: q["Why Wrong AR:"] ?? null,
     });
   }
 

@@ -15,8 +15,14 @@ export interface Question {
   correctAnswer: string;
   explanationEn: string;
   explanationAr: string;
-  wrongExplanationEn?: string | null;
-  wrongExplanationAr?: string | null;
+  explanationAEn?: string | null;
+  explanationAAr?: string | null;
+  explanationBEn?: string | null;
+  explanationBAr?: string | null;
+  explanationCEn?: string | null;
+  explanationCAr?: string | null;
+  explanationDEn?: string | null;
+  explanationDAr?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -27,8 +33,14 @@ export type ExamQuestion = Omit<Question, "createdAt" | "updatedAt"> & {
   correctAnswer?: string;
   explanationEn?: string;
   explanationAr?: string;
-  wrongExplanationEn?: string | null;
-  wrongExplanationAr?: string | null;
+  explanationAEn?: string | null;
+  explanationAAr?: string | null;
+  explanationBEn?: string | null;
+  explanationBAr?: string | null;
+  explanationCEn?: string | null;
+  explanationCAr?: string | null;
+  explanationDEn?: string | null;
+  explanationDAr?: string | null;
 };
 
 export type Language = "en" | "ar";
@@ -44,8 +56,14 @@ export interface ExamResult {
   isCorrect: boolean;
   explanationEn: string;
   explanationAr: string;
-  wrongExplanationEn: string | null;
-  wrongExplanationAr: string | null;
+  explanationAEn: string | null;
+  explanationAAr: string | null;
+  explanationBEn: string | null;
+  explanationBAr: string | null;
+  explanationCEn: string | null;
+  explanationCAr: string | null;
+  explanationDEn: string | null;
+  explanationDAr: string | null;
   optionAEn: string;
   optionAAr: string;
   optionBEn: string;

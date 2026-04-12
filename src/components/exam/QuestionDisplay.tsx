@@ -15,29 +15,11 @@ function getOptionText(q: ExamQuestion, key: string, lang: "en" | "ar"): string 
   return val as string;
 }
 
-const ARABIC_KEY_MAP: Record<string, string> = { 'أ': 'A', 'ب': 'B', 'ج': 'C', 'د': 'D' };
-
-// Parses "A: reason. B: reason. C & D: reason." → { A: "reason", B: "reason", C: "reason", D: "reason" }
-// Also handles Arabic letter keys: "أ: reason. ب: reason." → same output map
-function parseWrongExplanations(text: string | null | undefined): Record<string, string> {
-  if (!text) return {};
-  const result: Record<string, string> = {};
-
-  // Try English keys first: "A:", "C & D:", "A, B:" etc.
-  const enMatches = text.matchAll(/\b([A-D](?:\s*[&,]\s*[A-D])*)\s*:\s*(.*?)(?=\s+[A-D](?:\s*[&,]\s*[A-D])*\s*:|$)/g);
-  for (const m of enMatches) {
-    const explanation = m[2].trim().replace(/\.$/, "");
-    for (const letter of (m[1].match(/[A-D]/g) ?? [])) result[letter] = explanation;
-  }
-  if (Object.keys(result).length > 0) return result;
-
-  // Fall back to Arabic letter keys: "أ:", "ب:", "ج:", "د:"
-  const arMatches = text.matchAll(/([أبجد])\s*:\s*(.*?)(?=\s+[أبجد]\s*:|$)/g);
-  for (const m of arMatches) {
-    const enKey = ARABIC_KEY_MAP[m[1]];
-    if (enKey) result[enKey] = m[2].trim().replace(/\.$/, "");
-  }
-  return result;
+function getOptionExplanation(q: ExamQuestion, key: string, lang: "en" | "ar"): string | null {
+  const enMap: Record<string, keyof ExamQuestion> = { A: "explanationAEn", B: "explanationBEn", C: "explanationCEn", D: "explanationDEn" };
+  const arMap: Record<string, keyof ExamQuestion> = { A: "explanationAAr", B: "explanationBAr", C: "explanationCAr", D: "explanationDAr" };
+  const val = lang === "ar" ? (q[arMap[key]] || q[enMap[key]]) : q[enMap[key]];
+  return (val as string | null | undefined) ?? null;
 }
 
 interface QuestionDisplayProps {
@@ -76,9 +58,6 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
   const isRevealed = practiceMode && !!selectedAnswer;
   const correctAnswer = question.correctAnswer;
   const explanation = language === "en" ? question.explanationEn : question.explanationAr;
-  const wrongMap = parseWrongExplanations(
-    language === "en" ? question.wrongExplanationEn : question.wrongExplanationAr
-  );
 
   const questionStrikethroughs = strikethroughs[question.id] ?? [];
 
@@ -209,7 +188,7 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
               {isRevealed && isCorrectOption && (
                 <div className="mt-1 px-4 py-2 bg-green-50 border-l-4 border-green-400 text-green-800 rounded-r-lg text-sm">
                   <span className="font-semibold">{isRtl ? "لماذا صحيح: " : "Why correct: "}</span>
-                  {wrongMap[key] || explanation || "—"}
+                  {getOptionExplanation(question, key, language) || explanation || "—"}
                 </div>
               )}
               {isRevealed && !isCorrectOption && (
@@ -219,7 +198,7 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
                     : "bg-gray-50 border-l-4 border-gray-300 text-gray-600"
                 }`}>
                   <span className="font-semibold">{isRtl ? "لماذا خطأ: " : "Why wrong: "}</span>
-                  {wrongMap[key] || (isRtl ? "راجع شرح الإجابة الصحيحة أعلاه." : "See the correct answer explanation above.")}
+                  {getOptionExplanation(question, key, language) || (isRtl ? "راجع شرح الإجابة الصحيحة أعلاه." : "See the correct answer explanation above.")}
                 </div>
               )}
             </div>

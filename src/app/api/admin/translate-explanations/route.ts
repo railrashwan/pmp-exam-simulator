@@ -13,15 +13,13 @@ Rules:
 - Keep PMP terminology consistent (e.g. project charter = ميثاق المشروع, stakeholder = أصحاب المصلحة, risk register = سجل المخاطر, etc.)
 - Output ONLY the translated text, nothing else`;
 
-const WRONG_EXPLANATION_PROMPT = `You are an expert Arabic translator specializing in project management (PMP) content.
-Translate the following English per-option wrong-answer explanations into Arabic.
+const OPTION_EXPLANATION_PROMPT = `You are an expert Arabic translator specializing in project management (PMP) content.
+Translate the following English PMP exam per-option explanation into natural, fluent Arabic.
 
 Rules:
 - Convey the MEANING faithfully — do NOT translate word-for-word
 - Use clear, professional Arabic suitable for PMP exam study material
-- Preserve the format exactly: if input is "A: reason. B: reason." output "أ: السبب. ب: السبب."
-- Use Arabic letter labels: A→أ, B→ب, C→ج, D→د
-- Keep PMP terminology consistent
+- Keep PMP terminology consistent (e.g. project charter = ميثاق المشروع, stakeholder = أصحاب المصلحة, etc.)
 - Output ONLY the translated text, nothing else`;
 
 async function translate(text: string, prompt: string): Promise<string> {
@@ -36,26 +34,30 @@ async function translate(text: string, prompt: string): Promise<string> {
   return block.text.trim();
 }
 
-// GET — return stats for both fields
+const OPTION_KEYS = ["A", "B", "C", "D"] as const;
+type OptionKey = (typeof OPTION_KEYS)[number];
+
+function optionEnField(key: OptionKey) { return `explanation${key}En` as const; }
+function optionArField(key: OptionKey) { return `explanation${key}Ar` as const; }
+
+// GET — return stats for explanation and per-option explanation fields
 export async function GET() {
-  const [
-    explanationTotal,
-    explanationMissing,
-    wrongTotal,
-    wrongMissing,
-  ] = await Promise.all([
+  const [explanationTotal, explanationMissing, optionTotal, optionMissing] = await Promise.all([
     prisma.question.count({ where: { explanationEn: { not: "" } } }),
+    prisma.question.count({ where: { explanationEn: { not: "" }, explanationAr: "" } }),
     prisma.question.count({
       where: {
-        explanationEn: { not: "" },
-        explanationAr: "",
+        OR: OPTION_KEYS.map((k) => ({ [optionEnField(k)]: { not: null } })),
       },
     }),
-    prisma.question.count({ where: { wrongExplanationEn: { not: null } } }),
     prisma.question.count({
       where: {
-        wrongExplanationEn: { not: null },
-        OR: [{ wrongExplanationAr: null }, { wrongExplanationAr: "" }],
+        OR: OPTION_KEYS.map((k) => ({
+          AND: [
+            { [optionEnField(k)]: { not: null } },
+            { OR: [{ [optionArField(k)]: null }, { [optionArField(k)]: "" }] },
+          ],
+        })),
       },
     }),
   ]);
@@ -66,16 +68,16 @@ export async function GET() {
       missing: explanationMissing,
       done: explanationTotal - explanationMissing,
     },
-    wrongExplanation: {
-      total: wrongTotal,
-      missing: wrongMissing,
-      done: wrongTotal - wrongMissing,
+    optionExplanation: {
+      total: optionTotal,
+      missing: optionMissing,
+      done: optionTotal - optionMissing,
     },
-    totalMissing: explanationMissing + wrongMissing,
+    totalMissing: explanationMissing + optionMissing,
   });
 }
 
-// POST — translate a batch (explanationAr first, then wrongExplanationAr)
+// POST — translate a batch (explanationAr first, then per-option explanation AR fields)
 export async function POST(req: NextRequest) {
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json(
@@ -93,10 +95,7 @@ export async function POST(req: NextRequest) {
   // 1. Fill batch with missing explanationAr first
   if (remaining > 0) {
     const questions = await prisma.question.findMany({
-      where: {
-        explanationEn: { not: "" },
-        explanationAr: "",
-      },
+      where: { explanationEn: { not: "" }, explanationAr: "" },
       select: { id: true, explanationEn: true },
       take: remaining,
     });
@@ -105,10 +104,7 @@ export async function POST(req: NextRequest) {
       if (!q.explanationEn) continue;
       try {
         const ar = await translate(q.explanationEn, EXPLANATION_PROMPT);
-        await prisma.question.update({
-          where: { id: q.id },
-          data: { explanationAr: ar },
-        });
+        await prisma.question.update({ where: { id: q.id }, data: { explanationAr: ar } });
         translated++;
       } catch (e) {
         errors.push(`Q${q.id} (explanation): ${String(e).slice(0, 100)}`);
@@ -117,49 +113,59 @@ export async function POST(req: NextRequest) {
     remaining -= questions.length;
   }
 
-  // 2. Fill remainder of batch with missing wrongExplanationAr
+  // 2. Fill remainder with questions that have any missing per-option AR explanation
   if (remaining > 0) {
+    const selectFields = Object.fromEntries(
+      OPTION_KEYS.flatMap((k) => [[optionEnField(k), true], [optionArField(k), true]])
+    );
     const questions = await prisma.question.findMany({
       where: {
-        wrongExplanationEn: { not: null },
-        OR: [{ wrongExplanationAr: null }, { wrongExplanationAr: "" }],
+        OR: OPTION_KEYS.map((k) => ({
+          AND: [
+            { [optionEnField(k)]: { not: null } },
+            { OR: [{ [optionArField(k)]: null }, { [optionArField(k)]: "" }] },
+          ],
+        })),
       },
-      select: { id: true, wrongExplanationEn: true },
+      select: { id: true, ...selectFields },
       take: remaining,
     });
 
     for (const q of questions) {
-      if (!q.wrongExplanationEn) continue;
-      try {
-        const ar = await translate(q.wrongExplanationEn, WRONG_EXPLANATION_PROMPT);
-        await prisma.question.update({
-          where: { id: q.id },
-          data: { wrongExplanationAr: ar },
-        });
-        translated++;
-      } catch (e) {
-        errors.push(`Q${q.id} (wrong): ${String(e).slice(0, 100)}`);
+      for (const key of OPTION_KEYS) {
+        const enVal = (q as Record<string, unknown>)[optionEnField(key)] as string | null;
+        const arVal = (q as Record<string, unknown>)[optionArField(key)] as string | null;
+        if (!enVal || arVal) continue;
+        try {
+          const ar = await translate(enVal, OPTION_EXPLANATION_PROMPT);
+          await prisma.question.update({
+            where: { id: q.id },
+            data: { [optionArField(key)]: ar },
+          });
+          translated++;
+        } catch (e) {
+          errors.push(`Q${q.id} (option ${key}): ${String(e).slice(0, 100)}`);
+        }
       }
     }
   }
 
   // Recalculate total remaining
-  const [explMissing, wrongMissing] = await Promise.all([
+  const [explMissing, optMissing] = await Promise.all([
+    prisma.question.count({ where: { explanationEn: { not: "" }, explanationAr: "" } }),
     prisma.question.count({
       where: {
-        explanationEn: { not: "" },
-        explanationAr: "",
-      },
-    }),
-    prisma.question.count({
-      where: {
-        wrongExplanationEn: { not: null },
-        OR: [{ wrongExplanationAr: null }, { wrongExplanationAr: "" }],
+        OR: OPTION_KEYS.map((k) => ({
+          AND: [
+            { [optionEnField(k)]: { not: null } },
+            { OR: [{ [optionArField(k)]: null }, { [optionArField(k)]: "" }] },
+          ],
+        })),
       },
     }),
   ]);
 
-  const totalRemaining = explMissing + wrongMissing;
+  const totalRemaining = explMissing + optMissing;
 
   if (translated === 0 && totalRemaining === 0) {
     return NextResponse.json({

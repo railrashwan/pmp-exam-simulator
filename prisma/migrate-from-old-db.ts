@@ -53,8 +53,6 @@ async function main() {
           explanationAr: row.explanationAr as string,
           examSet: row.examSet as string,
           globalBank: Boolean(row.globalBank),
-          wrongExplanationEn: (row.wrongExplanationEn as string) ?? null,
-          wrongExplanationAr: (row.wrongExplanationAr as string) ?? null,
         },
       });
     }

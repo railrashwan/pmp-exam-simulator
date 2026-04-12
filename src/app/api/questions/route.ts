@@ -48,6 +48,10 @@ export async function POST(req: NextRequest) {
       optionAEn, optionAAr, optionBEn, optionBAr,
       optionCEn, optionCAr, optionDEn, optionDAr,
       correctAnswer, explanationEn, explanationAr,
+      explanationAEn, explanationAAr,
+      explanationBEn, explanationBAr,
+      explanationCEn, explanationCAr,
+      explanationDEn, explanationDAr,
     } = body;
 
     if (!domain || !questionTextEn || !questionTextAr || !correctAnswer) {
@@ -66,6 +70,14 @@ export async function POST(req: NextRequest) {
         optionAEn, optionAAr, optionBEn, optionBAr,
         optionCEn, optionCAr, optionDEn, optionDAr,
         correctAnswer, explanationEn, explanationAr,
+        explanationAEn: explanationAEn || null,
+        explanationAAr: explanationAAr || null,
+        explanationBEn: explanationBEn || null,
+        explanationBAr: explanationBAr || null,
+        explanationCEn: explanationCEn || null,
+        explanationCAr: explanationCAr || null,
+        explanationDEn: explanationDEn || null,
+        explanationDAr: explanationDAr || null,
       },
     });
 
