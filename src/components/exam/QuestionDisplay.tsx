@@ -117,6 +117,7 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
             lineHeight: isRtl ? "1.8" : "1.6",
             color: "var(--cs-text, var(--color-text-1))",
             fontWeight: "normal",
+            textAlign: "justify",
           }}
         >
           {qText}
