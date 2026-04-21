@@ -32,7 +32,7 @@ export const usePreferencesStore = create<PreferencesState>()(
   persist(
     (set) => ({
       questionFont: "",
-      fontSize: 1.0625,
+      fontSize: 0.9375,
       theme: "light",
       colorScheme: "black-on-white",
       setQuestionFont: (font) => set({ questionFont: font }),
