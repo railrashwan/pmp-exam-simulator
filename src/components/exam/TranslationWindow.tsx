@@ -11,10 +11,14 @@ const MIN_H = 200;
 const DEFAULT_W = 780;
 const DEFAULT_H = 360;
 
-function getOptionEn(q: ExamQuestion, key: string): string {
-  const map: Record<string, keyof ExamQuestion> = {
+function getOptionText(q: ExamQuestion, key: string, lang: "en" | "ar"): string {
+  const arMap: Record<string, keyof ExamQuestion> = {
+    A: "optionAAr", B: "optionBAr", C: "optionCAr", D: "optionDAr",
+  };
+  const enMap: Record<string, keyof ExamQuestion> = {
     A: "optionAEn", B: "optionBEn", C: "optionCEn", D: "optionDEn",
   };
+  const map = lang === "en" ? enMap : arMap;
   return q[map[key]] as string;
 }
 
@@ -23,21 +27,20 @@ interface TranslationWindowProps {
 }
 
 export function TranslationWindow({ onClose }: TranslationWindowProps) {
-  const { questions, currentIndex } = useExamStore();
+  const { questions, currentIndex, language } = useExamStore();
   const { fontSize } = usePreferencesStore();
   const question = questions[currentIndex];
 
-  // Position — bottom-left by default, calculated after mount
-  const [pos, setPos] = useState({ x: 20, y: 9999 }); // 9999 = unset, replaced on mount
-  // Size — wide landscape by default
+  // When exam is in English → show Arabic; when in Arabic → show English
+  const targetLang: "en" | "ar" = language === "en" ? "ar" : "en";
+  const isTargetRtl = targetLang === "ar";
+
+  const [pos, setPos] = useState({ x: 20, y: 9999 });
   const [size, setSize] = useState({ w: DEFAULT_W, h: DEFAULT_H });
   const [minimized, setMinimized] = useState(false);
 
-  // Drag state
   const dragging = useRef(false);
   const dragStart = useRef({ mouseX: 0, mouseY: 0, winX: 0, winY: 0 });
-
-  // Resize state
   const resizing = useRef(false);
   const resizeStart = useRef({ mouseX: 0, mouseY: 0, w: DEFAULT_W, h: DEFAULT_H });
 
@@ -55,7 +58,6 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
     e.stopPropagation();
   }
 
-  // Set bottom-left position once we know the viewport height
   useEffect(() => {
     setPos({ x: 20, y: Math.max(60, window.innerHeight - DEFAULT_H - 130) });
   }, []);
@@ -91,6 +93,8 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
   if (!question) return null;
 
   const textSize = Math.max(fontSize * 0.88, 0.82);
+  const titleLabel = language === "en" ? "Arabic Translation / الترجمة العربية" : "English Translation";
+  const questionText = targetLang === "en" ? question.questionTextEn : (question.questionTextAr || question.questionTextEn);
 
   return (
     <div
@@ -105,13 +109,13 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
         boxShadow: "2px 4px 14px rgba(0,0,0,0.2)",
       }}
     >
-      {/* Title bar — light gray, OS-style, draggable, controls on LEFT */}
+      {/* Title bar */}
       <div
         className="flex items-center px-2 py-1 cursor-move shrink-0"
         style={{ backgroundColor: "#e8e8e8", borderBottom: "1px solid #c0c0c0" }}
         onMouseDown={onTitleMouseDown}
       >
-        {/* Controls: ✕ □ ─  (left-aligned, like macOS-style) */}
+        {/* Controls */}
         <div className="flex items-center gap-0.5">
           <button
             onClick={onClose}
@@ -135,40 +139,45 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
             ─
           </button>
         </div>
-        {/* Drag affordance fills the rest */}
+        {/* Title label */}
+        <span className="ml-2 text-gray-500 text-xs font-medium select-none">{titleLabel}</span>
         <div className="flex-1" />
       </div>
 
-      {/* Content — scrollable */}
+      {/* Content */}
       {!minimized && (
         <div
           className="flex-1 overflow-y-auto px-4 py-3 bg-white"
-          dir="ltr"
+          dir={isTargetRtl ? "rtl" : "ltr"}
         >
-          {/* Question */}
+          {/* Question text */}
           <p
-            className="text-gray-900 mb-3"
-            style={{ fontSize: `${textSize}rem`, lineHeight: 1.55, fontWeight: "normal" }}
+            className={`text-gray-900 mb-3 ${isTargetRtl ? "text-right" : ""}`}
+            style={{
+              fontSize: `${textSize}rem`,
+              lineHeight: isTargetRtl ? 1.85 : 1.55,
+              fontWeight: "normal",
+            }}
           >
-            {question.questionTextEn}
+            {questionText}
           </p>
 
-          {/* Options — plain text, no letter labels */}
+          {/* Options */}
           <div className="flex flex-col gap-1.5">
             {OPTION_KEYS.map((key) => (
               <p
                 key={key}
-                className="text-gray-700"
-                style={{ fontSize: `${textSize * 0.93}rem`, lineHeight: 1.45 }}
+                className={`text-gray-700 ${isTargetRtl ? "text-right" : ""}`}
+                style={{ fontSize: `${textSize * 0.93}rem`, lineHeight: isTargetRtl ? 1.75 : 1.45 }}
               >
-                {getOptionEn(question, key)}
+                {getOptionText(question, key, targetLang)}
               </p>
             ))}
           </div>
         </div>
       )}
 
-      {/* Resize handle — bottom-right corner */}
+      {/* Resize handle */}
       {!minimized && (
         <div
           onMouseDown={onResizeMouseDown}
@@ -176,7 +185,6 @@ export function TranslationWindow({ onClose }: TranslationWindowProps) {
           style={{ userSelect: "none" }}
           title="Drag to resize"
         >
-          {/* Grip dots */}
           <svg width="14" height="14" viewBox="0 0 14 14" className="absolute bottom-0.5 right-0.5 text-gray-400">
             <circle cx="10" cy="10" r="1.2" fill="currentColor" />
             <circle cx="6"  cy="10" r="1.2" fill="currentColor" />

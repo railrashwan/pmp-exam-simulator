@@ -56,7 +56,7 @@ const initialState: ExamState = {
   timeRemaining: DEFAULT_DURATION,
   isFinished: false,
   isPaused: false,
-  language: "ar",
+  language: "en",
   examSet: "pmp",
   savedAttemptId: null,
   practiceMode: false,
@@ -200,6 +200,7 @@ export const useExamStore = create<ExamState & ExamActions>()(
         isFinished: s.isFinished,
         isPaused: s.isPaused,
         examSet: s.examSet,
+        language: s.language,
         savedAttemptId: s.savedAttemptId,
         practiceMode: s.practiceMode,
         strikethroughs: s.strikethroughs,
@@ -208,8 +209,6 @@ export const useExamStore = create<ExamState & ExamActions>()(
         highlights: s.highlights,
       }),
       onRehydrateStorage: () => (state) => {
-        // Language is always Arabic — never restore a persisted English value
-        if (state) state.language = "ar";
         // Recalculate remaining time only if it is actually running
         if (state && state.startTime && !state.isFinished && !state.isPaused) {
           const elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);

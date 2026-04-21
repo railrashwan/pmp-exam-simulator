@@ -32,6 +32,8 @@ export default function HomePage() {
   const isFinished = useExamStore((s) => s.isFinished);
   const timeRemaining = useExamStore((s) => s.timeRemaining);
   const savedSet = useExamStore((s) => s.examSet);
+  const language = useExamStore((s) => s.language);
+  const toggleLanguage = useExamStore((s) => s.toggleLanguage);
   const hasSavedExam = questions.length > 0 && !isFinished && timeRemaining > 0;
 
   const router = useRouter();
@@ -92,7 +94,7 @@ export default function HomePage() {
   const eduhubDurationMin = calcMin(EDUHUB_COUNT);
 
   return (
-    <div className="min-h-screen bg-canvas" dir="ltr">
+    <div className="min-h-screen bg-canvas" dir={language === "ar" ? "rtl" : "ltr"}>
 
       {/* Page header */}
       <header className="bg-primary border-b border-primary">
@@ -103,12 +105,32 @@ export default function HomePage() {
           </div>
           <div className="flex items-center gap-3">
             <a href="/profile" className="text-xs-type text-white/90 hover:text-white transition-colors">
-              My Profile
+              {language === "ar" ? "ملفي" : "My Profile"}
             </a>
             <span className="text-white/40">|</span>
             <a href="/admin" className="text-xs-type text-white/70 hover:text-white transition-colors">
-              Admin
+              {language === "ar" ? "إدارة" : "Admin"}
             </a>
+            {/* Language toggle */}
+            <div className="flex items-center gap-0 rounded overflow-hidden border border-white/30 ml-1">
+              <button
+                onClick={() => language === "ar" && toggleLanguage()}
+                className={`px-2.5 py-1 text-xs-type font-semibold transition-colors ${
+                  language === "en" ? "bg-white/25 text-white" : "text-white/70 hover:bg-white/15"
+                }`}
+              >
+                EN
+              </button>
+              <span className="text-white/30 text-xs select-none">|</span>
+              <button
+                onClick={() => language === "en" && toggleLanguage()}
+                className={`px-2.5 py-1 text-xs-type font-semibold transition-colors ${
+                  language === "ar" ? "bg-white/25 text-white" : "text-white/70 hover:bg-white/15"
+                }`}
+              >
+                ع
+              </button>
+            </div>
             <ThemeToggle className="border-white/20 text-white/70 hover:bg-white/10 hover:text-white ml-1" />
           </div>
         </div>

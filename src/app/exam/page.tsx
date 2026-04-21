@@ -60,7 +60,7 @@ export default function ExamPage() {
           <QuestionDisplay
             strikethroughMode={strikethroughMode}
             highlightMode={highlightMode}
-            onShowTranslation={isRtl ? () => setTranslationOpen(true) : undefined}
+            onShowTranslation={() => setTranslationOpen(true)}
           />
         </div>
 

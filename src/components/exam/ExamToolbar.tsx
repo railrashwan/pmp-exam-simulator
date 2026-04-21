@@ -21,7 +21,7 @@ export function ExamToolbar({
   strikethroughMode,
   onToggleStrikethrough,
 }: ExamToolbarProps) {
-  const { questions, currentIndex, language, markedForReview, toggleMarkForReview, comments } = useExamStore();
+  const { questions, currentIndex, language, toggleLanguage, markedForReview, toggleMarkForReview, comments } = useExamStore();
   const { colorScheme, setColorScheme } = usePreferencesStore();
   const L = labels[language];
 
@@ -127,6 +127,29 @@ export function ExamToolbar({
           </svg>
           <span>{L.flagForReview}</span>
         </button>
+
+        {/* Language Toggle */}
+        <div className="flex items-center gap-0 ml-1 rounded overflow-hidden border border-white/30">
+          <button
+            onClick={() => language === "ar" && toggleLanguage()}
+            className={`px-2.5 py-1 text-sm transition-colors ${
+              language === "en" ? "bg-white/30 text-white font-semibold" : "text-white/75 hover:bg-white/15"
+            }`}
+            title="English"
+          >
+            EN
+          </button>
+          <span className="text-white/30 text-xs select-none">|</span>
+          <button
+            onClick={() => language === "en" && toggleLanguage()}
+            className={`px-2.5 py-1 text-sm transition-colors ${
+              language === "ar" ? "bg-white/30 text-white font-semibold" : "text-white/75 hover:bg-white/15"
+            }`}
+            title="العربية"
+          >
+            ع
+          </button>
+        </div>
 
         {/* Color Scheme */}
         <div className="relative">
