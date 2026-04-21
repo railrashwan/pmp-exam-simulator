@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
     if (examSet === "helena") {
       const questions = await prisma.question.findMany({
         where: { examSet: "helena" },
-        select: SELECT_FIELDS,
+        select: fields,
         orderBy: { id: "asc" },
       });
       return NextResponse.json(questions as ExamQuestion[]);
@@ -82,7 +82,7 @@ export async function GET(req: NextRequest) {
     if (examSet === "eduhub") {
       const questions = await prisma.question.findMany({
         where: { examSet: "eduhub" },
-        select: SELECT_FIELDS,
+        select: fields,
         orderBy: { id: "asc" },
       });
       return NextResponse.json(questions as ExamQuestion[]);
