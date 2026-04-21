@@ -74,10 +74,10 @@ export function FontPanel() {
 
   return (
     <>
-      {/* Trigger button */}
+      {/* Trigger button — min 44×44px for touch targets */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-4 left-4 z-40 bg-canvas border border-edge text-muted font-medium shadow-sm hover:bg-surface hover:text-content transition-colors rounded px-4 py-1.5 text-xs-type"
+        className="fixed bottom-4 left-4 z-40 bg-canvas border border-edge text-muted font-bold shadow-sm hover:bg-surface hover:text-content transition-colors rounded min-w-[44px] min-h-[44px] flex items-center justify-center text-sm"
         aria-label="Open font settings"
       >
         Aa
@@ -91,7 +91,7 @@ export function FontPanel() {
       {/* Slide-out panel */}
       <div
         className={`fixed top-0 left-0 h-full z-50 bg-canvas shadow-xl flex flex-col transition-transform duration-300 border-r border-edge ${open ? "translate-x-0" : "-translate-x-full"}`}
-        style={{ width: "min(400px, calc(100vw - 1rem))" }}
+        style={{ width: "min(360px, calc(100vw - 2rem))" }}
       >
         {/* Header */}
         <div className="bg-surface border-b border-edge px-5 py-4 flex items-center justify-between shrink-0">
@@ -118,7 +118,7 @@ export function FontPanel() {
                 <button
                   key={value}
                   onClick={() => setFontSize(value)}
-                  className={`py-2.5 rounded border text-xs-type font-semibold transition-colors ${
+                  className={`py-3 rounded border text-xs-type font-semibold transition-colors min-h-[44px] ${
                     isActive
                       ? "bg-primary text-inverse border-primary"
                       : "bg-canvas text-content border-edge hover:border-edge-2"

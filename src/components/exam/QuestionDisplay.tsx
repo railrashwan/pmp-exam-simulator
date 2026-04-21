@@ -91,15 +91,15 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
   }
 
   return (
-    <div className="flex-1 px-6 py-5 flex flex-col gap-0" data-scheme={colorScheme}>
+    <div className="flex-1 px-4 sm:px-6 py-4 sm:py-5 flex flex-col gap-0" data-scheme={colorScheme}>
       {/* Question text */}
       <div dir={isRtl ? "rtl" : "ltr"} onMouseUp={handleMouseUp} className="mb-6">
-        {/* Translate button — show in both language modes */}
+        {/* Translate button — full width on mobile, inline on desktop */}
         {onShowTranslation && (
           <button
             onClick={onShowTranslation}
-            className="mb-4 px-8 py-3 text-lg font-bold rounded"
-            style={{ backgroundColor: "#4a72b0", color: "white", minWidth: "140px" }}
+            className="mb-4 w-full sm:w-auto px-6 py-3 text-base font-bold rounded min-h-[44px]"
+            style={{ backgroundColor: "#4a72b0", color: "white" }}
           >
             {isRtl ? "ترجمة" : "Translate"}
           </button>
@@ -147,13 +147,13 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
           return (
             <div key={key} className="flex flex-col">
               <label
-                className={`flex items-center py-3 px-2 rounded ${rowBg} ${
+                className={`flex items-center py-4 px-2 rounded ${rowBg} ${
                   isRevealed ? "cursor-default" : strikethroughMode ? "cursor-crosshair" : "cursor-pointer"
                 }`}
                 onClick={strikethroughMode ? (e) => { e.preventDefault(); handleOptionClick(); } : undefined}
               >
                 {/* Radio */}
-                <span className="shrink-0 flex items-center" style={{ width: "1.5rem" }}>
+                <span className="shrink-0 flex items-center" style={{ width: "1.75rem" }}>
                   <input
                     type="radio"
                     name={`question-${question.id}`}
@@ -163,7 +163,7 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
                       if (!strikethroughMode && !isRevealed) selectAnswer(question.id, key);
                     }}
                     disabled={isRevealed}
-                    className="w-3.5 h-3.5"
+                    className="w-5 h-5"
                     style={{ accentColor: "#364395" }}
                   />
                 </span>

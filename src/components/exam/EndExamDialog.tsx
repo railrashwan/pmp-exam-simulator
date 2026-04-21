@@ -24,7 +24,7 @@ export function EndExamDialog({ unanswered, onConfirm, onCancel }: Props) {
       aria-modal="true"
       aria-labelledby="end-exam-title"
     >
-      <div className="bg-canvas border border-edge rounded-lg shadow-xl w-[440px] overflow-hidden">
+      <div className="bg-canvas border border-edge rounded-lg shadow-xl w-full max-w-[440px] mx-4 overflow-hidden">
         <div className="bg-surface border-b border-edge px-5 py-4">
           <h2 id="end-exam-title" className="font-semibold text-content text-sm-type">
             {L.endExamConfirm}
@@ -37,13 +37,13 @@ export function EndExamDialog({ unanswered, onConfirm, onCancel }: Props) {
           <button
             ref={cancelRef}
             onClick={onCancel}
-            className="px-5 py-2 text-xs-type border border-edge rounded text-content hover:bg-surface font-medium transition-colors"
+            className="px-5 py-3 text-xs-type border border-edge rounded text-content hover:bg-surface font-medium transition-colors min-h-[44px]"
           >
             {L.cancel}
           </button>
           <button
             onClick={onConfirm}
-            className="px-5 py-2 text-xs-type bg-err text-inverse rounded hover:opacity-90 font-medium transition-opacity"
+            className="px-5 py-3 text-xs-type bg-err text-inverse rounded hover:opacity-90 font-medium transition-opacity min-h-[44px]"
           >
             {L.confirm}
           </button>

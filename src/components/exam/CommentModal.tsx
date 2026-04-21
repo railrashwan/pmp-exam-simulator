@@ -61,20 +61,20 @@ export function CommentModal({ onClose }: CommentModalProps) {
             {existing && (
               <button
                 onClick={handleDelete}
-                className="px-4 py-2 text-sm font-medium rounded border border-red-300 text-red-700 hover:bg-red-50 transition-colors"
+                className="px-4 py-3 min-h-[44px] text-sm font-medium rounded border border-red-300 text-red-700 hover:bg-red-50 active:bg-red-100 transition-colors"
               >
                 {L.commentDelete}
               </button>
             )}
             <button
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium rounded border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+              className="px-4 py-3 min-h-[44px] text-sm font-medium rounded border border-gray-300 text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors"
             >
               {L.cancel}
             </button>
             <button
               onClick={handleSave}
-              className="px-4 py-2 text-sm font-medium rounded text-white transition-colors"
+              className="px-4 py-3 min-h-[44px] text-sm font-medium rounded text-white transition-colors"
               style={{ backgroundColor: "#1e3a8a" }}
             >
               {L.commentSave}

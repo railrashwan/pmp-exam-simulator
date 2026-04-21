@@ -98,24 +98,24 @@ export default function HomePage() {
 
       {/* Page header */}
       <header className="bg-primary border-b border-primary">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-white tracking-wide drop-shadow-sm">PMP Exam Simulator</h1>
-            <p className="text-sm text-white/90 mt-0.5">Project Management Professional</p>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <h1 className="text-lg sm:text-2xl font-bold text-white tracking-wide drop-shadow-sm truncate">PMP Exam Simulator</h1>
+            <p className="text-xs sm:text-sm text-white/90 mt-0.5 hidden sm:block">Project Management Professional</p>
           </div>
-          <div className="flex items-center gap-3">
-            <a href="/profile" className="text-xs-type text-white/90 hover:text-white transition-colors">
+          <div className="flex items-center gap-2 shrink-0">
+            <a href="/profile" className="text-xs-type text-white/90 hover:text-white transition-colors hidden sm:inline">
               {language === "ar" ? "ملفي" : "My Profile"}
             </a>
-            <span className="text-white/40">|</span>
-            <a href="/admin" className="text-xs-type text-white/70 hover:text-white transition-colors">
+            <span className="text-white/40 hidden sm:inline">|</span>
+            <a href="/admin" className="text-xs-type text-white/70 hover:text-white transition-colors hidden sm:inline">
               {language === "ar" ? "إدارة" : "Admin"}
             </a>
             {/* Language toggle */}
-            <div className="flex items-center gap-0 rounded overflow-hidden border border-white/30 ml-1">
+            <div className="flex items-center gap-0 rounded overflow-hidden border border-white/30">
               <button
                 onClick={() => language === "ar" && toggleLanguage()}
-                className={`px-2.5 py-1 text-xs-type font-semibold transition-colors ${
+                className={`px-2.5 py-2 min-h-[36px] text-xs-type font-semibold transition-colors ${
                   language === "en" ? "bg-white/25 text-white" : "text-white/70 hover:bg-white/15"
                 }`}
               >
@@ -124,14 +124,14 @@ export default function HomePage() {
               <span className="text-white/30 text-xs select-none">|</span>
               <button
                 onClick={() => language === "en" && toggleLanguage()}
-                className={`px-2.5 py-1 text-xs-type font-semibold transition-colors ${
+                className={`px-2.5 py-2 min-h-[36px] text-xs-type font-semibold transition-colors ${
                   language === "ar" ? "bg-white/25 text-white" : "text-white/70 hover:bg-white/15"
                 }`}
               >
                 ع
               </button>
             </div>
-            <ThemeToggle className="border-white/20 text-white/70 hover:bg-white/10 hover:text-white ml-1" />
+            <ThemeToggle className="border-white/20 text-white/70 hover:bg-white/10 hover:text-white" />
           </div>
         </div>
       </header>
@@ -177,7 +177,7 @@ export default function HomePage() {
                   <button
                     key={n}
                     onClick={() => setPmpCount(n)}
-                    className={`px-4 py-1.5 rounded-md border text-xs-type font-semibold transition-colors ${
+                    className={`px-4 py-2.5 min-h-[44px] rounded-md border text-xs-type font-semibold transition-colors ${
                       pmpCount === n
                         ? "bg-primary text-white border-primary"
                         : "bg-surface text-content border-edge hover:border-edge-2"
