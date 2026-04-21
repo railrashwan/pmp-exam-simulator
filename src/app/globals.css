@@ -186,6 +186,54 @@ p, li, td, th, label, span, button, h1, h2, h3, h4 {
   }
 }
 
+/* ── Mobile UX ─────────────────────────────────────────────────────────────── */
+
+/* Smooth momentum scrolling on iOS */
+#question-area {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Prevent text size adjustment when rotating device */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Remove tap highlight on interactive elements (iOS default blue flash) */
+button, label, a, input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Question area scroll-fade hint at bottom — subtle gradient when content overflows */
+.question-scroll-container {
+  position: relative;
+}
+.question-scroll-container::after {
+  content: "";
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2rem;
+  display: block;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--color-bg, #ffffff));
+}
+
+/* Touch-active feedback on option rows — supplements Tailwind active: */
+@media (hover: none) and (pointer: coarse) {
+  /* Mobile-only: options get a brief visual flash on tap */
+  label:active {
+    opacity: 0.82;
+  }
+  /* Increase tap-target padding without increasing visual size (on mobile only) */
+  .exam-option-label {
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+  }
+}
+
 /* ── Pearson VUE Color Schemes ────────────────────────────────────────────── */
 /* Applied via data-scheme on #question-area */
 [data-scheme="black-on-white"]     { --cs-bg: #ffffff; --cs-text: #000000; }

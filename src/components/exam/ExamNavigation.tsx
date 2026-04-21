@@ -36,8 +36,12 @@ export function ExamNavigation({ onToggleNavigator }: Props) {
   return (
     <>
       <div
-        className="flex items-center justify-between px-2 sm:px-4 py-1 shrink-0"
-        style={{ backgroundColor: "#1e3a8a" }}
+        className="flex items-center justify-between px-2 sm:px-4 shrink-0"
+        style={{
+          backgroundColor: "#1e3a8a",
+          paddingTop: "0.375rem",
+          paddingBottom: "calc(0.375rem + env(safe-area-inset-bottom, 0px))",
+        }}
         dir={isRtl ? "rtl" : "ltr"}
       >
         {/* ← Previous */}
