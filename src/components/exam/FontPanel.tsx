@@ -19,11 +19,11 @@ const ENGLISH_FONTS = [
 ];
 
 const FONT_SIZES: { label: string; value: number }[] = [
-  { label: "22px", value: 1.375  },
-  { label: "23px", value: 1.4375 },
-  { label: "24px", value: 1.5    },  // default
-  { label: "25px", value: 1.5625 },
-  { label: "26px", value: 1.625  },
+  { label: "15px", value: 0.9375  },
+  { label: "16px", value: 1.0     },
+  { label: "17px", value: 1.0625  },  // default
+  { label: "18px", value: 1.125   },
+  { label: "20px", value: 1.25    },
 ];
 
 const ARABIC_SAMPLE = "ما هي الخطوة الأولى التي يجب عليك اتخاذها؟";
@@ -74,10 +74,10 @@ export function FontPanel() {
 
   return (
     <>
-      {/* Trigger button */}
+      {/* Trigger button — min 44×44px for touch targets */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-4 right-4 z-40 bg-canvas border border-edge text-muted font-medium shadow-sm hover:bg-surface hover:text-content transition-colors rounded px-4 py-1.5 text-xs-type"
+        className="fixed bottom-4 right-4 z-40 bg-canvas border border-edge text-muted font-medium shadow-sm hover:bg-surface hover:text-content transition-colors rounded min-w-[44px] min-h-[44px] flex items-center justify-center text-xs-type"
         aria-label="Open font settings"
       >
         Aa
@@ -118,7 +118,7 @@ export function FontPanel() {
                 <button
                   key={value}
                   onClick={() => setFontSize(value)}
-                  className={`py-2.5 rounded border text-xs-type font-semibold transition-colors ${
+                  className={`py-3 rounded border text-xs-type font-semibold transition-colors min-h-[44px] ${
                     isActive
                       ? "bg-primary text-inverse border-primary"
                       : "bg-canvas text-content border-edge hover:border-edge-2"

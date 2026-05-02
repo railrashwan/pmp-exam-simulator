@@ -54,14 +54,15 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
   const selectedAnswer = answers[question.id];
   const isRtl = language === "ar";
 
-  // Practice mode: reveal state — only active once user has selected an answer
   const isRevealed = practiceMode && !!selectedAnswer;
   const correctAnswer = question.correctAnswer;
   const explanation = language === "en" ? question.explanationEn : question.explanationAr;
 
   const questionStrikethroughs = strikethroughs[question.id] ?? [];
 
-  // Handle text selection for highlight mode
+  // Options font is slightly smaller than question for visual hierarchy
+  const optionFontSize = Math.max(fontSize * 0.94, 0.875);
+
   function handleMouseUp() {
     if (!highlightMode) return;
     const sel = window.getSelection();
@@ -79,34 +80,41 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
   }
 
   return (
-    <div className="flex-1 px-6 py-5 flex flex-col gap-0" data-scheme={colorScheme}>
+    <div className="flex-1 px-4 sm:px-6 py-2 sm:py-5 flex flex-col gap-0" data-scheme={colorScheme}>
       {/* Question text */}
-      <div dir={isRtl ? "rtl" : "ltr"} onMouseUp={handleMouseUp} className="mb-6">
-        {/* Translate button — large, prominent, blue */}
-        {isRtl && onShowTranslation && (
+      <div dir={isRtl ? "rtl" : "ltr"} onMouseUp={handleMouseUp} className="mb-2 sm:mb-5">
+        {/* Translate button — compact inline, not full-width */}
+        {onShowTranslation && (
           <button
             onClick={onShowTranslation}
-            className="mb-4 px-8 py-3 text-lg font-bold rounded"
-            style={{ backgroundColor: "#4a72b0", color: "white", minWidth: "140px" }}
+            className={`mb-2 inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-full border transition-colors active:opacity-70 ${
+              isRtl ? "float-left" : "float-right"
+            }`}
+            style={{ borderColor: "#4a72b0", color: "#4a72b0", clear: "both" }}
           >
-            ترجمة
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <circle cx="8" cy="8" r="6.5"/>
+              <path d="M8 1.5C8 1.5 5.5 5 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 5 10.5 8s-2.5 6.5-2.5 6.5M1.5 8h13" strokeLinecap="round"/>
+            </svg>
+            {isRtl ? "ترجمة" : "Translate"}
           </button>
         )}
         <p
           ref={questionRef}
-          className={`cs-text ${isRtl ? "text-right" : ""}`}
+          className={`cs-text ${isRtl ? "text-right" : ""} ${onShowTranslation ? "clear-both" : ""}`}
           style={{
             fontSize: `${fontSize}rem`,
-            lineHeight: isRtl ? "1.85" : "1.6",
+            lineHeight: isRtl ? "1.8" : "1.6",
             color: "var(--cs-text, var(--color-text-1))",
             fontWeight: "normal",
+            textAlign: "justify",
           }}
         >
           {qText}
         </p>
       </div>
 
-      {/* Options — tabular layout matching Pearson VUE: ○  A.    text */}
+      {/* Options */}
       <div dir={isRtl ? "rtl" : "ltr"} className="flex flex-col">
         {OPTION_KEYS.map((key) => {
           const optionText = getOptionText(question, key, language);
@@ -114,7 +122,6 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
           const label = isRtl ? ARABIC_LABELS[key] : key;
           const isStruck = questionStrikethroughs.includes(key);
 
-          // Practice mode coloring
           const isCorrectOption = isRevealed && correctAnswer === key;
           const isWrongSelected = isRevealed && isSelected && correctAnswer !== key;
 
@@ -126,7 +133,6 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
             if (!isRevealed) selectAnswer(question.id, key);
           }
 
-          // Row background — Pearson VUE: no border, subtle bg on selected only
           let rowBg = "";
           if (isCorrectOption) rowBg = "bg-green-50";
           else if (isWrongSelected) rowBg = "bg-red-50";
@@ -135,13 +141,17 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
           return (
             <div key={key} className="flex flex-col">
               <label
-                className={`flex items-center py-3 px-2 rounded ${rowBg} ${
-                  isRevealed ? "cursor-default" : strikethroughMode ? "cursor-crosshair" : "cursor-pointer"
+                className={`flex items-center py-3 sm:py-4 px-2 rounded transition-opacity ${rowBg} ${
+                  isRevealed
+                    ? "cursor-default"
+                    : strikethroughMode
+                    ? "cursor-crosshair active:opacity-70"
+                    : "cursor-pointer active:opacity-80"
                 }`}
                 onClick={strikethroughMode ? (e) => { e.preventDefault(); handleOptionClick(); } : undefined}
               >
                 {/* Radio */}
-                <span className="shrink-0 flex items-center" style={{ width: "1.5rem" }}>
+                <span className="shrink-0 flex items-center" style={{ width: "1.75rem" }}>
                   <input
                     type="radio"
                     name={`question-${question.id}`}
@@ -151,17 +161,17 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
                       if (!strikethroughMode && !isRevealed) selectAnswer(question.id, key);
                     }}
                     disabled={isRevealed}
-                    className="w-3.5 h-3.5"
+                    className="w-5 h-5"
                     style={{ accentColor: "#364395" }}
                   />
                 </span>
-                {/* Letter label — fixed width column */}
+                {/* Letter label */}
                 <span
-                  className={`shrink-0 font-normal leading-none ${isCorrectOption ? "text-green-900" : isWrongSelected ? "text-red-900" : ""}`}
+                  className={`shrink-0 font-normal ${isCorrectOption ? "text-green-900" : isWrongSelected ? "text-red-900" : ""}`}
                   style={{
-                    width: "2.5rem",
-                    fontSize: `${fontSize}rem`,
-                    lineHeight: isRtl ? "1.85" : "1.6",
+                    width: "2.2rem",
+                    fontSize: `${optionFontSize}rem`,
+                    lineHeight: isRtl ? "1.8" : "1.55",
                     color: isCorrectOption || isWrongSelected ? undefined : "var(--cs-text, var(--color-text-1))",
                   }}
                 >
@@ -173,26 +183,26 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
                     isCorrectOption ? "text-green-900" : isWrongSelected ? "text-red-900" : ""
                   }`}
                   style={{
-                    fontSize: `${fontSize}rem`,
-                    lineHeight: isRtl ? "1.85" : "1.6",
+                    fontSize: `${optionFontSize}rem`,
+                    lineHeight: isRtl ? "1.8" : "1.55",
                     color: isCorrectOption || isWrongSelected ? undefined : "var(--cs-text, var(--color-text-1))",
                   }}
                 >
                   {optionText}
-                  {isCorrectOption && <span className="ml-2 text-green-700 font-bold">✓</span>}
-                  {isWrongSelected && <span className="ml-2 text-red-700 font-bold">✗</span>}
+                  {isCorrectOption && <span className="ml-2 text-green-700 font-bold text-sm">✓</span>}
+                  {isWrongSelected && <span className="ml-2 text-red-700 font-bold text-sm">✗</span>}
                 </span>
               </label>
 
-              {/* Per-option explanation in practice mode — always shown for all 4 options */}
+              {/* Per-option explanation in practice mode */}
               {isRevealed && isCorrectOption && (
-                <div className="mt-1 px-4 py-2 bg-green-50 border-l-4 border-green-400 text-green-800 rounded-r-lg text-sm">
+                <div className="mt-0.5 px-3 sm:px-4 py-2 bg-green-50 border-l-4 border-green-400 text-green-800 rounded-r-lg text-sm leading-snug">
                   <span className="font-semibold">{isRtl ? "لماذا صحيح: " : "Why correct: "}</span>
                   {getOptionExplanation(question, key, language) || explanation || "—"}
                 </div>
               )}
               {isRevealed && !isCorrectOption && (
-                <div className={`mt-1 px-4 py-2 rounded-r-lg text-sm ${
+                <div className={`mt-0.5 px-3 sm:px-4 py-2 rounded-r-lg text-sm leading-snug ${
                   isWrongSelected
                     ? "bg-red-50 border-l-4 border-red-400 text-red-800"
                     : "bg-gray-50 border-l-4 border-gray-300 text-gray-600"
@@ -209,12 +219,11 @@ export function QuestionDisplay({ strikethroughMode, highlightMode, onShowTransl
       {/* Result banner in practice mode */}
       {isRevealed && (
         <div
-          className={`mt-2 px-5 py-3 rounded-xl font-bold text-center ${
+          className={`mt-2 px-4 py-2.5 rounded-xl font-bold text-center text-sm sm:text-base ${
             selectedAnswer === correctAnswer
               ? "bg-green-100 text-green-800 border border-green-300"
               : "bg-red-100 text-red-800 border border-red-300"
           }`}
-          style={{ fontSize: `${fontSize}rem` }}
         >
           {selectedAnswer === correctAnswer
             ? isRtl ? "إجابة صحيحة! 🎉" : "Correct! 🎉"

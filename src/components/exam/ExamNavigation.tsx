@@ -26,17 +26,22 @@ export function ExamNavigation({ onToggleNavigator }: Props) {
     router.push("/exam/results");
   }
 
+  // min-h-[44px] ensures touch target compliance; icon-only on mobile (text hidden sm:inline)
   const btnBase =
-    "flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-white/90 hover:bg-white/15 rounded transition-colors border border-transparent select-none";
+    "flex items-center justify-center gap-1.5 px-3 sm:px-5 py-2 min-h-[44px] text-sm font-medium text-white/90 hover:bg-white/15 active:bg-white/25 rounded transition-colors border border-transparent select-none";
 
   const btnNavBase =
-    "flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white/90 hover:bg-white/15 rounded transition-colors border border-white/20 select-none";
+    "flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 min-h-[44px] text-sm font-medium text-white/90 hover:bg-white/15 active:bg-white/25 rounded transition-colors border border-white/20 select-none";
 
   return (
     <>
       <div
-        className="flex items-center justify-end px-4 py-2 shrink-0"
-        style={{ backgroundColor: "#1e3a8a" }}
+        className="flex items-center justify-between px-2 sm:px-4 shrink-0"
+        style={{
+          backgroundColor: "#1e3a8a",
+          paddingTop: "0.375rem",
+          paddingBottom: "calc(0.375rem + env(safe-area-inset-bottom, 0px))",
+        }}
         dir={isRtl ? "rtl" : "ltr"}
       >
         {/* ← Previous */}
@@ -45,7 +50,8 @@ export function ExamNavigation({ onToggleNavigator }: Props) {
           disabled={currentIndex === 0}
           className={`${btnBase} disabled:opacity-40 disabled:cursor-not-allowed`}
         >
-          {isRtl ? "→" : "←"} {L.previous}
+          {isRtl ? "→" : "←"}
+          <span className="hidden sm:inline">{L.previous}</span>
         </button>
 
         {/* ⚙ Navigator */}
@@ -55,7 +61,7 @@ export function ExamNavigation({ onToggleNavigator }: Props) {
             <circle cx="8" cy="8" r="1.8" fill="currentColor" stroke="none"/>
             <path d="M8 1.5V4M8 12v2.5M1.5 8H4M12 8h2.5" strokeLinecap="round"/>
           </svg>
-          {L.navigator}
+          <span className="hidden xs:inline sm:inline">{L.navigator}</span>
         </button>
 
         {/* Next → */}
@@ -64,7 +70,8 @@ export function ExamNavigation({ onToggleNavigator }: Props) {
           disabled={currentIndex === questions.length - 1}
           className={`${btnBase} disabled:opacity-40 disabled:cursor-not-allowed`}
         >
-          {L.next} {isRtl ? "←" : "→"}
+          <span className="hidden sm:inline">{L.next}</span>
+          {isRtl ? "←" : "→"}
         </button>
       </div>
 

@@ -32,6 +32,8 @@ export default function HomePage() {
   const isFinished = useExamStore((s) => s.isFinished);
   const timeRemaining = useExamStore((s) => s.timeRemaining);
   const savedSet = useExamStore((s) => s.examSet);
+  const language = useExamStore((s) => s.language);
+  const toggleLanguage = useExamStore((s) => s.toggleLanguage);
   const hasSavedExam = questions.length > 0 && !isFinished && timeRemaining > 0;
 
   const router = useRouter();
@@ -92,23 +94,43 @@ export default function HomePage() {
   const eduhubDurationMin = calcMin(EDUHUB_COUNT);
 
   return (
-    <div className="min-h-screen bg-canvas" dir="ltr">
+    <div className="min-h-screen bg-canvas" dir={language === "ar" ? "rtl" : "ltr"}>
 
       {/* Page header */}
       <header className="bg-primary border-b border-primary">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-white tracking-wide drop-shadow-sm">PMP Exam Simulator</h1>
-            <p className="text-sm text-white/90 mt-0.5">Project Management Professional</p>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <h1 className="text-lg sm:text-2xl font-bold text-white tracking-wide drop-shadow-sm truncate">PMP Exam Simulator</h1>
+            <p className="text-xs sm:text-sm text-white/90 mt-0.5 hidden sm:block">Project Management Professional</p>
           </div>
-          <div className="flex items-center gap-3">
-            <a href="/profile" className="text-xs-type text-white/90 hover:text-white transition-colors">
-              My Profile
+          <div className="flex items-center gap-2 shrink-0">
+            <a href="/profile" className="text-xs-type text-white/90 hover:text-white transition-colors hidden sm:inline">
+              {language === "ar" ? "ملفي" : "My Profile"}
             </a>
-            <span className="text-white/40">|</span>
-            <a href="/admin" className="text-xs-type text-white/70 hover:text-white transition-colors">
-              Admin
+            <span className="text-white/40 hidden sm:inline">|</span>
+            <a href="/admin" className="text-xs-type text-white/70 hover:text-white transition-colors hidden sm:inline">
+              {language === "ar" ? "إدارة" : "Admin"}
             </a>
+            {/* Language toggle */}
+            <div className="flex items-center gap-0 rounded overflow-hidden border border-white/30">
+              <button
+                onClick={() => language === "ar" && toggleLanguage()}
+                className={`px-2.5 py-2 min-h-[36px] text-xs-type font-semibold transition-colors ${
+                  language === "en" ? "bg-white/25 text-white" : "text-white/70 hover:bg-white/15"
+                }`}
+              >
+                EN
+              </button>
+              <span className="text-white/30 text-xs select-none">|</span>
+              <button
+                onClick={() => language === "en" && toggleLanguage()}
+                className={`px-2.5 py-2 min-h-[36px] text-xs-type font-semibold transition-colors ${
+                  language === "ar" ? "bg-white/25 text-white" : "text-white/70 hover:bg-white/15"
+                }`}
+              >
+                ع
+              </button>
+            </div>
             <span className="text-white/40">|</span>
             <button
               onClick={() => setPracticeMode((v) => !v)}
@@ -171,7 +193,7 @@ export default function HomePage() {
                   <button
                     key={n}
                     onClick={() => setPmpCount(n)}
-                    className={`px-4 py-1.5 rounded-md border text-xs-type font-semibold transition-colors ${
+                    className={`px-4 py-2.5 min-h-[44px] rounded-md border text-xs-type font-semibold transition-colors ${
                       pmpCount === n
                         ? "bg-primary text-white border-primary"
                         : "bg-surface text-content border-edge hover:border-edge-2"
