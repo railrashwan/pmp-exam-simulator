@@ -1,10 +1,12 @@
-langchain
-langchain-community
-langchain-core
-langchain-openai
-langchainhub
-tavily-python
-requests
-python-dotenv
-streamlit
-certifi
+# Pinned to the LangChain 0.3.x line. The ReAct helpers used here
+# (langchain.agents.create_react_agent + AgentExecutor) were removed from the
+# top-level API in LangChain 1.x, so leaving these unpinned breaks the build.
+langchain==0.3.27
+langchain-community==0.3.27
+langchain-core==0.3.79
+langchain-openai==0.3.35
+tavily-python==0.7.27
+requests==2.32.5
+python-dotenv==1.1.1
+streamlit==1.61.1
+certifi==2025.10.5
