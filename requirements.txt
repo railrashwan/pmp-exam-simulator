@@ -1,0 +1,10 @@
+langchain
+langchain-community
+langchain-core
+langchain-openai
+langchainhub
+tavily-python
+requests
+python-dotenv
+streamlit
+certifi

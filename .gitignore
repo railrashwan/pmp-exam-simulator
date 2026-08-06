@@ -48,3 +48,9 @@ next-env.d.ts
 *.db
 *.db-shm
 *.db-wal
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
