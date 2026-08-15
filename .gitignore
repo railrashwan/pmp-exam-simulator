@@ -48,3 +48,8 @@ next-env.d.ts
 *.db
 *.db-shm
 *.db-wal
+
+# Exported question bank — third-party prep content, must not be pushed to a
+# public repository. Remove this entry once the destination repo is private.
+# See docs/question-bank-export.md
+/prisma/data/export*/

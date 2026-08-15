@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "db:export": "tsx prisma/export-bank.ts",
     "db:seed": "tsx prisma/seed.ts",
     "db:seed-undraw": "tsx prisma/seed-undraw.ts",
     "db:seed-andrew-ultra": "tsx prisma/seed-andrew-ultra.ts",
