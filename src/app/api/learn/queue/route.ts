@@ -27,8 +27,6 @@ export async function GET() {
             correctAnswer: true,
             explanationEn: true,
             explanationAr: true,
-            wrongExplanationEn: true,
-            wrongExplanationAr: true,
           },
         },
       },

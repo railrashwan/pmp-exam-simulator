@@ -20,8 +20,6 @@ interface Question {
   correctAnswer: string;
   explanationEn: string;
   explanationAr: string;
-  wrongExplanationEn: string | null;
-  wrongExplanationAr: string | null;
 }
 
 interface QueueCard {
